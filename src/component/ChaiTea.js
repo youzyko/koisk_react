@@ -1,27 +1,28 @@
-
 import React, {useState, useEffect} from 'react'; 
 import { API_BASE_URL } from "/kkj_data/kiosk/frontend/src/config/host-config";
-const BrownSugar=()=>{
-    const [brownSugar,setBrownSugar]=useState({items:[]});  //브라운슈가
+
+const ChaiTea=()=>{
+
+const [chaiTea,setChaiTea]=useState({items:[]});  //차이티
 
     useEffect(()=>{
-        fetch(`${API_BASE_URL}/api/item/2`,{
+        fetch(`${API_BASE_URL}/api/item/3`,{
             method:"GET"
         }).then(res=>res.json())
         .then(res=>{
-            setBrownSugar(res);
+            setChaiTea(res);
         })
     },[])
     
     useEffect(() => {
-        console.log(brownSugar);
-      }, [brownSugar]);
-
+        console.log(chaiTea);
+      }, [chaiTea]);
+     
 
     return(
         <div>
-        {brownSugar.items.length}개의 메뉴 
-    {brownSugar.items.map(item => (
+        {chaiTea.items.length}개의 메뉴 
+    {chaiTea.items.map(item => (
       <div key={item.itemName} style={{border:"1px solid black"}}>
         <h2>{item.itemName}</h2>
         <p>{item.itemPrice}</p>
@@ -33,4 +34,4 @@ const BrownSugar=()=>{
     );
 
 }
-export default BrownSugar;
+export default ChaiTea;

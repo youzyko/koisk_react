@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 /* import { ThemeProvider, createTheme } from '@mui/material/styles'; */
 
 const Header = () => {
-  const [headMenu, setHeadMenu] = useState(null);
+  
 
   return (
     <header style={{ backgroundColor: "#333", color: "#fff", padding: "20px" }}>
@@ -33,7 +33,7 @@ const Header = () => {
         }}
       >
         <a
-          href="/"
+          href="/1"
           style={{
             color: "#fff",
             textDecoration: "none",
@@ -45,7 +45,7 @@ const Header = () => {
           MilkTea
         </a>
         <a
-          href="/about"
+          href="/2"
           style={{
             color: "#fff",
             textDecoration: "none",
@@ -57,7 +57,7 @@ const Header = () => {
           BrownSugar
         </a>
         <a
-          href="/contact"
+          href="/3"
           style={{
             color: "#fff",
             textDecoration: "none",
@@ -69,7 +69,7 @@ const Header = () => {
           ChaiTea
         </a>
         <a
-          href="/contact"
+          href="/4"
           style={{
             color: "#fff",
             textDecoration: "none",
@@ -81,7 +81,7 @@ const Header = () => {
           Smoothie
         </a>
         <a
-          href="/contact"
+          href="/5"
           style={{
             color: "#fff",
             textDecoration: "none",
