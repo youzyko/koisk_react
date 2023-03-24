@@ -1,16 +1,19 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { json, Link } from "react-router-dom";
 
+import MenuList from "./MenuList";
 const Header = () => {
-  const BASE_URL = "http://localhost:8080/api/name";
+  const BASE_URL = "http://localhost:8080/api";
   const [headName, setHeadName] = useState({ items: [] });
 
+
   useEffect(() => {
-    fetch(BASE_URL, {
+    fetch(BASE_URL+"/name", {
       method: "GET",
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+       /*  console.log(data); */
         setHeadName(data);
       });
   }, []);
@@ -18,8 +21,15 @@ const Header = () => {
   console.log(headName.items);
 
   const menu = headName.items.map((item) => {
-    return <h2 key={item.menuName}>{item.menuName}</h2>;
+    return <div key={item.menuName}>
+      {/* {item.menuName} */}
+
+       <Link to={`/api/item/${item.menuId}`}>{item.menuName}</Link> 
+    </div>
+    {/* <h2 key={item.menuName}>{item.menuName}</h2> */};
   });
+
+  
 
   return (
     <header style={{ backgroundColor: "#333", color: "#fff", padding: "20px" }}>
@@ -39,27 +49,19 @@ const Header = () => {
         >
           GONG CHA
         </h1>
-        <nav
+        <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             marginTop: "10px",
           }}
         >
-          <a
-            href="/"
-            style={{
-              color: "#fff",
-              textDecoration: "none",
-              marginRight: "10px",
-              fontWeight: "bold",
-              fontSize: "18px",
-              display: "inherit",
-            }}
-          >
-            {menu}
-          </a>
-        </nav>
+           {menu} 
+      
+         
+        </div>
+
+        {/*   </nav> */}
       </div>
     </header>
   );
