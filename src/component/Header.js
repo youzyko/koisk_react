@@ -6,14 +6,13 @@ const Header = () => {
   const BASE_URL = "http://localhost:8080/api";
   const [headName, setHeadName] = useState({ items: [] });
 
-
   useEffect(() => {
-    fetch(BASE_URL+"/name", {
+    fetch(BASE_URL + "/name", {
       method: "GET",
     })
       .then((res) => res.json())
       .then((data) => {
-       /*  console.log(data); */
+        /*  console.log(data); */
         setHeadName(data);
       });
   }, []);
@@ -21,25 +20,37 @@ const Header = () => {
   console.log(headName.items);
 
   const menu = headName.items.map((item) => {
-    return <div key={item.menuName}>
-      {/* {item.menuName} */}
+    return (
+      <div key={item.menuName}>
+        {/* {item.menuName} */}
 
-       <Link to={`/api/item/${item.menuId}`}>{item.menuName}</Link> 
-    </div>
-    {/* <h2 key={item.menuName}>{item.menuName}</h2> */};
+        <Link to={`/api/item/${item.menuId}`} style={{ color: 'white', fontWeight: 'bold', textDecoration: 'none',letterSpacing: '5px'  }}>{item.menuName}</Link>
+      </div>
+    );
+    {
+      /* <h2 key={item.menuName}>{item.menuName}</h2> */
+    }
   });
 
-  
-
   return (
-    <header style={{ backgroundColor: "#333", color: "#fff", padding: "20px" }}>
+    <header
+      style={{
+        backgroundColor: "#333",
+        color: "#fff",
+        padding: "20px",
+        border: "1px solid black",
+      }}
+    >
       <div style={{ display: "flex", alignItems: "center" }}>
-        <img
-          src={require("../images/gongcha_logo.png")}
-          alt="logo"
-          className="brand-logo"
-          style={{ width: 45 }}
-        />
+        <a href="/">
+          <img
+            src={require("../images/gongcha_logo.png")}
+            alt="logo"
+            className="brand-logo"
+            style={{ width: 45 }}
+          />
+        </a>
+
         <h1
           style={{
             fontSize: "36px",
@@ -56,9 +67,7 @@ const Header = () => {
             marginTop: "10px",
           }}
         >
-           {menu} 
-      
-         
+          {menu}
         </div>
 
         {/*   </nav> */}

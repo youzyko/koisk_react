@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { json, useParams } from "react-router-dom";
+import { json, Link, useParams } from "react-router-dom";
 const MenuList =({props})=>{
-    const BASE_URL = "http://localhost:8080/api/item";
+    const BASE_URL = "http://localhost:8080/api";
  /*    http://localhost:8080/api/item/1,2,3,.... */
     const [menuList, setMenuList] = useState({items:[]});
-    const [optionList,setOptionList]=useState({});
+    
  
 
     let menuId = useParams();
+    /* console.log("현재param 값"+{menuId}) */
 
     useEffect(()=>{
-        fetch(BASE_URL+`/${menuId.menuId}`,{
+        fetch(BASE_URL+"/item"+`/${menuId.menuId}`,{
             method:"GET"
         })
         .then(res=>res.json())
@@ -22,7 +23,12 @@ const MenuList =({props})=>{
     console.log(menuList)
 
     const list=menuList.items.map((item)=>{
-        return <div>{item.itemName}</div>
+        return(
+            <div>
+                <Link to={`/api/option/${item.itemId}`}>{item.itemName}</Link>
+            </div>
+        )
+       /*  <div>{item.itemName}</div> */
     })
 /*     console.log(list) */
 
@@ -31,29 +37,38 @@ const MenuList =({props})=>{
     })
  console.log(list) 
  */
-    const menuClick=(e)=>{
-        const BASE_URL="http://localhost:8080/api/option"
-        fetch(BASE_URL+`/${menuId.menuId}`,{
-            method:"GET"
-        })
-        .then(res=>res.json())
-        .then(json=>{
-            console.log(json)
-            setOptionList(json)
-          
-        })
-    }
+  
 
+/*    const optionListAll=optionList.coffeeOptions.map((e)=>{
+        return (
+            <div>
+                {e.menuName}
+                <br/>
+                {e.countNum}
+                <br/>
+                {e.hereTogo}
+                <br/>
+                {e.hotCold}
+                <br/>
+                {e.coffeeTopping}
+                <br/>
+                {e.shotPrice}
+            </div>
+        )
+
+    }) 
+ */
 
     return(
         <div>
      <h1>Menu Items</h1>
 
-     <div style={{border:"1px solid black"}} onClick={menuClick}>
+     <div style={{border:"1px solid black"}} >
        
             {list}
-        
+
      </div>
+
 {/* <div>
     {this.items.map((item,index)=>{
         return <MenuList>{item.menuName}</MenuList>

@@ -14,7 +14,7 @@ const AppRouter = () => {
         <Route path="/menuList" element={<MenuList />} /> */}
         <Route exact path="/" element={<App />} />
         <Route exact path="/api/item/:menuId" element={<MenuList />} />  
-        <Route exact path="/option" element={<Option />} />
+        <Route exact path="/api/option/:menuId" element={<Option />} />
        </Routes>     
        </>
     );
