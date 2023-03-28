@@ -3,33 +3,23 @@ import { json, useParams, useLocation } from "react-router-dom";
 const Option = ({ props }) => {
   const BASE_URL = "http://localhost:8080/api";
   const [optionList, setOptionList] = useState({});
-  const [number, setNumber] = useState(0); //갯슈
-  const [checkedList, setCheckedList] = useState([]); //체크박스
+  const [coffeeTopping,setCoffeeTopping]=useState({});
 
-  const onCheckedElement = (checked, item) => {
-    if (checked) {
-      setCheckedList([...checkedList, item]);
-    } else if (!checked) {
-      setCheckedList(checkedList.filter(el => el !== item));
-    }
-  };
-  const onRemove = item => {
-    setCheckedList(checkedList.filter(el => el !== item));
-  };
-  
+ /*  const [nonCoffeeTopping,setNonCoffeeTopping]=useState({nonCoffeeToppingDtos:[]});
+  const [nonCoffeeToppingsFetched, setNonCoffeeToppingsFetched] = useState(false); */
+/*   const handleCheckboxChange = (event, index) => {
+    const isChecked = event.target.checked;
+    setCheckedItems(prevState => {
+      const newState = [...prevState];
+      newState[index] = isChecked;
+      return newState;
+    });
+  }; */
 
-
-
-  const onIncrease = () => {
-    setNumber(number + 1);
-  };
-  const onDecrease = () => {
-    setNumber(number - 1);
-  };
-  let menuId = useParams();
+  let menuId = useParams(); 
   /* console.log(itemId) */
 
-  useEffect(() => {
+  useEffect(() => { //커피 옵션페이지
     fetch(BASE_URL + "/option" + `/${menuId.menuId}`, {
       method: "GET",
     })
@@ -39,56 +29,69 @@ const Option = ({ props }) => {
         setOptionList(json);
       });
   }, [menuId]);
-  console.log(optionList);
+/*   console.log(optionList); */
 
-  /*    let optionAll=optionList; */
-
-  /*  for (var key in optionAll){
-    console.log("key==="+key)
-    console.log("vaklu==="+optionAll[key])
-   } */
-
-  /*   let optionAll;
-  for(let key in optionList)
-     optionAll = optionList[key].map(options=>{
-        return(
-            <div>
-                {options.menuName}
-            </div>
-        )
-    })  */
-
-  /*    const location = useLocation();
-
-    useEffect(() => {
-      console.log(location);
-    }, [ location ]) */
-
-  /*     const BASE_URL="http://localhost:8080/api/option"
-    
-    fetch(BASE_URL+`/${menuId.menuId}`,{
-        method:"GET"
+  useEffect(()=>{ //커피 토핑
+    fetch(BASE_URL+"/topping"+`/${menuId.menuId}`,{
+      method:"GET"
     })
     .then(res=>res.json())
-    .then(json=>{
-        console.log(json)
-        setOptionList(json)
+    .then((json)=>{
+     /*  console.log(json) */
+      setCoffeeTopping (json)
     })
- */
-  const onChange = (e) => {
-    setOptionList(e.target.value);
-  };
+  },[])
+  console.log(coffeeTopping); 
+  
+  let toppingAll;
+  for(let key in coffeeTopping){
+    toppingAll=coffeeTopping[key].map(options=>{
+      return(
+        <div>
+          <label>
+        <input
+          type="checkbox"
+          
+          /* onChange={handleCheckboxChange} */
+        />
+       토핑이름: {options.toppingNameNonCoffee}
+          {options.toppingPriceNonCoffee}
+      </label>
+          
+          
+          {options.toppingNameCoffee}
+          {options.toppingPriceCoffee}원
+        </div>
+      )
+    })
+  }
+console.log(toppingAll)
+  
+/*   const toppingMap=coffeeTopping.map((item)=>{
+    return(
+      <div>
+        {item.toppingNameNonCoffee}
+      </div>
+    )
+  })
+   */
+
+
+  
   return (
     <div>
       옵션페이지입니다
+     {/*    {toppingMap} */}
+   
       <div>
-        {/* <input onChange={onChange}></input> */}
+    
         {/* {JSON.stringify(optionList)} */}
         {Object.values(optionList).map((options) => (
           <div key={options.menuId}>
             {options.menuName}
             <br />
             <>
+            <h2>매장/포장</h2>
               <input
                 id="Windows"
                 value="Windows"
@@ -125,8 +128,8 @@ const Option = ({ props }) => {
             <div>
               <h2> 수량</h2>
               <h2>{options.countNum}</h2>
-              <button onClick={onIncrease}>+1</button>
-              <button onClick={onDecrease}>-1</button>
+              <button /* onClick={onIncrease} */>+1</button>
+              <button /* onClick={onDecrease} */>-1</button>
             </div>
             <br />
 
@@ -181,7 +184,8 @@ const Option = ({ props }) => {
               덜달게
             </>
             <br/>
-            
+            <h2>토핑</h2>
+            {toppingAll}
            {/*  {options.hereTogo}
             {options.hotCold}
             {options.iceAmount}
