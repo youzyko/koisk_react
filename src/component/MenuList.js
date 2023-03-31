@@ -4,7 +4,7 @@ const MenuList =({props})=>{
     const BASE_URL = "http://localhost:8080/api";
  /*    http://localhost:8080/api/item/1,2,3,.... */
     const [menuList, setMenuList] = useState({items:[]});
-    
+    const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
  
 
     let menuId = useParams();
@@ -12,7 +12,10 @@ const MenuList =({props})=>{
 
     useEffect(()=>{
         fetch(BASE_URL+"/item"+`/${menuId.menuId}`,{
-            method:"GET"
+            method:"GET",
+            headers: {
+                Authorization: "Bearer " + ACCESS_TOKEN,
+              },
         })
         .then(res=>res.json())
         .then(json=>{

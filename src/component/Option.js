@@ -4,7 +4,7 @@ const Option = ({ props }) => {
   const BASE_URL = "http://localhost:8080/api";
   const [optionList, setOptionList] = useState({});
   const [coffeeTopping,setCoffeeTopping]=useState({});
-
+  const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
  /*  const [nonCoffeeTopping,setNonCoffeeTopping]=useState({nonCoffeeToppingDtos:[]});
   const [nonCoffeeToppingsFetched, setNonCoffeeToppingsFetched] = useState(false); */
 /*   const handleCheckboxChange = (event, index) => {
@@ -22,6 +22,10 @@ const Option = ({ props }) => {
   useEffect(() => { //커피 옵션페이지
     fetch(BASE_URL + "/option" + `/${menuId.menuId}`, {
       method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + ACCESS_TOKEN,
+      },
     })
       .then((res) => res.json())
       .then((json) => {
@@ -33,7 +37,11 @@ const Option = ({ props }) => {
 
   useEffect(()=>{ //커피 토핑
     fetch(BASE_URL+"/topping"+`/${menuId.menuId}`,{
-      method:"GET"
+      method:"GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + ACCESS_TOKEN,
+      },
     })
     .then(res=>res.json())
     .then((json)=>{
@@ -67,21 +75,13 @@ const Option = ({ props }) => {
   }
 console.log(toppingAll)
   
-/*   const toppingMap=coffeeTopping.map((item)=>{
-    return(
-      <div>
-        {item.toppingNameNonCoffee}
-      </div>
-    )
-  })
-   */
+
 
 
   
   return (
     <div>
-      옵션페이지입니다
-     {/*    {toppingMap} */}
+     옵션페이지 입니다/
    
       <div>
     

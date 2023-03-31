@@ -3,8 +3,12 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import App from "../App";
 import Header from "../component/Header";
+ import Login from "../component/Login"; 
 import MenuList from "../component/MenuList";
 import Option from "../component/Option";
+import ImageSlide from "../component/ImageSlide";
+import Join from "../component/Join";
+
 const AppRouter = () => {
 
     return (
@@ -12,9 +16,12 @@ const AppRouter = () => {
         <Header />
        <Routes>   {/* 
         <Route path="/menuList" element={<MenuList />} /> */}
-        <Route exact path="/" element={<App />} />
+      {/*   <Route exact path="/" element={<App />} /> */}
         <Route exact path="/api/item/:menuId" element={<MenuList />} />  
         <Route exact path="/api/option/:menuId" element={<Option />} />
+      <Route  path="/login" element={<Login />} /> 
+      <Route  path="/" element={<ImageSlide />} /> 
+      <Route  path="/join" element={<Join />} /> 
        </Routes>     
        </>
     );
