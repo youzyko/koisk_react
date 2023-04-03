@@ -8,7 +8,7 @@ import MenuList from "../component/MenuList";
 import Option from "../component/Option";
 import ImageSlide from "../component/ImageSlide";
 import Join from "../component/Join";
-
+import MainImgAdmin from "../component/MainImgAdmin"
 const AppRouter = () => {
 
     return (
@@ -20,8 +20,9 @@ const AppRouter = () => {
         <Route exact path="/api/item/:menuId" element={<MenuList />} />  
         <Route exact path="/api/option/:menuId" element={<Option />} />
       <Route  path="/login" element={<Login />} /> 
-      <Route  path="/" element={<ImageSlide />} /> 
+      <Route  exact path="/" element={<ImageSlide />} /> 
       <Route  path="/join" element={<Join />} /> 
+      <Route  path="/mainImg" element={<MainImgAdmin />} /> 
        </Routes>     
        </>
     );

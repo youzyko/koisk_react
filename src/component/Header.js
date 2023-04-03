@@ -49,7 +49,7 @@ const Header = () => {
   };
 
   const changemenu=e=>{
-
+    window.location.href = "/mainImg";
   };
   const button = USERNAME ? (
     <>
@@ -65,7 +65,8 @@ const Header = () => {
 
 {USERNAME=="admin" ? (
       <Button color="inherit" onClick={changemenu}>
-          메인 이미지 수정
+         메인 이미지 수정
+       
       </Button>
     ) : null}
 
