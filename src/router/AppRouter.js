@@ -22,7 +22,7 @@ const AppRouter = () => {
       <Route  path="/login" element={<Login />} /> 
       <Route  exact path="/" element={<ImageSlide />} /> 
       <Route  path="/join" element={<Join />} /> 
-      <Route  path="/mainImg" element={<MainImgAdmin />} /> 
+  
        </Routes>     
        </>
     );
