@@ -10,8 +10,8 @@ import "swiper/css/navigation";
 
 const ImageSlide =()=>{
 
-  const BASE_URL = "http://localhost:8080/api";
-  const token = localStorage.getItem("ACCESS_TOKEN");
+  const BASE_URL = "http://localhost:8080/api/image";
+ const token = localStorage.getItem("ACCESS_TOKEN"); 
   const [backImg,setBackImg]=useState(
      {
  count:"",
@@ -21,11 +21,75 @@ const ImageSlide =()=>{
       mainImg:""
     }
    ]
-  } );
+  }   );
 
-  
+  const [id,setId]=useState([]);
+
   useEffect(()=>{
-    fetch(BASE_URL+"/image/backgroung",{
+    fetch(`${BASE_URL}/bringId`)
+    // ,{
+    //   method:"GET",
+    //   headers: { 
+    //     'Content-type': 'application/json'
+    //   }
+    // })
+    .then(res=>res.json())
+    .then(json=>{
+      setId(json)
+    })
+  },[])
+
+
+/*   const  = id.map((item)=>{
+    return(
+      <div key={item.id}>
+          {item.id}
+      </div>
+    )
+  }) */
+
+  const circulId=id.map((item)=>{
+    console.log(item);
+    return item;
+  })
+  console.log(circulId[1])
+
+ /*  console.log(backImg) */
+   useEffect(()=>{
+
+    id.map((item)=>{
+    fetch(BASE_URL+`/${item}`)
+    // ,{
+    //   method:"GET",
+    //   headers: {
+    //     'Authorization': 'Bearer ' + token
+    // }
+    // })
+    .then(res=>{
+      if(res.status===200){
+        return res.blob();
+      }
+      return setBackImg(null);
+    })
+    .then(imageData=>{
+      //서버가 보낸 이미지파일 =>url형식으로 변환
+      const imgUrl = window.URL.createObjectURL(imageData);
+      console.log(imgUrl)
+      setBackImg(imgUrl);
+    });
+  });
+
+  }, [id]);   
+  console.log(backImg)
+
+
+
+
+
+
+/*   
+ useEffect(()=>{
+    fetch(BASE_URL,{
       method:"get"
     })
     .then(res=>res.blob())
@@ -37,8 +101,7 @@ const ImageSlide =()=>{
     )
   },[])
   console.log(backImg)
-  
-
+   */
 
 /*   
  useEffect(()=>{
@@ -56,15 +119,16 @@ const ImageSlide =()=>{
       const objectURL = URL.createObjectURL(imageData);
       let myImage = document.getElementById('mainImg');
       myImage.src=objectURL;
-      setMainImg(objectURL);
+      setBackImg(objectURL);
       
     })
-  },[]); */
+  },[]);  */
+
   //blob:http://localhost:3000/36bea821-0679-46dc-9a60-f91fa21375bb
   //console.log(mainImg) 
 
-/*   
-   useEffect(()=>{
+  
+/*    useEffect(()=>{
     fetch(BASE_URL+"/image/backgroung",{
       method:"get",
     })
@@ -75,7 +139,7 @@ const ImageSlide =()=>{
     }
     )
   },[]) 
-  console.log(backImg) */
+  console.log(backImg)  */
 
 
 /* 
@@ -88,29 +152,32 @@ const ImageSlide =()=>{
         </div>
       )
     })
-  } */
-/*   const list=backImg.mainImgs.map((item)=>{
-    return(
-      <div>
-        {item.mainImg}
-      </div>
-    )
-  })
- */
+  }  */
+  
+  //   const list=backImg.mainImgs.map((item)=>{
+  //   return(
+  //     <div>
+  //       <img src={`${process.env.PUBLIC_URL}`+`${item.mainImg}`}>
+  //       </img>
+  //       {item.mainImg}
+  //     </div>
+  //   )
+  // })
 
- {/*  const list=backImg.mainImgs.map((item)=>{
+/* 
+  const list=backImg.mainImgs.map((item)=>{
     return(
       <div>
         <img src={`${item.mainImg}`}></img>  
         {item.mainImg} 
       </div>
     )
-  })
- console.log(list)
- */}
+  }){`${item.mainImg}`}
+ console.log(list) */
 
-/*  useEffect(()=>{
-  fetch(BASE_URL+"/image/backgroung",{
+
+/*   useEffect(()=>{
+  fetch(BASE_URL,{
     method:"get"
   })
   .then(res=>res.blob())
@@ -119,10 +186,12 @@ const ImageSlide =()=>{
     reader.onload=()=>{
       const basedata=reader.result;
       console.log(basedata)
+      setBackImg(basedata)
     }
     reader.readAsDataURL(blob)
   })
-})*/
+})
+ */
 
 
 
@@ -142,15 +211,22 @@ const ImageSlide =()=>{
     //Blob {size: 332, type: 'application/json'}
 
 
-
+   // console.log(backImg.mainImgs.length);
+    console.log(backImg.mainImgs[0])
     return (
         <>
         <div>
-          <img src={backImg}></img>
+ 
+         <img src={backImg.mainImgs[0].mainImg}></img>  
+    {/*  {circulId} */}
         {/*   {imageAll} */}
-         {/*  {list} */}
+        {/* <{list} > */}
+        {/* <img src ='C:\\profile_upload\\2023\\04\\03\\0cbc9b35-eaf8-4e19-9361-ad5e960bbebb_images (1).jpg'></img> */}
+        {/* <img src={`${item.mainImg}`}> */}
+  
         </div>
-         {/*  <Swiper
+        {/* { backImg.mainImgs[0].mainImg != undefined ?
+       <Swiper
             spaceBetween={30}
             centeredSlides={true}
             autoplay={{
@@ -164,9 +240,13 @@ const ImageSlide =()=>{
             modules={[Autoplay, Pagination, Navigation]}
             className="mySwiper"
           >
-            <SwiperSlide><img src="" alt="Blob URL Image" /></SwiperSlide>
-           
-          </Swiper> */}
+            
+            <SwiperSlide><img src={backImg.mainImgs[0].mainImg} alt="Blob URL Image" /></SwiperSlide>
+      
+          
+          </Swiper> 
+          : <></>
+    } */}
         </>
     )
 }

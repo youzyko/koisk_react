@@ -17,7 +17,7 @@ const Option = ({ props }) => {
   }; */
 
   let menuId = useParams(); 
-  /* console.log(itemId) */
+   console.log(menuId) 
 
   useEffect(() => { //커피 옵션페이지
     fetch(BASE_URL + "/option" + `/${menuId.menuId}`, {

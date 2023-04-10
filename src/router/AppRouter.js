@@ -20,9 +20,9 @@ const AppRouter = () => {
         <Route exact path="/api/item/:menuId" element={<MenuList />} />  
         <Route exact path="/api/option/:menuId" element={<Option />} />
       <Route  path="/login" element={<Login />} /> 
-      <Route  exact path="/" element={<ImageSlide />} /> 
+      <Route    exact path="/" element={<ImageSlide />} /> 
       <Route  path="/join" element={<Join />} /> 
-  
+     {/* <Route  path="/" element={<App />} />  */}
        </Routes>     
        </>
     );
