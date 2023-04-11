@@ -34,7 +34,7 @@ const Header = () => {
       <div key={item.menuName}>
         {/* {item.menuName} */}
 
-        <Link to={`/api/item/${item.menuId}`} style={{ color: 'white', fontWeight: 'bold', textDecoration: 'none',letterSpacing: '5px'  }}>{item.menuName}</Link>
+        <Link to={`/api/item/${item.menuId}`} style={{ color: 'white', fontWeight: 'bold', textDecoration: 'none'/* ,border:"1px solid white"  */,marginLeft:"20px" }}>{item.menuName}</Link>
       </div>
     );
     {
@@ -135,6 +135,7 @@ const Header = () => {
             display: "flex",
             justifyContent: "space-between",
             marginTop: "10px",
+            paddingBottom:"20px"
           }}
         >
           {menu}

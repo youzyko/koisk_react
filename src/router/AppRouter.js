@@ -8,7 +8,7 @@ import MenuList from "../component/MenuList";
 import Option from "../component/Option";
 import ImageSlide from "../component/ImageSlide";
 import Join from "../component/Join";
-import MainImgAdmin from "../component/MainImgAdmin"
+
 const AppRouter = () => {
 
     return (

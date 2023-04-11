@@ -3,11 +3,11 @@ import { json, useParams, useLocation } from "react-router-dom";
 const Option = ({ props }) => {
   const BASE_URL = "http://localhost:8080/api";
   const [optionList, setOptionList] = useState({});
-  const [coffeeTopping,setCoffeeTopping]=useState({});
+  const [coffeeTopping, setCoffeeTopping] = useState({});
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
- /*  const [nonCoffeeTopping,setNonCoffeeTopping]=useState({nonCoffeeToppingDtos:[]});
+  /*  const [nonCoffeeTopping,setNonCoffeeTopping]=useState({nonCoffeeToppingDtos:[]});
   const [nonCoffeeToppingsFetched, setNonCoffeeToppingsFetched] = useState(false); */
-/*   const handleCheckboxChange = (event, index) => {
+  /*   const handleCheckboxChange = (event, index) => {
     const isChecked = event.target.checked;
     setCheckedItems(prevState => {
       const newState = [...prevState];
@@ -16,10 +16,11 @@ const Option = ({ props }) => {
     });
   }; */
 
-  let menuId = useParams(); 
-   console.log(menuId) 
+  let menuId = useParams();
+  console.log(menuId);
 
-  useEffect(() => { //커피 옵션페이지
+  useEffect(() => {
+    //커피 옵션페이지
     fetch(BASE_URL + "/option" + `/${menuId.menuId}`, {
       method: "GET",
       headers: {
@@ -33,65 +34,79 @@ const Option = ({ props }) => {
         setOptionList(json);
       });
   }, [menuId]);
-/*   console.log(optionList); */
+  /*   console.log(optionList); */
 
-  useEffect(()=>{ //커피 토핑
-    fetch(BASE_URL+"/topping"+`/${menuId.menuId}`,{
-      method:"GET",
+  useEffect(() => {
+    //커피 토핑
+    fetch(BASE_URL + "/topping" + `/${menuId.menuId}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + ACCESS_TOKEN,
       },
     })
-    .then(res=>res.json())
-    .then((json)=>{
-     /*  console.log(json) */
-      setCoffeeTopping (json)
-    })
-  },[])
-  console.log(coffeeTopping); 
-  
+      .then((res) => res.json())
+      .then((json) => {
+        /*  console.log(json) */
+        setCoffeeTopping(json);
+      });
+  }, []);
+  console.log(coffeeTopping);
+
   let toppingAll;
-  for(let key in coffeeTopping){
-    toppingAll=coffeeTopping[key].map(options=>{
-      return(
+  for (let key in coffeeTopping) {
+    toppingAll = coffeeTopping[key].map((options) => {
+      return (
         <div>
           <label>
-        <input
-          type="checkbox"
-          
-          /* onChange={handleCheckboxChange} */
-        />
-       토핑이름: {options.toppingNameNonCoffee}
-          {options.toppingPriceNonCoffee}
-      </label>
-          
-          
+            <input
+              type="checkbox"
+
+              /* onChange={handleCheckboxChange} */
+            />
+            토핑이름: {options.toppingNameNonCoffee}
+            {options.toppingPriceNonCoffee}
+          </label>
           {options.toppingNameCoffee}
           {options.toppingPriceCoffee}원
         </div>
-      )
-    })
+      );
+    });
   }
-console.log(toppingAll)
-  
+  console.log(toppingAll);
 
-
-
-  
   return (
     <div>
-     옵션페이지 입니다/
-   
+      <h1
+        style={{
+          textDecorationLine: "underline",
+          fontFamily: "Arial, sans-serif",
+          fontSize: "32px",
+          color: "#333",
+          textAlign: "center",
+        }}
+      >
+        Option Page
+      </h1>
+
       <div>
-    
-        {/* {JSON.stringify(optionList)} */}
+        
         {Object.values(optionList).map((options) => (
           <div key={options.menuId}>
-            {options.menuName}
+            {/*  {options.menuName} */}
             <br />
             <>
-            <h2>매장/포장</h2>
+              <h2
+                style={{
+                  textDecorationLine: "underline",
+                  fontFamily: "Arial, sans-serif",
+                  fontSize: "32px",
+                  color: "#333",
+                  textAlign: "center",
+                }}
+              >
+                매장/포장
+              </h2>
               <input
                 id="Windows"
                 value="Windows"
@@ -125,6 +140,8 @@ console.log(toppingAll)
               HOT
             </>
             <br />
+
+
             <div>
               <h2> 수량</h2>
               <h2>{options.countNum}</h2>
@@ -183,10 +200,10 @@ console.log(toppingAll)
               />
               덜달게
             </>
-            <br/>
+            <br />
             <h2>토핑</h2>
             {toppingAll}
-           {/*  {options.hereTogo}
+            {/*  {options.hereTogo}
             {options.hotCold}
             {options.iceAmount}
             {options.sweetness}
