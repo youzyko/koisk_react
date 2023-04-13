@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { json, Link } from "react-router-dom";
 import {
@@ -49,7 +50,7 @@ const Header = () => {
   };
 
   const changemenu=e=>{
-    window.location.href = "/mainImg";
+    window.location.href = "/menuchange";
   };
   const button = USERNAME ? (
     <>
