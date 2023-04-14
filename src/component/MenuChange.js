@@ -1,62 +1,66 @@
-import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import DeleteIcon from "@mui/icons-material/Delete";
-import SendIcon from "@mui/icons-material/Send";
-import Stack from "@mui/material/Stack";
+import React, { useEffect, useState,useRef} from "react";
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import FolderIcon from '@mui/icons-material/Folder';
+import DeleteIcon from '@mui/icons-material/Delete';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+
+import SendIcon from '@mui/icons-material/Send';
+import Stack from '@mui/material/Stack';
 import { json } from "react-router-dom";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
-import CommentIcon from "@mui/icons-material/Comment";
-
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-
-import Avatar from "@mui/material/Avatar";
-
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import FolderIcon from "@mui/icons-material/Folder";
 
 const MenuChange = () => {
-  /*   <<<<<<<<List check>>>>>>*/
-
-  const [checked, setChecked] = React.useState([0]);
-
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
-
-  //http://localhost:8080/api/name
+/*   const [dense, setDense] = React.useState(false);
+  const [secondary, setSecondary] = React.useState(false); */
   const BASE_URL = "http://localhost:8080/api/name";
-  const [menuId, setMenuId] = useState({
-    items: [
+
+  const [newMenu,setNewMenu]=useState({
+/*     menuId:"",
+    menuName:"" */
+  }
+  );  //새로 입력받은 메뉴id를 담는 공간
+
+  
+  const [menu, setMenu] = useState([
       {
         menuId: "",
         menuName: "",
       },
     ],
-  });
+  );
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
 
-  useEffect(() => {
+
+/* const onAdd=()=>{
+  fetch(BASE_URL,{
+    method:"post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + ACCESS_TOKEN,
+    },
+    body:JSON.stringify()
+  })
+  .then(res=>res.json())
+  .then((json)=>{
+    setNewMenu(json)
+  })
+}
+console.log(newMenu)
+ */
+
+useEffect(() => { //메뉴리스트 가져오기
     fetch(BASE_URL, {
       method: "get",
       headers: {
@@ -65,26 +69,89 @@ const MenuChange = () => {
     })
       .then((res) => res.json())
       .then((json) => {
-        // console.log(json)
-        setMenuId(json);
+        console.log(json)
+        setMenu(json.items);
       });
   }, []);
-  console.log(menuId);
+  console.log(menu);
 
-  /* const numrepeat =menuId.items.map((item)=>{
-    return item.menuId
-})
-console.log(numrepeat); */
+  const handleChangeState = (e) => {
+    setNewMenu({
+      ...newMenu,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  const repeat = menuId.items.map((item) => {
-    return (
-      <>
-        <div>{item.menuId}{item.menuName}</div>
-     
-      </>
-    );
-  });
 
+  const addClickSubmit = (e) => {
+   e.preventDefault();
+    const { menuId, menuName } = newMenu;
+
+    const wordRegex = /^[^\s]+$/; //빈칸빼고 모든 문자가능 
+
+    if (!wordRegex.test(menuId) || !wordRegex.test(menuName)) {
+      alert("제목/내용은 필수 입력사항입니다.");
+      return;
+    }
+  
+    onAdd(newMenu);
+    alert("저장완료");
+
+  /*   setMenu([...menu, newMenu]); */
+/*   setMenu(menu.concat(newMenu)) */
+
+    /* let temp = [...menu];
+    temp.push(newMenu);
+    setMenu(temp); */
+   
+
+   // return state.replaceAll("<br>", "\r\n"); //엔터 클릭시 줄바꿈
+  };
+
+  const onAdd = (diary) => {
+    fetch(BASE_URL+"/addmenu",{
+      method:"post",
+      headers:{
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + ACCESS_TOKEN,
+      },
+      body: JSON.stringify(diary)
+    })
+    .then(res=>res.json())
+    .then(json=>{
+      console.log(json)
+      
+    })
+  }
+
+
+  const repeatmenu=menu.map((item)=>{
+    return(
+      // console.log("fsdfsdfsdf")
+      <List/*  dense={dense} */>
+      <ListItem
+                  secondaryAction={
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  }
+                >
+                  <ListItemAvatar>
+                    <Avatar>
+                      <FolderIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+
+                  <ListItemText
+                    primary={`${item.menuId} - ${item.menuName}`}
+                 /*    secondary={secondary ? 'Secondary text' : null} */
+                  />
+                </ListItem>
+            </List>
+            
+    )
+  })
+console.log("MC리렌더")
   return (
     <>
       <h1
@@ -98,74 +165,71 @@ console.log(numrepeat); */
       >
         메뉴 수정 페이지
       </h1>
-
-      {repeat}
-
-      {/* <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      {menuId.items.map((value) => {
-       const repeat = `checkbox-list-label-${value}`;
-
-        return (
-          <ListItem
-            key={value}
-            secondaryAction={
-              <IconButton edge="end" aria-label="comments">
-                <CommentIcon />
-              </IconButton>
-            }
-            disablePadding
-          >
-            <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
-              <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  checked={checked.indexOf(value) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{ 'aria-labelledby': repeat }}
+      {/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<메뉴 추가하기>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
+  {/*   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '5vh' }}>
+        <Box
+            component="form"
+            sx={{
+                '& .MuiTextField-root': { m: 1, width: '50ch' },
+            }}
+            noValidate
+            autoComplete="off"
+        >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <TextField
+                    id="outlined-multiline-flexible"
+                    label="메뉴코드를 입력해주세요"
+                    placeholder="ex)0... 기존 숫자와 중복 불가"
+                    multiline
+                    maxRows={4}
                 />
-              </ListItemIcon>
-              <ListItemText id={repeat} primary={`Line item ${value + 1}`} />
-            </ListItemButton>
-          </ListItem>
-        );
-      })}
+                <TextField
+                    id="outlined-textarea"
+                    label="메뉴를 입력해주세요"
+                    placeholder="ex)밀크티"
+                    multiline
+                />
+                 <Button variant="contained" endIcon={<SendIcon />} onClick={submitHandler}>
+        Send
+      </Button>
+            </div>
+            
+        </Box>
+    </div>  */}
+  
 
-    </List> */}
+<div className="addNewMenu">
+    <form onSubmit={addClickSubmit} name="frm">
+    <div style={{ display: 'inline-block' }}>
+  <input
+    name="menuId"
+    value={newMenu.menuId || ""}
+    onChange={handleChangeState}
+    placeholder="메뉴아이디를 입력해주세요,,,"
+    type="text"
+    style={{ width: '200px' }}
 
-      <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "25ch" },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <div>
-          <TextField
-            id="outlined-multiline-flexible"
-            label="MenuId"
-            placeholder="MenuId"
-            MenuId
-            maxRows={4}
-          />
-          <TextField
-            id="outlined-textarea"
-            label="MenuName"
-            placeholder="MenuName"
-            MenuName
-          />
-        </div>
-      </Box>
+  />
+</div>
+<div style={{ display: 'inline-block' }}>
+  <textarea
+    name="menuName"
+    value={newMenu.menuName}
+    onChange={handleChangeState}
+    placeholder="메뉴이름을 적어주세요"
+    type="text"
+    style={{ display: 'block', width: '400px', height: '200px' }}
+   
+  />
+  <Button variant="contained" endIcon={<SendIcon />} onClick={addClickSubmit}>
+        Send
+      </Button>
+</div>
+      </form>
+  </div> 
+      {/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<메뉴 List>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
+{repeatmenu}
 
-      <Stack direction="row" spacing={2}>
-        {/* <Button variant="outlined" startIcon={<DeleteIcon />}>
-        Delete
-      </Button> */}
-        <Button variant="contained" endIcon={<SendIcon />}>
-          Send
-        </Button>
-      </Stack>
     </>
   );
 };
