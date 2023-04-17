@@ -9,6 +9,8 @@ import Option from "../component/Option";
 import ImageSlide from "../component/ImageSlide";
 import Join from "../component/Join";
 import MenuChange from "../component/MenuChange";
+import ItemChange from "component/ItemChange";
+
 const AppRouter = () => {
 
     return (
@@ -23,6 +25,7 @@ const AppRouter = () => {
       <Route    exact path="/" element={<ImageSlide />} /> 
       <Route  path="/join" element={<Join />} /> 
    <Route  path="/menuchange" element={<MenuChange />} />  
+   <Route  path="/itemchange" element={<ItemChange />} />  
        </Routes>     
        </>
     );

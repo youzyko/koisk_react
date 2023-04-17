@@ -52,6 +52,10 @@ const Header = () => {
   const changemenu=e=>{
     window.location.href = "/menuchange";
   };
+  const changeItem=e=>{
+    window.location.href = "/itemchange";
+  };
+
   const button = USERNAME ? (
     <>
     <Button color="inherit" onClick={logoutHandler}>
@@ -60,13 +64,20 @@ const Header = () => {
 
     {USERNAME=="admin" ? (
       <Button color="inherit" onClick={changemenu}>
-        메뉴 수정
+        메뉴 등록/삭제
       </Button>
     ) : null}
 
 {USERNAME=="admin" ? (
-      <Button color="inherit" onClick={changemenu}>
-         메인 이미지 수정
+      <Button color="inherit" /* onClick={changemenu} */>
+         메인 이미지 등록/삭제/수정
+       
+      </Button>
+    ) : null}
+
+{USERNAME=="admin" ? (
+      <Button color="inherit" onClick={changeItem} >
+         상품 등록/수정/삭제
        
       </Button>
     ) : null}

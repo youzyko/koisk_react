@@ -17,22 +17,26 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
+
 import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
 import { json } from "react-router-dom";
+
 
 const MenuChange = () => {
 /*   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false); */
   const BASE_URL = "http://localhost:8080/api/name";
 
+
   const [newMenu,setNewMenu]=useState({
-/*     menuId:"",
-    menuName:"" */
+    menuId:"",
+    menuName:"" 
   }
   );  //새로 입력받은 메뉴id를 담는 공간
 
-  
+
+ 
   const [menu, setMenu] = useState([
       {
         menuId: "",
@@ -41,6 +45,8 @@ const MenuChange = () => {
     ],
   );
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
+
+
 
 
 /* const onAdd=()=>{
@@ -60,6 +66,7 @@ const MenuChange = () => {
 console.log(newMenu)
  */
 
+
 useEffect(() => { //메뉴리스트 가져오기
     fetch(BASE_URL, {
       method: "get",
@@ -70,44 +77,61 @@ useEffect(() => { //메뉴리스트 가져오기
       .then((res) => res.json())
       .then((json) => {
         console.log(json)
-        setMenu(json.items);
+       /*  setMenu(menu =>[...menu, json]); */
+       setMenu(json.items); 
       });
   }, []);
   console.log(menu);
+
 
   const handleChangeState = (e) => {
     setNewMenu({
       ...newMenu,
       [e.target.name]: e.target.value,
-    });
+
+    })
+    
   };
+
 
 
   const addClickSubmit = (e) => {
    e.preventDefault();
     const { menuId, menuName } = newMenu;
 
-    const wordRegex = /^[^\s]+$/; //빈칸빼고 모든 문자가능 
+
+    const wordRegex = /^[^\s]+$/; //빈칸빼고 모든 문자가능
+
 
     if (!wordRegex.test(menuId) || !wordRegex.test(menuName)) {
       alert("제목/내용은 필수 입력사항입니다.");
       return;
     }
-  
+ 
     onAdd(newMenu);
     alert("저장완료");
+   setMenu(menu=>[...menu, newMenu]);
 
-  /*   setMenu([...menu, newMenu]); */
+   setNewMenu({
+    menuId:"",
+    menuName:"" 
+   })
+
+
 /*   setMenu(menu.concat(newMenu)) */
+
 
     /* let temp = [...menu];
     temp.push(newMenu);
     setMenu(temp); */
    
 
+
    // return state.replaceAll("<br>", "\r\n"); //엔터 클릭시 줄바꿈
   };
 
+
+  //추가
   const onAdd = (diary) => {
     fetch(BASE_URL+"/addmenu",{
       method:"post",
@@ -120,18 +144,40 @@ useEffect(() => { //메뉴리스트 가져오기
     .then(res=>res.json())
     .then(json=>{
       console.log(json)
-      
+
+     
     })
   }
+  //삭제
+  const onDelete=(targetId)=>{
+    fetch(BASE_URL+ `/${targetId}`,{
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + ACCESS_TOKEN,
+      }
+    })
+    .then((res) => res.json())
+    .then(json=>{
+      console.log(json)
+      setMenu(json.items)
+    })
+  }
+
+
+  const removeClick=(e,targetId)=>{
+    e.preventDefault();
+    onDelete(targetId)
+  }
+
 
 
   const repeatmenu=menu.map((item)=>{
     return(
       // console.log("fsdfsdfsdf")
-      <List/*  dense={dense} */>
+      <List>
       <ListItem
                   secondaryAction={
-                    <IconButton edge="end" aria-label="delete">
+                    <IconButton edge="end" aria-label="delete"  onClick={(e) => removeClick(e, item.menuId)} >
                       <DeleteIcon />
                     </IconButton>
                   }
@@ -142,16 +188,17 @@ useEffect(() => { //메뉴리스트 가져오기
                     </Avatar>
                   </ListItemAvatar>
 
+
                   <ListItemText
                     primary={`${item.menuId} - ${item.menuName}`}
                  /*    secondary={secondary ? 'Secondary text' : null} */
                   />
                 </ListItem>
             </List>
-            
+           
     )
   })
-console.log("MC리렌더")
+/* console.log("MC리렌더") */
   return (
     <>
       <h1
@@ -170,7 +217,7 @@ console.log("MC리렌더")
         <Box
             component="form"
             sx={{
-                '& .MuiTextField-root': { m: 1, width: '50ch' },
+                '& .MuiTextField-root': { m: 1, width:... '50ch' },
             }}
             noValidate
             autoComplete="off"
@@ -193,44 +240,47 @@ console.log("MC리렌더")
         Send
       </Button>
             </div>
-            
+           
         </Box>
     </div>  */}
-  
+ 
 
-<div className="addNewMenu">
-    <form onSubmit={addClickSubmit} name="frm">
-    <div style={{ display: 'inline-block' }}>
-  <input
-    name="menuId"
-    value={newMenu.menuId || ""}
-    onChange={handleChangeState}
-    placeholder="메뉴아이디를 입력해주세요,,,"
-    type="text"
-    style={{ width: '200px' }}
 
-  />
+<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+  <form onSubmit={addClickSubmit} name="frm" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', borderRadius: '10px' }}>
+    <div style={{ width: '100%', margin: '10px 0' }}>
+      <input
+        name="menuId"
+        value={newMenu.menuId || ""}
+        onChange={handleChangeState}
+        placeholder="메뉴아이디를 입력해주세요,,,"
+        type="text"
+        style={{ width: '940px', padding: '10px', fontSize: '18px', borderRadius: '5px', border: '1px solid #ccc' }}
+      />
+    </div>
+    <div style={{ width: '950px', margin: '10px 0' }}>
+      <textarea
+        name="menuName"
+        value={newMenu.menuName}
+        onChange={handleChangeState}
+        placeholder="메뉴이름을 적어주세요"
+        type="text"
+        style={{ display: 'block', width: '100%', height: '200px', padding: '10px', fontSize: '18px', borderRadius: '5px', border: '1px solid #ccc', resize: 'none' }}
+      />
+    </div>
+    <Button variant="contained" endIcon={<SendIcon />} onClick={addClickSubmit} style={{  borderRadius: '5px', padding: '10px', fontSize: '18px' }}>
+      Send
+    </Button>
+  </form>
 </div>
-<div style={{ display: 'inline-block' }}>
-  <textarea
-    name="menuName"
-    value={newMenu.menuName}
-    onChange={handleChangeState}
-    placeholder="메뉴이름을 적어주세요"
-    type="text"
-    style={{ display: 'block', width: '400px', height: '200px' }}
-   
-  />
-  <Button variant="contained" endIcon={<SendIcon />} onClick={addClickSubmit}>
-        Send
-      </Button>
-</div>
-      </form>
-  </div> 
       {/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<메뉴 List>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
 {repeatmenu}
+
 
     </>
   );
 };
 export default MenuChange;
+
+
+

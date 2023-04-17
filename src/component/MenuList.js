@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { json, Link, useParams } from "react-router-dom";
- //<<<<<<<<<<<<<<<<메뉴선택 밀크티/스무디/차이디...>>>>>>>>>>>>>>>>>>>>
+ //<<<<<<<<<<<<<<<<노랑밀크티,블랙밀크티(상세Item)...>>>>>>>>>>>>>>>>>>>>
 
 
 const MenuList =({props})=>{
@@ -8,7 +8,7 @@ const MenuList =({props})=>{
  /*    http://localhost:8080/api/item/1,2,3,.... */
     const [menuList, setMenuList] = useState({items:[]});
     const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
-
+    const [groupImg, setGroupImg]=useState([]); //이미지 저장
     let menuId = useParams();
     /* console.log("현재param 값"+{menuId}) */
 
@@ -27,6 +27,15 @@ const MenuList =({props})=>{
     },[menuId])
     console.log(menuList)
 
+    useEffect(()=>{
+        fetch(`${BASE_URL}/register`,{
+            method:"post",
+            headers: {
+                Authorization: "Bearer " + ACCESS_TOKEN,
+              },
+        })
+    })
+
     const list=menuList.items.map((item)=>{
         return(
             <div style={{
@@ -44,7 +53,10 @@ const MenuList =({props})=>{
                 }}>
                 <Link to={`/api/option/${item.itemId}`} style={{ textDecoration: "none", color: "#333" }}>
                   {item.itemName}
+                
                 </Link>
+                {item.itemImg}
+                
               </div>
         )
        /*  <div>{item.itemName}</div> */
