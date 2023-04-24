@@ -41,7 +41,7 @@ const Header = () => {
     {
       /* <h2 key={item.menuName}>{item.menuName}</h2> */
     }
-  });
+  }); 
   const logoutHandler = (e) => {
     //로컬스토리지 데이터 제거
     localStorage.removeItem("ACCESS_TOKEN");
@@ -53,7 +53,7 @@ const Header = () => {
     window.location.href = "/menuchange";
   };
   const changeItem=e=>{
-    window.location.href = "/itemchange";
+    window.location.href = "/adminitem";
   };
 
   const button = USERNAME ? (

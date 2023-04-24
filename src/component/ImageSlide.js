@@ -12,7 +12,7 @@ const ImageSlide =()=>{
 
   const BASE_URL = "http://localhost:8080/api/image";
  //const token = localStorage.getItem("ACCESS_TOKEN"); 
-  const [backImg,setBackImg]=useState(null);
+  /* const [backImg,setBackImg]=useState(null); */
   const [group,setGroup]=useState([]);
   const [id,setId]=useState([]);
 

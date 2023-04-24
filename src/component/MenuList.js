@@ -10,10 +10,10 @@ const MenuList =({props})=>{
     const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
     const [groupImg, setGroupImg]=useState([]); //이미지 저장
     let menuId = useParams();
-    /* console.log("현재param 값"+{menuId}) */
+    console.log("현재param 값"+{menuId})
 
     useEffect(()=>{
-        fetch(BASE_URL+"/item"+`/${menuId.menuId}`,{
+        fetch(BASE_URL+"/item/itemId"+`/${menuId.menuId}`,{
             method:"GET",
             headers: {
                 Authorization: "Bearer " + ACCESS_TOKEN,
