@@ -104,7 +104,9 @@ const ItemChange = () => {
     //재고상태
     setData({ ...data, status: e.target.value });
   };
-
+const backhome=(e)=>{
+  window.location.href = "/adminitem";
+}
   return (
 
     <>
@@ -174,7 +176,7 @@ const ItemChange = () => {
         </Box>
 
 
-        <Button type="submit" fullWidth variant="contained" color="primary">
+        <Button type="submit" fullWidth variant="contained" color="primary" onClick={backhome}>
           send
         </Button>
 
