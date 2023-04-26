@@ -17,6 +17,8 @@ import Stack from "@mui/material/Stack";
 
 /* UPLOAD BUTTON */
 import Button from "@mui/material/Button";
+import { json } from "react-router-dom";
+import { SetMeal } from "@mui/icons-material";
 
 /* SEND BUTTON */
 
@@ -33,6 +35,7 @@ const AdminItem = () => {
   const [Img, setImg] = useState([]); //ownImgId에 해당하는 이미지주소
   const [allinform, setAllInform] = useState([]); //전체 상세 메뉴 정보가 들어가있음
 
+
   useEffect(() => {
     //사진을 가져오기위한 ownImgId 가져오기
     fetch(BASE_URL + "/bringownImgId", {
@@ -46,7 +49,7 @@ const AdminItem = () => {
         setId(res);
       });
   }, []);
-  console.log(id);
+  //console.log(id);
   //["5da15029-0c1d-4a2e-839d-4a155817f507", '77041901-ab22-45e4-bf7]
 /* const arrayId=id;
 for(let i=0;i<arrayId.length;i++){
@@ -55,7 +58,7 @@ for(let i=0;i<arrayId.length;i++){
 const bunch=[];
  id.forEach((item)=>{
   bunch.push(item)
-  console.log(item)
+ // console.log(item)
  })
 // console.log(bunch)
 
@@ -99,6 +102,7 @@ const bunch=[];
     })
       .then((res) => res.json())
       .then((res) => {
+        console.log(res)
         setAllInform(res);
       });
   }, []);
@@ -111,16 +115,46 @@ const bunch=[];
     )
   }) 
 
-/*   
+ 
   const modal = (e) => {
     window.location.href = "/itemchange";
   };
- */
+  
+  const deleinform=allinform.map((item)=>{
+    return(
+      item.ownImgId
+    )
+  })
+console.log(deleinform)
+
+const remove =(target)=>{
+  fetch(BASE_URL+"/ownImgId"+`/${target.ownImgId}`,{
+    method: 'DELETE',
+    headers: { 
+      'Authorization': 'Bearer ' + ACCESS_TOKEN 
+    },
+  })
+  .then(res=>res.json())
+  .then(res=>{
+    console.log(res) //true
+    if (res){
+      const updatedInform=allinform.filter(item=>item.ownImgId !== target.ownImgId);
+      setAllInform(updatedInform);
+    }
+  })
+
+}
+const removeHandler =item=>{
+  console.log(item.ownImgId)
+  remove(item)
+}
+
   const allItembunch = allinform.map((item,index) => {
+  
     return (
       <>
         <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-          <ListItem secondaryAction={<IconButton edge="end" aria-label="delete"><DeleteIcon /></IconButton>} disablePadding>
+          <ListItem secondaryAction={<IconButton edge="end" aria-label="delete" onClick={()=>removeHandler(item)}><DeleteIcon  /></IconButton>} disablePadding>
             <ListItemButton>
               <ListItemAvatar>
               <Avatar> {ImgBunch[index]}
@@ -136,10 +170,15 @@ const bunch=[];
   });
   return (
     <>
-     {allItembunch} 
-{/*  {ImgBunch}
-  */}
-     {/*  <div>
+    <div style={{ 
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  paddingTop:"50px"
+}}>
+
+      <div>
         <Stack spacing={2} direction="row">
           <Button variant="contained" onClick={modal}>상세메뉴 등록하기</Button>
         </Stack>
@@ -151,9 +190,11 @@ const bunch=[];
           paddingTop: "20px",
         }}
       >
-
-      
-      </div> */}
+      </div> 
+      <div>
+      {allItembunch} 
+      </div>
+      </div>
     </>
   );
 };

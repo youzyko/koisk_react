@@ -110,17 +110,20 @@ const backhome=(e)=>{
   return (
 
     <>
+    <div  style={{ display: "flex", justifyContent: "center" }}>
+
  <Box
       component="form"
       sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
+        '& > :not(style)': { m: 5, width: '25ch' },
+      
       }}
       noValidate
       autoComplete="off"
       onSubmit={addClickSubmit}
 
     >
-      <div onClick={fileClickHandler}>
+      <div onClick={fileClickHandler} >
          <img alt="이미지 업로드를 원하시면 클릭해주세요" src={imgFile}></img>
         
           <input
@@ -141,14 +144,14 @@ const backhome=(e)=>{
       />
       </div>
       <div>
-      <TextField id="outlined-basic" label="상품이름" variant="outlined" placeholder="상품코드" required
+      <TextField id="outlined-basic" label="상품이름" variant="outlined" placeholder="상품이름" required
         name="itemName"
         value={data.itemName}
         onChange={itemNameHandler}
 />
       </div>
       <div>
-      <TextField id="outlined-basic" label="상품가격" variant="outlined" placeholder="상품코드" required
+      <TextField id="outlined-basic" label="상품가격" variant="outlined" placeholder="상품가격" required
       name="itemPrice"
       value={data.itemPrice}
       onChange={itemPriceHandler}
@@ -181,8 +184,9 @@ const backhome=(e)=>{
         </Button>
 
     </Box>
+    
+</div>
     </>
-
 
   );
 };
