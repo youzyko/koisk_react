@@ -142,7 +142,6 @@ const remove =(target)=>{
       setAllInform(updatedInform);
     }
   })
-
 }
 const removeHandler =item=>{
   console.log(item.ownImgId)
@@ -170,6 +169,17 @@ const removeHandler =item=>{
   });
   return (
     <>
+     <h1
+        style={{
+          textDecorationLine: "underline",
+          fontFamily: "Arial, sans-serif",
+          fontSize: "32px",
+          color: "#333",
+          textAlign: "center",
+        }}
+      >
+        상품 등록 / 삭제 페이지
+      </h1>
     <div style={{ 
   display: "flex",
   flexDirection: "column",
@@ -177,7 +187,7 @@ const removeHandler =item=>{
   alignItems: "center",
   paddingTop:"50px"
 }}>
-
+  
       <div>
         <Stack spacing={2} direction="row">
           <Button variant="contained" onClick={modal}>상세메뉴 등록하기</Button>

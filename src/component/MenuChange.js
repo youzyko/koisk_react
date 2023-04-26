@@ -77,12 +77,11 @@ useEffect(() => { //메뉴리스트 가져오기
       .then((res) => res.json())
       .then((json) => {
         console.log(json)
-       /*  setMenu(menu =>[...menu, json]); */
-       setMenu(json.items); 
+        /* setMenu(menu =>[...menu, json]); */
+      setMenu(json.items); 
       });
   }, []);
   console.log(menu);
-
 
   const handleChangeState = (e) => {
     setNewMenu({
@@ -107,11 +106,12 @@ useEffect(() => { //메뉴리스트 가져오기
       alert("제목/내용은 필수 입력사항입니다.");
       return;
     }
+    
  
     onAdd(newMenu);
-    alert("저장완료");
-   setMenu(menu=>[...menu, newMenu]);
-
+   
+   //setMenu(menu=>[...menu, newMenu]);
+   /* menu=>[...menu, newMenu] */
    setNewMenu({
     menuId:"",
     menuName:"" 
@@ -141,13 +141,19 @@ useEffect(() => { //메뉴리스트 가져오기
       },
       body: JSON.stringify(diary)
     })
-    .then(res=>res.json())
-    .then(json=>{
-      console.log(json)
-
-     
+    .then(res=>{
+      if(res.status===500){
+          alert("중복된 메뉴코드가 존재합니다.");
+        return;
+      }else{
+        res.json()
+        alert("저장완료");
+        setMenu(menu=>[...menu, newMenu])
+      }
     })
+
   }
+  
   //삭제
   const onDelete=(targetId)=>{
     fetch(BASE_URL+ `/${targetId}`,{
@@ -210,7 +216,7 @@ useEffect(() => { //메뉴리스트 가져오기
           textAlign: "center",
         }}
       >
-        메뉴 수정 페이지
+        메뉴 등록 / 삭제 페이지
       </h1>
       {/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<메뉴 추가하기>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
   {/*   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '5vh' }}>
@@ -253,7 +259,7 @@ useEffect(() => { //메뉴리스트 가져오기
         name="menuId"
         value={newMenu.menuId || ""}
         onChange={handleChangeState}
-        placeholder="메뉴아이디를 입력해주세요,,,"
+        placeholder="메뉴 코드 써주세요"
         type="text"
         style={{ width: '940px', padding: '10px', fontSize: '18px', borderRadius: '5px', border: '1px solid #ccc' }}
       />

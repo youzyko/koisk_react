@@ -22,6 +22,15 @@ const ItemChange = () => {
   const BASE_URL = "http://localhost:8080/api/item";
   /* @PostMapping("/register") */
 
+      // 검증 완료 여부 상태관리
+      const [validate, setValidate] = useState({
+        itemId: false,
+        itemName: false,
+        itemPrice: false,
+        status:false
+    });
+
+
   /* 파일 */
   const $fileInput = useRef();
 
@@ -31,8 +40,10 @@ const ItemChange = () => {
     itemPrice: "",
     status: "",
   }); //상품정보
+  
 
   const addClickSubmit = (e) => { //업로드 처리 이벤트
+
     e.preventDefault();
     const userFormData = new FormData();
     const userBlob = new Blob([JSON.stringify(data)], {
@@ -77,6 +88,7 @@ const ItemChange = () => {
     };
   };
 
+
   const fileClickHandler = (e) => {
     // const $fileInput = document.getElementById('profileImg');
     $fileInput.current.click();
@@ -86,10 +98,43 @@ const ItemChange = () => {
 
   console.log(data);
 
+  //get-only-menu-id
+  const [onlyId, setOnlyId]=useState([]);
+  useEffect(()=>{
+    fetch(BASE_URL+"/onlymenuId",{
+      method:"get",
+      headers: {
+        Authorization: "Bearer " + ACCESS_TOKEN,
+      },
+    })
+    .then(res=>res.json())
+    .then(res=>{
+      console.log(res)
+      setOnlyId(res)
+    })
+  },[])
+  console.log(onlyId)
+  
+  //forEach로 적용 안됨
+  const getonlyId=onlyId.map(item=>{
+    return (
+      item.menuId
+    )
+  })
+  console.log(getonlyId)
+
+
+
   const itemIdHandler = (e) => {
-    //상품아이디
+    //상품코드
+ /*    if (!e.target.value){
+      alert("코드는 필수 입력란입니다. ")
+      setValidate({...validate, itemId: false})
+    } */
+
     setData({ ...data, itemId: e.target.value });
-  };
+ 
+  }; 
 
   const itemNameHandler = (e) => {
     //상품이름
@@ -107,6 +152,12 @@ const ItemChange = () => {
 const backhome=(e)=>{
   window.location.href = "/adminitem";
 }
+
+//버튼 활성화
+function btnActive()  {
+ 
+}
+
   return (
 
     <>
@@ -136,13 +187,37 @@ const backhome=(e)=>{
           />
         </div>
 
-      <div>
+   {/*       <div>
       <TextField id="outlined-basic" label="상품코드" variant="outlined" placeholder="상품코드" required
          value={data.itemId}
        name="itemId"
        onChange={itemIdHandler}
       />
       </div>
+    */}
+
+      <Box sx={{ minWidth: 150, width: "100%" }}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">상품 코드</InputLabel>
+            <Select
+              labelId="itemId"
+              id="itemId"
+              value={data.itemId}
+              label="itemId"
+              onChange={itemIdHandler}
+              required
+            >
+            {getonlyId.map((menuId) => (
+        <MenuItem key={menuId} value={menuId}>
+          {menuId}
+        </MenuItem>
+      ))}
+           
+            </Select>
+          </FormControl>
+        </Box>
+
+
       <div>
       <TextField id="outlined-basic" label="상품이름" variant="outlined" placeholder="상품이름" required
         name="itemName"
@@ -180,7 +255,7 @@ const backhome=(e)=>{
 
 
         <Button type="submit" fullWidth variant="contained" color="primary" onClick={backhome}>
-          send
+          상품 추가
         </Button>
 
     </Box>
