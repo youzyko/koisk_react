@@ -11,6 +11,8 @@ import Join from "../component/Join";
 import MenuChange from "../component/MenuChange";
  import ItemChange from "component/ItemChange"; 
 import AdminItem from "../component/AdminItem";
+import MainImgAdmin from "component/MainImgAdmin";
+
 const AppRouter = () => {
 
     return (
@@ -27,6 +29,7 @@ const AppRouter = () => {
    <Route  path="/menuchange" element={<MenuChange />} />  
     <Route  path="/itemchange" element={<ItemChange />} />   
 <Route  path="/adminitem" element={< AdminItem/>} />  
+<Route  path="/mainimgchange" element={< MainImgAdmin/>} />  
        </Routes>     
        </>
     );

@@ -143,7 +143,10 @@ const remove =(target)=>{
     }
   })
 }
-const removeHandler =item=>{
+
+
+//삭제버튼 클릭
+const removeHandler =(item)=>{
   console.log(item.ownImgId)
   remove(item)
 }
@@ -153,7 +156,7 @@ const removeHandler =item=>{
     return (
       <>
         <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-          <ListItem secondaryAction={<IconButton edge="end" aria-label="delete" onClick={()=>removeHandler(item)}><DeleteIcon  /></IconButton>} disablePadding>
+          <ListItem secondaryAction={<IconButton edge="end" aria-label="delete" onClick={()=>{if(window.confirm("진짜로 삭제하시겠습니까?")){removeHandler(item)}}}><DeleteIcon  /></IconButton>} disablePadding>
             <ListItemButton>
               <ListItemAvatar>
               <Avatar> {ImgBunch[index]}

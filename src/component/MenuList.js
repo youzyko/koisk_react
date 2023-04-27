@@ -99,7 +99,7 @@ textDecorationLine: "underline",
   fontSize: "32px",
   color: "#333",
   textAlign: "center"
-}}>Menu List
+}}>메뉴 리스트
 </h1>
 
 <div style={{

@@ -55,6 +55,9 @@ const Header = () => {
   const changeItem=e=>{
     window.location.href = "/adminitem";
   };
+  const changeMainImg=e=>{
+    window.location.href="/mainimgchange"
+  }
 
   const button = USERNAME ? (
     <>
@@ -69,7 +72,7 @@ const Header = () => {
     ) : null}
 
 {USERNAME=="admin" ? (
-      <Button color="inherit" /* onClick={changemenu} */>
+      <Button color="inherit" onClick={changeMainImg} >
          메인 이미지 등록/삭제/수정
        
       </Button>

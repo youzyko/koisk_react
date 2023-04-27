@@ -1,55 +1,45 @@
-import React, { useEffect, useState,useRef} from "react";
-import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import FolderIcon from '@mui/icons-material/Folder';
-import DeleteIcon from '@mui/icons-material/Delete';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import React, { useEffect, useState, useRef } from "react";
+import Box from "@mui/material/Box";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import FolderIcon from "@mui/icons-material/Folder";
+import DeleteIcon from "@mui/icons-material/Delete";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
-
-import SendIcon from '@mui/icons-material/Send';
-import Stack from '@mui/material/Stack';
+import SendIcon from "@mui/icons-material/Send";
+import Stack from "@mui/material/Stack";
 import { json } from "react-router-dom";
 
-
 const MenuChange = () => {
-/*   const [dense, setDense] = React.useState(false);
+  /*   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false); */
   const BASE_URL = "http://localhost:8080/api/name";
 
+  const [newMenu, setNewMenu] = useState({
+    menuId: "",
+    menuName: "",
+  }); //새로 입력받은 메뉴id를 담는 공간
 
-  const [newMenu,setNewMenu]=useState({
-    menuId:"",
-    menuName:"" 
-  }
-  );  //새로 입력받은 메뉴id를 담는 공간
-
-
- 
   const [menu, setMenu] = useState([
-      {
-        menuId: "",
-        menuName: "",
-      },
-    ],
-  );
+    {
+      menuId: "",
+      menuName: "",
+    },
+  ]);
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
 
-
-
-
-/* const onAdd=()=>{
+  /* const onAdd=()=>{
   fetch(BASE_URL,{
     method:"post",
     headers: {
@@ -66,8 +56,8 @@ const MenuChange = () => {
 console.log(newMenu)
  */
 
-
-useEffect(() => { //메뉴리스트 가져오기
+  useEffect(() => {
+    //메뉴리스트 가져오기
     fetch(BASE_URL, {
       method: "get",
       headers: {
@@ -76,9 +66,9 @@ useEffect(() => { //메뉴리스트 가져오기
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log(json)
+        console.log(json);
         /* setMenu(menu =>[...menu, json]); */
-      setMenu(json.items); 
+        setMenu(json.items);
       });
   }, []);
   console.log(menu);
@@ -87,124 +77,121 @@ useEffect(() => { //메뉴리스트 가져오기
     setNewMenu({
       ...newMenu,
       [e.target.name]: e.target.value,
-
-    })
-    
+    });
   };
 
-
-
   const addClickSubmit = (e) => {
-   e.preventDefault();
+    e.preventDefault();
     const { menuId, menuName } = newMenu;
 
-
     const wordRegex = /^[^\s]+$/; //빈칸빼고 모든 문자가능
-
+    const numRegex = /[^0-9]/g;
 
     if (!wordRegex.test(menuId) || !wordRegex.test(menuName)) {
-      alert("제목/내용은 필수 입력사항입니다.");
+      alert("코드 또는 이름은 필수 입력사항입니다.");
+      return;
+    } else if (numRegex.test(menuId)) {
+      alert("메뉴코드는 오직 숫자만 가능합니다");
       return;
     }
-    
- 
+
     onAdd(newMenu);
-   
-   //setMenu(menu=>[...menu, newMenu]);
-   /* menu=>[...menu, newMenu] */
-   setNewMenu({
-    menuId:"",
-    menuName:"" 
-   })
 
+    //setMenu(menu=>[...menu, newMenu]);
+    /* menu=>[...menu, newMenu] */
+    setNewMenu({
+      menuId: "",
+      menuName: "",
+    });
 
-/*   setMenu(menu.concat(newMenu)) */
-
+    /*   setMenu(menu.concat(newMenu)) */
 
     /* let temp = [...menu];
     temp.push(newMenu);
     setMenu(temp); */
-   
 
-
-   // return state.replaceAll("<br>", "\r\n"); //엔터 클릭시 줄바꿈
+    // return state.replaceAll("<br>", "\r\n"); //엔터 클릭시 줄바꿈
   };
-
 
   //추가
   const onAdd = (diary) => {
-    fetch(BASE_URL+"/addmenu",{
-      method:"post",
-      headers:{
+    fetch(BASE_URL + "/addmenu", {
+      method: "post",
+      headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + ACCESS_TOKEN,
       },
-      body: JSON.stringify(diary)
-    })
-    .then(res=>{
-      if(res.status===500){
-          alert("중복된 메뉴코드가 존재합니다.");
+      body: JSON.stringify(diary),
+    }).then((res) => {
+      if (res.status === 500) {
+        alert("중복된 메뉴코드가 존재합니다.");
         return;
-      }else{
-        res.json()
+      } else {
+        res.json();
         alert("저장완료");
-        setMenu(menu=>[...menu, newMenu])
+        setMenu((menu) => [...menu, newMenu]);
       }
-    })
+    });
+  };
 
-  }
-  
   //삭제
-  const onDelete=(targetId)=>{
-    fetch(BASE_URL+ `/${targetId}`,{
+  const onDelete = (targetId) => {
+    fetch(BASE_URL + `/${targetId}`, {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + ACCESS_TOKEN,
-      }
+      },
     })
-    .then((res) => res.json())
-    .then(json=>{
-      console.log(json)
-      setMenu(json.items)
-    })
-  }
+      .then((res) => res.json())
+      .then((json) => {
+        console.log(json);
+        setMenu(json.items);
+      });
+  };
 
+  const removeClick = (targetId) => {
+    onDelete(targetId);
+  };
 
-  const removeClick=(e,targetId)=>{
-    e.preventDefault();
-    onDelete(targetId)
-  }
+  /*   (e) => removeClick(e, item.menuId) */
 
-
-
-  const repeatmenu=menu.map((item)=>{
-    return(
+  const repeatmenu = menu.map((item) => {
+    return (
       // console.log("fsdfsdfsdf")
       <List>
-      <ListItem
-                  secondaryAction={
-                    <IconButton edge="end" aria-label="delete"  onClick={(e) => removeClick(e, item.menuId)} >
-                      <DeleteIcon />
-                    </IconButton>
-                  }
-                >
-                  <ListItemAvatar>
-                    <Avatar>
-                      <FolderIcon />
-                    </Avatar>
-                  </ListItemAvatar>
+        <ListItem
+          secondaryAction={
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              onClick={() => {
+                if (
+                  window.confirm(
+                    `"${item.menuName}"를 진짜로 삭제하시겠습니까?`
+                  )
+                )
+                  removeClick(item.menuId);
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          }
+        >
+          <ListItemAvatar>
+            <Avatar>
+              <FolderIcon />
+            </Avatar>
+          </ListItemAvatar>
 
-
-                  <ListItemText
-                    primary={`${item.menuId} - ${item.menuName}`}
-                 /*    secondary={secondary ? 'Secondary text' : null} */
-                  />
-                </ListItem>
-            </List>
-           
-    )
-  })
-/* console.log("MC리렌더") */
+          <ListItemText
+            primary={`${item.menuId} - ${item.menuName}`}
+            /*    secondary={secondary ? 'Secondary text' : null} */
+          />
+        </ListItem>
+      </List>
+    );
+  });
+  /* console.log("MC리렌더") */
   return (
     <>
       <h1
@@ -219,7 +206,7 @@ useEffect(() => { //메뉴리스트 가져오기
         메뉴 등록 / 삭제 페이지
       </h1>
       {/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<메뉴 추가하기>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
-  {/*   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '5vh' }}>
+      {/*   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '5vh' }}>
         <Box
             component="form"
             sx={{
@@ -249,44 +236,72 @@ useEffect(() => { //메뉴리스트 가져오기
            
         </Box>
     </div>  */}
- 
 
-
-<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-  <form onSubmit={addClickSubmit} name="frm" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', borderRadius: '10px' }}>
-    <div style={{ width: '100%', margin: '10px 0' }}>
-      <input
-        name="menuId"
-        value={newMenu.menuId || ""}
-        onChange={handleChangeState}
-        placeholder="메뉴 코드 써주세요"
-        type="text"
-        style={{ width: '940px', padding: '10px', fontSize: '18px', borderRadius: '5px', border: '1px solid #ccc' }}
-      />
-    </div>
-    <div style={{ width: '950px', margin: '10px 0' }}>
-      <textarea
-        name="menuName"
-        value={newMenu.menuName}
-        onChange={handleChangeState}
-        placeholder="메뉴이름을 적어주세요"
-        type="text"
-        style={{ display: 'block', width: '100%', height: '200px', padding: '10px', fontSize: '18px', borderRadius: '5px', border: '1px solid #ccc', resize: 'none' }}
-      />
-    </div>
-    <Button variant="contained" endIcon={<SendIcon />} onClick={addClickSubmit} style={{  borderRadius: '5px', padding: '10px', fontSize: '18px' }}>
-      Send
-    </Button>
-  </form>
-</div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <form
+          onSubmit={addClickSubmit}
+          name="frm"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "20px",
+            borderRadius: "10px",
+          }}
+        >
+          <div style={{ width: "100%", margin: "10px 0" }}>
+            <TextField
+              name="menuId"
+              value={newMenu.menuId || ""}
+              onChange={handleChangeState}
+              /*   placeholder="메뉴 코드 써주세요 ※숫자만 가능※" */
+              type="number"
+              label="메뉴 코드를 입력해주세요"
+              /*  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" */
+              style={{
+                width: "940px",
+                padding: "10px",
+                fontSize: "18px",
+                borderRadius: "5px",
+              }}
+            />
+          </div>
+          <div style={{ width: "950px", margin: "10px 0" }}>
+            <TextField
+              name="menuName"
+              value={newMenu.menuName}
+              onChange={handleChangeState}
+              label="메뉴 이름를 입력해주세요"
+              type="text"
+              style={{
+                width: "940px",
+                padding: "10px",
+                fontSize: "18px",
+                borderRadius: "5px",
+                resize: "none",
+              }}
+            />
+          </div>
+          <Button
+            variant="contained"
+            endIcon={<SendIcon />}
+            onClick={addClickSubmit}
+            style={{ borderRadius: "5px", padding: "10px", fontSize: "18px" }}
+          >
+            추가하기
+          </Button>
+        </form>
+      </div>
       {/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<메뉴 List>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
-{repeatmenu}
-
-
+      {repeatmenu}
     </>
   );
 };
 export default MenuChange;
-
-
-
