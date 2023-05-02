@@ -128,6 +128,7 @@ const bunch=[];
 console.log(deleinform)
 
 const remove =(target)=>{
+  console.log(target.ownImgId)
   fetch(BASE_URL+"/ownImgId"+`/${target.ownImgId}`,{
     method: 'DELETE',
     headers: { 
