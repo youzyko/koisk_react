@@ -24,18 +24,29 @@ const MainImgAdmin = () => {
   const [img, setImg] = useState([]);
 
   //전체정보
-   const [allinform,setAllInform]=useState([
-    {
-      id: "",
-      mainImg: "",
-    }
-   ]);
+   const [allinform,setAllInform]=useState([]);
    
    //새로운 이미지파일 
    const [newImg,setNewImg]=useState(null);
   
    //파일
    const $fileInput = useRef();
+
+//id를 다 받아옴
+ useEffect(() => {
+  fetch(BASE_URL + "/bringId", {
+    method: "get",
+    headers: {
+      Authorization: "Bearer " + ACCESS_TOKEN,
+    },
+  })
+    .then((res) => res.json())
+    .then((res) => {
+    //  console.log(res)
+      setId(res);
+    });
+}, []);
+console.log(id); 
 
 //전체정보
 useEffect(()=>{
@@ -52,20 +63,7 @@ useEffect(()=>{
 },[])
 console.log(allinform) 
 
-//id를 다 받아옴
-useEffect(() => {
-  fetch(BASE_URL + "/bringId", {
-    method: "get",
-    headers: {
-      Authorization: "Bearer " + ACCESS_TOKEN,
-    },
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      setId(res);
-    });
-}, []);
-console.log(id);
+
 
 //id 받아서 이미지 나열
 useEffect(() => {
@@ -90,8 +88,8 @@ const imglist = img.map((item) => {
 });
 
 //삭제
-const remove=(target)=>{
-  console.log(target.id)
+/* const remove=(target)=>{
+  //console.log(target.id)
   fetch(BASE_URL+`/${target.id}`,{
     method: 'DELETE',
     headers: { 
@@ -100,30 +98,61 @@ const remove=(target)=>{
   })
   .then(res=>res.json())
   .then(res=>{
-    console.log(res) //true
+   // console.log(res) //true
    if (res){
-      const updatedInform=[...allinform].filter(item=>item.id !== target.id);
+      const updatedInform=allinform.filter(item=>item.id !== target.id);
       console.log(updatedInform)
       setAllInform(updatedInform); 
     } 
   })
   }
-  console.log(allinform)
+  console.log(allinform) */
+
+  const remove = (target) => {
+    fetch(BASE_URL + `/${target.id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + ACCESS_TOKEN,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res) {
+          const updatedInform = allinform.filter(
+            (item) => item.id !== target.id
+          );
+          setAllInform(updatedInform);
+  
+          // Fetch the updated list of IDs and update the 'id' state
+          fetch(BASE_URL + "/bringId", {
+            method: "get",
+            headers: {
+              Authorization: "Bearer " + ACCESS_TOKEN,
+            },
+          })
+            .then((res) => res.json())
+            .then((res) => {
+              setId(res);
+            });
+        }
+      });
+  };
   
   const removeHandler=(item)=>{
-    console.log(item)
+   // console.log(item.id)
+    //console.log(item)
     remove(item);
   }
   
 const mainImgbunch = allinform.map((item, index) => {
-  
+
   return (
     <Card sx={{ maxWidth: 345 }} style={{marginBottom:"2em", display: 'block',marginLeft: 'auto', marginRight: 'auto'}}>
       {/*    <CardMedia
     
     /> */}
       {imglist[index]}
-     
+
 
       {/*     <CardContent>
       <Typography gutterBottom variant="h5" component="div">
@@ -218,18 +247,20 @@ const mainImgbunch = allinform.map((item, index) => {
           component="form"
           sx={{
             "& > :not(style)": { m: 5, width: "25ch" },
+            
           }}
           noValidate
           autoComplete="off"
           onSubmit={addClickSubmit} 
         >
-            <div onClick={fileClickHandler}  >
+            <div onClick={fileClickHandler}  style={{margin:'auto'}}>
             <img
               alt="이미지 업로드"
               src={newImg ? newImg : require("../assets/img/image-add.png")} 
               style={{
                 maxWidth: "150px",
                 maxHeight: "200px",
+                
              /*    border: "1px solid black", */
                 marginLeft:"2em"
               }}
@@ -250,6 +281,7 @@ const mainImgbunch = allinform.map((item, index) => {
             fullWidth
             variant="contained"
             color="primary" /* onClick={backhome} */
+            style={{ display: 'block', margin: '20px auto' }}
           >
             상품 추가
           </Button>
