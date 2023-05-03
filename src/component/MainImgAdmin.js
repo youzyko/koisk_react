@@ -198,12 +198,14 @@ const mainImgbunch = allinform.map((item, index) => {
       if (res.status === 200) {
         alert("정상적으로 상품등록을 완료했습니다");
         setNewImg(null)
-        
-      } else {
+      } else{
         alert("이미지를 등록해주세요");
       }
-    });
-
+    })
+    .catch((error)=>{
+      console.log(error);
+  alert("이미지를 등록해주세요");
+    })
   }
   const fileClickHandler = (e) => {
     // const $fileInput = document.getElementById('profileImg');

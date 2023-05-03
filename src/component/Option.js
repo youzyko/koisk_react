@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { json, useParams, useLocation } from "react-router-dom";
 const Option = ({ props }) => {
-  const BASE_URL = "http://localhost:8080/api";
+  const BASE_URL = "http://localhost:8080/api/option";
   const [optionList, setOptionList] = useState({});
   const [coffeeTopping, setCoffeeTopping] = useState({});
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
@@ -21,7 +21,7 @@ const Option = ({ props }) => {
 
   useEffect(() => {
     //커피 옵션페이지
-    fetch(BASE_URL + "/option" + `/${menuId.menuId}`, {
+    fetch(BASE_URL + `/${menuId.menuId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
