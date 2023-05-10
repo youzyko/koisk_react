@@ -12,17 +12,21 @@ import MenuChange from "../component/MenuChange";
  import ItemChange from "component/ItemChange"; 
 import AdminItem from "../component/AdminItem";
 import MainImgAdmin from "component/MainImgAdmin";
+/* import Sidebar from "component/Sidebar"; */
+import Cart from "component/Cart";
 
 const AppRouter = () => {
 
     return (
      <>
         <Header />
+       
        <Routes>   {/* 
         <Route path="/menuList" element={<MenuList />} /> */}
       {/*   <Route exact path="/" element={<App />} /> */}
+      
         <Route exact path="/api/item/:menuId" element={<MenuList />} />  
-        <Route exact path="/api/option/:menuId" element={<Option />} />
+        <Route exact path="/api/option/:itemName" element={<Option />} />
       <Route  path="/login" element={<Login />} /> 
       <Route    exact path="/" element={<ImageSlide />} /> 
       <Route  path="/join" element={<Join />} /> 
@@ -30,6 +34,7 @@ const AppRouter = () => {
     <Route  path="/itemchange" element={<ItemChange />} />   
 <Route  path="/adminitem" element={< AdminItem/>} />  
 <Route  path="/mainimgchange" element={< MainImgAdmin/>} />  
+<Route  path="/cart" element={< Cart/>} />  
        </Routes>     
        </>
     );
