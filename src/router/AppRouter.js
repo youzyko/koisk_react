@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // 라우팅에 사용할 라이브러리
 import { Routes, Route } from "react-router-dom";
 import App from "../App";
@@ -20,7 +20,7 @@ const AppRouter = () => {
     return (
      <>
         <Header />
-       
+     
        <Routes>   {/* 
         <Route path="/menuList" element={<MenuList />} /> */}
       {/*   <Route exact path="/" element={<App />} /> */}

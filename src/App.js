@@ -6,8 +6,12 @@ import { json } from "react-router-dom"
 import Option from "component/Option";
 
 
+
+
+
 function App() { //첫페이지
- 
+
+
 /*   const BASE_URL = "http://localhost:8080/api/item";
   const [menuList, setMenuList] = useState({ items: [] });
 
@@ -33,7 +37,7 @@ const lists=menuList.items.map(item=>{
  */
   return (
     <div>
-app.js
+
     </div>
    
   );
