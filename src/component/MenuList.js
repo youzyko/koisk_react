@@ -12,9 +12,10 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { createContext, useContext  } from "react";
+import { createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Cart from "./Cart";
+import { AltRoute } from "@mui/icons-material";
 
 //리액트 context
 
@@ -34,13 +35,16 @@ const MenuList = () => {
   const [menuname, setMenuname] = useState();
 
   //전체정보에서 뽑아온 가격
-  const [price,setPrice]=useState();
+  const [price, setPrice] = useState();
 
   //전체정보에서 뽑아온 ownImgId
-  const [imgId,setImgid]=useState();
-  
-  //전체정보에서 뽑아온 img 
-  const [img,setImg]=useState();
+  const [imgId, setImgid] = useState();
+
+  //전체정보에서 뽑아온 img
+  const [img, setImg] = useState();
+
+  //itemid===3 커피
+  const [itemid,setItemid]=useState();
 
   //modal
   const [open, setOpen] = useState(false);
@@ -54,6 +58,7 @@ const MenuList = () => {
   const [here, setHere] = useState();
   const [hot, setHot] = useState();
   const [ice, setIce] = useState();
+  const [sweetness, setSweetness] = useState();
 
   const style = {
     position: "absolute",
@@ -107,28 +112,40 @@ const MenuList = () => {
   });
 
   //장바구니 담기 버튼
-  const optionButton = (e) => { 
+  const optionButton = (e) => {
     const param = {
       here: here,
       hot: hot,
       ice: ice,
       itemName: menuname,
-      itemPrice:price,
+      itemPrice: price,
       ownImgId: imgId,
-      itemImg:img
+      itemImg: img,
+      sweetness: sweetness,
     };
+    if (param.itemPrice < 4000) {
+      //null말고 disabled
+      param.sweetness = null;
+      setSweetness(null);
+    } else {
+      param.sweetness = sweetness;
+    }
+
     console.log(param);
     fetch(BASE_URL + "/cart/incart", {
       method: "post",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(param)
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if(res){
-          window.location.href="/cart"
-        }
-      });
+      body: JSON.stringify(param),
+    }).then((res) => {
+      console.log(res);
+      if (res.status === 400) {
+        alert("이미 장바구니에 추가된 메뉴입니다.");
+        setOpen(false); //모달 닫기
+      } else {
+        alert("장바구니 추가 완료");
+        window.location.href = "/cart"; //취소시 페이지 유지
+      }
+    });
   };
 
   // radio 옵션값이 변경될 때 onchange
@@ -147,6 +164,13 @@ const MenuList = () => {
   };
   console.log(ice);
 
+  const sweetChange = (e) => {
+      setSweetness(e.target.value);
+  };
+  console.log(sweetness);
+
+ 
+console.log(itemid)
   return (
     <div>
       <h1
@@ -166,7 +190,11 @@ const MenuList = () => {
           <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
             <Button
               onClick={() => {
-                setMenuname(item.itemName);setPrice(item.itemPrice);setImgid(item.ownImgId);setImg(item.itemImg)
+                setMenuname(item.itemName);
+                setPrice(item.itemPrice);
+                setImgid(item.ownImgId);
+                setImg(item.itemImg);
+                setItemid(item.itemId)
                 handleOpen();
               }}
             >
@@ -266,6 +294,7 @@ const MenuList = () => {
                   </RadioGroup>
                 </FormControl>
                 <br />
+
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     얼음양
@@ -296,17 +325,74 @@ const MenuList = () => {
                   </RadioGroup>
                 </FormControl>
                 <br />
+
+                {/* 당도 */}
+                {itemid === 3 ? (
+        <FormControl disabled>
+          <FormLabel id="demo-row-radio-buttons-group-label">당도</FormLabel>
+          <RadioGroup
+            row
+            aria-labelledby="demo-row-radio-buttons-group-label"
+            name="row-radio-buttons-group"
+          >
+            <FormControlLabel
+              value="안달게"
+              control={<Radio />}
+              label="안달게"
+              onChange={sweetChange}
+            />
+            <FormControlLabel
+              value="중간"
+              control={<Radio />}
+              label="중간"
+              onChange={sweetChange}
+            />
+            <FormControlLabel
+              value="달게"
+              control={<Radio />}
+              label="달게"
+              onChange={sweetChange}
+            />
+          </RadioGroup>
+        </FormControl>
+      ) :
+                <FormControl>
+          <FormLabel id="demo-row-radio-buttons-group-label">당도</FormLabel>
+          <RadioGroup
+            row
+            aria-labelledby="demo-row-radio-buttons-group-label"
+            name="row-radio-buttons-group"
+          >
+            <FormControlLabel
+              value="안달게"
+              control={<Radio />}
+              label="안달게"
+              onChange={sweetChange}
+            />
+            <FormControlLabel
+              value="중간"
+              control={<Radio />}
+              label="중간"
+              onChange={sweetChange}
+            />
+            <FormControlLabel
+              value="달게"
+              control={<Radio />}
+              label="달게"
+              onChange={sweetChange}
+            />
+          </RadioGroup>
+        </FormControl>}
               </Typography>
-        
 
               <button
                 onClick={() => {
+                  /*  if(window.confirm(`장바구니로 이동하시겠습니까?`)){ } */
                   optionButton();
                 }}
               >
                 장바구니 담기
               </button>
-             
             </Box>
           </Fade>
         </Modal>

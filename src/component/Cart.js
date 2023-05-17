@@ -31,9 +31,6 @@ const Cart = (props) => {
   //이미지
   const [img, setImg] = useState([]);
 
-
- 
-
   useEffect(() => {
     fetch(BASE_URL + "/cart", {
       method: "get",
@@ -69,6 +66,31 @@ const Cart = (props) => {
     return <img style={{ width: "100%", height: "100%" }} src={item}></img>;
   });
 
+  //삭제 버튼
+  const remove=(target)=>{
+    console.log(target)
+    fetch(BASE_URL+`/cart/${target.itemName}`,{
+      method: 'DELETE',
+      headers: { 
+        'Authorization': 'Bearer ' + ACCESS_TOKEN 
+      },
+    })
+    .then(res=>res.json())
+    .then(res=>{
+      console.log(res) //true
+      if(res){
+        const updatedInform=option.filter(item=>item.itemName !== target.itemName);
+        setOption(updatedInform);
+      }
+    })
+  }
+  const removeHandler =(item)=>{
+    console.log(item.itemName)
+    remove(item)
+  }
+  
+
+
   const optionMap = option.map((item, index) => {
     return (
       <>
@@ -82,7 +104,7 @@ const Cart = (props) => {
                 edge="end"
                 aria-label="delete"
                 onClick={() => {
-                  if (window.confirm("진짜로 삭제하시겠습니까?")) {
+                  if (window.confirm("진짜로 삭제하시겠습니까?")) {removeHandler(item)
                   }
                 }}
               >
@@ -105,7 +127,7 @@ const Cart = (props) => {
                       variant="body2"
                       color="textSecondary"
                     >
-                      {` 옵션:${item.here}/${item.hot}/${item.ice}`}
+                      {` 옵션:${item.here}/${item.hot}/${item.ice}/${item.sweetness}`}
                     </Typography>
                   </React.Fragment>
                 }
@@ -116,12 +138,13 @@ const Cart = (props) => {
       </>
     );
   });
-  
-  //총합계
-  const totalPrice =option.reduce((acc,item)=>{
-    return acc+item.itemPrice;
-  },0)
 
+  //총합계
+  const totalPrice = option.reduce((acc, item) => {
+    return acc + item.itemPrice;
+  }, 0);
+
+  //찐return
   return (
     <div>
       <h1
@@ -135,7 +158,7 @@ const Cart = (props) => {
       >
         장바구니
       </h1>
-      총합계:{totalPrice}
+
       <div
         style={{
           display: "flex",
@@ -147,6 +170,7 @@ const Cart = (props) => {
       >
         {optionMap}
       </div>
+      <div>총합계:{totalPrice}</div>
     </div>
   );
 };

@@ -9,6 +9,7 @@ import {
   Button,
   IconButton,
 } from "@mui/material"; 
+
 const Header = () => {
   const BASE_URL = "http://localhost:8080/api";
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
@@ -28,7 +29,7 @@ const Header = () => {
         setHeadName(data);
       });
   }, []);
-  console.log(headName.items);
+  console.log(headName);
 
   const menu = headName.items.map((item) => {
     return (
