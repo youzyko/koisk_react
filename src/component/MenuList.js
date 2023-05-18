@@ -59,6 +59,7 @@ const MenuList = () => {
   const [hot, setHot] = useState();
   const [ice, setIce] = useState();
   const [sweetness, setSweetness] = useState();
+  const[count,setCount]=useState();
 
   const style = {
     position: "absolute",
@@ -122,6 +123,7 @@ const MenuList = () => {
       ownImgId: imgId,
       itemImg: img,
       sweetness: sweetness,
+      count:count
     };
     if (param.itemPrice < 4000) {
       //null말고 disabled
@@ -195,6 +197,7 @@ console.log(itemid)
                 setImgid(item.ownImgId);
                 setImg(item.itemImg);
                 setItemid(item.itemId)
+                setCount(item.count)
                 handleOpen();
               }}
             >
@@ -246,7 +249,7 @@ console.log(itemid)
                 component="h2"
               ></Typography>
               <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-                <FormControl>
+                <FormControl required>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     매장/포장
                   </FormLabel>
@@ -254,6 +257,7 @@ console.log(itemid)
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"
+                   
                   >
                     <FormControlLabel
                       value="포장"
@@ -270,7 +274,7 @@ console.log(itemid)
                   </RadioGroup>
                 </FormControl>
                 <br />
-                <FormControl>
+                <FormControl required>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     핫/아이스
                   </FormLabel>
@@ -295,7 +299,7 @@ console.log(itemid)
                 </FormControl>
                 <br />
 
-                <FormControl>
+                <FormControl required>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     얼음양
                   </FormLabel>
@@ -328,7 +332,7 @@ console.log(itemid)
 
                 {/* 당도 */}
                 {itemid === 3 ? (
-        <FormControl disabled>
+        <FormControl disabled >
           <FormLabel id="demo-row-radio-buttons-group-label">당도</FormLabel>
           <RadioGroup
             row
@@ -356,7 +360,7 @@ console.log(itemid)
           </RadioGroup>
         </FormControl>
       ) :
-                <FormControl>
+                <FormControl required>
           <FormLabel id="demo-row-radio-buttons-group-label">당도</FormLabel>
           <RadioGroup
             row
