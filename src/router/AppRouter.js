@@ -14,7 +14,7 @@ import AdminItem from "../component/AdminItem";
 import MainImgAdmin from "component/MainImgAdmin";
 /* import Sidebar from "component/Sidebar"; */
 import Cart from "component/Cart";
-
+import Topping from "component/Topping";
 const AppRouter = () => {
 
     return (
@@ -35,6 +35,7 @@ const AppRouter = () => {
 <Route  path="/adminitem" element={< AdminItem/>} />  
 <Route  path="/mainimgchange" element={< MainImgAdmin/>} />  
 <Route  path="/cart" element={< Cart/>} />  
+<Route  path="/topping" element={< Topping/>} />  
        </Routes>     
        </>
     );

@@ -60,6 +60,8 @@ const MenuList = () => {
   const [ice, setIce] = useState();
   const [sweetness, setSweetness] = useState();
   const[count,setCount]=useState();
+  //토핑
+
 
   const style = {
     position: "absolute",
@@ -330,7 +332,7 @@ console.log(itemid)
                 </FormControl>
                 <br />
 
-                {/* 당도 */}
+                {/* 당도  커피id는 무조건 3*/} 
                 {itemid === 3 ? (
         <FormControl disabled >
           <FormLabel id="demo-row-radio-buttons-group-label">당도</FormLabel>

@@ -71,6 +71,9 @@ const Header = () => {
   const changeMainImg = (e) => {
     window.location.href = "/mainimgchange";
   };
+  const changeTopping=(e)=>{
+    window.location.href = "/topping";
+  }
 
   const button = USERNAME ? (
     <>
@@ -93,6 +96,12 @@ const Header = () => {
       {USERNAME == "admin" ? (
         <Button color="inherit" onClick={changeItem}>
           상품 등록/수정/삭제
+        </Button>
+      ) : null}
+
+{USERNAME == "admin" ? (
+        <Button color="inherit" onClick={changeTopping}>
+          토핑 등록/수정/삭제
         </Button>
       ) : null}
     </>
