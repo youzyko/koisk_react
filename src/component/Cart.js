@@ -45,12 +45,15 @@ const Cart = (props) => {
       },
     })
       .then((res) => res.json())
-      .then((res) => {
-        setOption(res);
-      });
-  }, []);
-  console.log(option);
+     .then((res)=>{
 
+    setOption(res)
+     })
+  }, []);
+  console.log("option: ",option);
+
+
+  //이미지
   useEffect(() => {
     Promise.all(
       option.map((item) => {
@@ -122,7 +125,24 @@ const Cart = (props) => {
   
   };
   
-  console.log(countMap); 
+  console.log("countMap: ",countMap); 
+
+  //토핑이름.가격
+  const toppingMap=option.map((item)=>{
+    return(
+      item.selectedToppings
+    )
+  })
+  console.log(toppingMap)  
+
+   /* const mapp=toppingMap.map((item)=>{
+    return item
+
+  }); 
+  console.log(mapp) 
+ */
+
+
 
   const optionMap = option.map((item, index) => {
     const count = countMap[item.random] || 1;
@@ -170,7 +190,26 @@ const Cart = (props) => {
         variant="body2"
         color="textSecondary"
       >
-        {` 옵션:${item.here}/${item.hot}/${item.ice}/${item.sweetness}`}
+        {` 옵션:${item.here}/${item.hot}/${item.ice}/${item.sweetness} `}<br/> 
+        토핑
+        {item.selectedToppings ? (
+              <span>
+                {(() => {
+                  const topping = JSON.parse(item.selectedToppings);
+                  console.log(topping)
+                  const toppingnameprice=topping.map((item)=>{
+                    return `[${item.toppingName}/가격:${item.toppingPrice}]`
+                  })
+                  return (
+                    <>
+              {toppingnameprice}
+                    </>
+                  );
+                })()}
+              </span>
+            ) : (
+              <span>선택된 토핑 없음</span>
+            )} 
       </Typography>
     </React.Fragment>
   }
@@ -207,9 +246,23 @@ const Cart = (props) => {
 
   //총합계
   const totalPrice = option.reduce((acc, item) => {
+    console.log(acc); 
+    
+    const toppingP=JSON.parse(item.selectedToppings);
+    const onlyprice= toppingP.map((item)=>{
+      return item.toppingPrice
+    })
+    console.log(onlyprice); 
+    const toppingPriceSum = onlyprice.reduce((toppingAcc, toppingPrice) => {
+      return toppingAcc + parseInt(toppingPrice, 10);
+    }, 0);
     const count = countMap[item.random] || 1;
-    return acc + (item.itemPrice * count);
+   
+
+
+    return acc + (item.itemPrice * count)+toppingPriceSum;
   }, 0);
+  console.log(totalPrice)
 
   //장바구니 초기화
   const deleteAll=()=>{

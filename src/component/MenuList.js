@@ -17,6 +17,14 @@ import { useNavigate } from "react-router-dom";
 import Cart from "./Cart";
 import { AltRoute } from "@mui/icons-material";
 
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Checkbox from "@mui/material/Checkbox";
+import Avatar from "@mui/material/Avatar";
+
 //리액트 context
 
 const MenuList = () => {
@@ -44,7 +52,7 @@ const MenuList = () => {
   const [img, setImg] = useState();
 
   //itemid===3 커피
-  const [itemid,setItemid]=useState();
+  const [itemid, setItemid] = useState();
 
   //modal
   const [open, setOpen] = useState(false);
@@ -59,9 +67,46 @@ const MenuList = () => {
   const [hot, setHot] = useState();
   const [ice, setIce] = useState();
   const [sweetness, setSweetness] = useState();
-  const[count,setCount]=useState();
-  //토핑
 
+  //전체 토핑
+  const [topping, setTopping] = useState([]);
+
+  useEffect(() => {
+    fetch(BASE_URL + "/topping", {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + ACCESS_TOKEN,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setTopping(res);
+      });
+  }, []);
+  console.log(topping);
+
+  //토핑 이미지
+  const [toppingImg, setToppingImg] = useState([]);
+  useEffect(() => {
+    Promise.all(
+      topping.map((item) => {
+        return fetch(BASE_URL + `/topping/${item.ownImgId}`, {
+          method: "get",
+          headers: {
+            Authorization: "Bearer " + ACCESS_TOKEN,
+          },
+        })
+          .then((res) => res.blob())
+          .then((data) => window.URL.createObjectURL(data));
+      })
+    ).then((url) => {
+      setToppingImg(url);
+    });
+  }, [topping]);
+
+  const toppingImgbunch = toppingImg.map((item) => {
+    return <img style={{ width: "100%", height: "100%" }} src={item}></img>;
+  });
 
   const style = {
     position: "absolute",
@@ -125,20 +170,19 @@ const MenuList = () => {
       ownImgId: imgId,
       itemImg: img,
       sweetness: sweetness,
-      count:count
+      selectedToppings:selectedToppings,
+     // selectedToppingsJson:selectedToppingsJson  //[{d:d,sd:sd}]...배열 형태
     };
-    if (param.itemPrice < 4000) {
-      //null말고 disabled
-      param.sweetness = null;
-      setSweetness(null);
-    } else {
-      param.sweetness = sweetness;
-    }
+    
+/* param.selectedToppings=param.selectedToppings.toString() */
+console.log(param)
 
-    console.log(param);
     fetch(BASE_URL + "/cart/incart", {
       method: "post",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: "Bearer " + ACCESS_TOKEN,
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify(param),
     }).then((res) => {
       console.log(res);
@@ -147,7 +191,7 @@ const MenuList = () => {
         setOpen(false); //모달 닫기
       } else {
         alert("장바구니 추가 완료");
-        window.location.href = "/cart"; //취소시 페이지 유지
+       // window.location.href = "/cart"; //취소시 페이지 유지
       }
     });
   };
@@ -169,12 +213,57 @@ const MenuList = () => {
   console.log(ice);
 
   const sweetChange = (e) => {
-      setSweetness(e.target.value);
+    setSweetness(e.target.value);
   };
   console.log(sweetness);
 
- 
-console.log(itemid)
+/*   const toppingNameChange = (e) => {
+    setToppingName(e.target.value);
+  }; */
+
+  const [selectedToppings, setSelectedToppings] = useState([]);
+
+
+  const handleListItemClick = (toppingName, toppingPrice) => {
+    const newValue = { toppingName, toppingPrice };
+    setSelectedToppings(prevState => [...prevState, newValue]);
+   
+  };
+
+  console.log("selectedToppings: ", selectedToppings);
+
+  
+  const toppingbumch = topping.map((item, index) => {
+    return (
+      <>
+        <List
+          dense
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        >
+          <ListItem
+            key={item.toppingName}
+            secondaryAction={<Checkbox edge="end" />}
+            disablePadding
+      
+      onChange={() => handleListItemClick(item.toppingName, item.toppingPrice)} 
+          >
+            <ListItemButton>
+              {/*    토핑 사진   */}
+              <ListItemAvatar>
+                <Avatar>{toppingImgbunch[index]}</Avatar>
+              </ListItemAvatar>
+
+              <ListItemText
+                primary={`${item.toppingName} - ${item.toppingPrice}`}
+              />
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </>
+    );
+  });
+
+  //진짜 return
   return (
     <div>
       <h1
@@ -198,8 +287,9 @@ console.log(itemid)
                 setPrice(item.itemPrice);
                 setImgid(item.ownImgId);
                 setImg(item.itemImg);
-                setItemid(item.itemId)
-                setCount(item.count)
+                setItemid(item.itemId);
+
+                //setChecked(item.toppingoption)
                 handleOpen();
               }}
             >
@@ -259,7 +349,6 @@ console.log(itemid)
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"
-                   
                   >
                     <FormControlLabel
                       value="포장"
@@ -332,63 +421,76 @@ console.log(itemid)
                 </FormControl>
                 <br />
 
-                {/* 당도  커피id는 무조건 3*/} 
+                {/* 당도  커피id는 무조건 3*/}
                 {itemid === 3 ? (
-        <FormControl disabled >
-          <FormLabel id="demo-row-radio-buttons-group-label">당도</FormLabel>
-          <RadioGroup
-            row
-            aria-labelledby="demo-row-radio-buttons-group-label"
-            name="row-radio-buttons-group"
-          >
-            <FormControlLabel
-              value="안달게"
-              control={<Radio />}
-              label="안달게"
-              onChange={sweetChange}
-            />
-            <FormControlLabel
-              value="중간"
-              control={<Radio />}
-              label="중간"
-              onChange={sweetChange}
-            />
-            <FormControlLabel
-              value="달게"
-              control={<Radio />}
-              label="달게"
-              onChange={sweetChange}
-            />
-          </RadioGroup>
-        </FormControl>
-      ) :
+                  <FormControl disabled>
+                    <FormLabel id="demo-row-radio-buttons-group-label">
+                      당도
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                    >
+                      <FormControlLabel
+                        value="안달게"
+                        control={<Radio />}
+                        label="안달게"
+                        onChange={sweetChange}
+                      />
+                      <FormControlLabel
+                        value="중간"
+                        control={<Radio />}
+                        label="중간"
+                        onChange={sweetChange}
+                      />
+                      <FormControlLabel
+                        value="달게"
+                        control={<Radio />}
+                        label="달게"
+                        onChange={sweetChange}
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                ) : (
+                  <FormControl required>
+                    <FormLabel id="demo-row-radio-buttons-group-label">
+                      당도
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                    >
+                      <FormControlLabel
+                        value="안달게"
+                        control={<Radio />}
+                        label="안달게"
+                        onChange={sweetChange}
+                      />
+                      <FormControlLabel
+                        value="중간"
+                        control={<Radio />}
+                        label="중간"
+                        onChange={sweetChange}
+                      />
+                      <FormControlLabel
+                        value="달게"
+                        control={<Radio />}
+                        label="달게"
+                        onChange={sweetChange}
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                )}
+                <br />
+
                 <FormControl required>
-          <FormLabel id="demo-row-radio-buttons-group-label">당도</FormLabel>
-          <RadioGroup
-            row
-            aria-labelledby="demo-row-radio-buttons-group-label"
-            name="row-radio-buttons-group"
-          >
-            <FormControlLabel
-              value="안달게"
-              control={<Radio />}
-              label="안달게"
-              onChange={sweetChange}
-            />
-            <FormControlLabel
-              value="중간"
-              control={<Radio />}
-              label="중간"
-              onChange={sweetChange}
-            />
-            <FormControlLabel
-              value="달게"
-              control={<Radio />}
-              label="달게"
-              onChange={sweetChange}
-            />
-          </RadioGroup>
-        </FormControl>}
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    토핑
+                  </FormLabel>
+                  {toppingbumch}
+                </FormControl>
               </Typography>
 
               <button

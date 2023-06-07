@@ -71,11 +71,11 @@ const ItemChange = () => {
           alert("정상적으로 상품등록을 완료했습니다");
           window.location.href = "/adminitem";
         } else {
-          alert("서버오류");
+          alert("입력란을 다시 확인하세요");
         }
       });
     } else {
-      alert("입력란을 다시 확인하세요");
+      alert("서버 오류");
     }
     /*     const userFormData = new FormData();
     const userBlob = new Blob([JSON.stringify(data)], {
@@ -259,6 +259,7 @@ const ItemChange = () => {
               onChange={itemNameHandler}
             />
           </div>
+
           <div>
             <TextField
               id="outlined-basic"
