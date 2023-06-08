@@ -67,7 +67,8 @@ const MenuList = () => {
   const [hot, setHot] = useState();
   const [ice, setIce] = useState();
   const [sweetness, setSweetness] = useState();
-
+  const [selectedToppings, setSelectedToppings] = useState([]);
+ // const [selectedToppingsJson, setselectedToppingsJson] = useState([]);
   //전체 토핑
   const [topping, setTopping] = useState([]);
 
@@ -170,8 +171,8 @@ const MenuList = () => {
       ownImgId: imgId,
       itemImg: img,
       sweetness: sweetness,
-      selectedToppingsJson: selectedToppings,
-      //  selectedToppingsJson:selectedToppingsJson  //[{d:d,sd:sd}]...배열 형태
+      selectedToppingsJson: JSON.stringify(selectedToppings),
+      //selectedToppings:selectedToppings  //[{d:d,sd:sd}]...배열 형태
     };
 
     /* param.selectedToppings=param.selectedToppings.toString() */
@@ -221,7 +222,7 @@ const MenuList = () => {
     setToppingName(e.target.value);
   }; */
 
-  const [selectedToppings, setSelectedToppings] = useState([]);
+ 
 
   const handleListItemClick = (toppingName, toppingPrice) => {
     const newValue = { toppingName, toppingPrice };

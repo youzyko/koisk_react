@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { json, Link, useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -53,244 +54,6 @@ const Cart = (props) => {
   console.log("option: ",option);
 
 
-  //이미지
-  useEffect(() => {
-    Promise.all(
-      option.map((item) => {
-        return fetch(BASE_URL + `/cart/${item.ownImgId}`, {
-          method: "get",
-          headers: {
-            Authorization: "Bearer " + ACCESS_TOKEN,
-          },
-        })
-          .then((res) => res.blob())
-          .then((data) => window.URL.createObjectURL(data));
-      })
-    ).then((url) => {
-      setImg(url);
-    });
-  }, [option]);
-
-  const imgBunch = img.map((item) => {
-    return <img style={{ width: "100%", height: "100%" }} src={item}></img>;
-  });
-
-  //삭제 버튼
-  const remove = (target) => {
-    console.log(target);
-    fetch(BASE_URL + `/cart/${target.itemName}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: "Bearer " + ACCESS_TOKEN,
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res); //true
-        if (res) {
-          const updatedInform = option.filter(
-            (item) => item.itemName !== target.itemName
-          );
-          setOption(updatedInform);
-        }
-      });
-  };
-  const removeHandler = (item) => {
-    console.log(item.itemName);
-    remove(item);
-  };
-
-
-  //수량 +
- 
-  const plus = (target) => {
-    const selectedItem = target;
-    const updatedCountMap = {
-      ...countMap,
-      [selectedItem]: (countMap[selectedItem] || 1) + 1
-    };
-    
-    setCountMap(updatedCountMap);
-    };
-
-    
-  //-
-  const minus = (target) => {
-    const selectedItem = target;
-    const updatedCountMap = {
-      ...countMap,
-      [selectedItem]: (countMap[selectedItem] || 1) - 1
-    };
-    setCountMap(updatedCountMap);
-  
-  };
-  
-  console.log("countMap: ",countMap); 
-
-  //토핑이름.가격
-  const toppingMap=option.map((item)=>{
-    return(
-      item.selectedToppings
-    )
-  })
-  console.log(toppingMap)  
-
-   /* const mapp=toppingMap.map((item)=>{
-    return item
-
-  }); 
-  console.log(mapp) 
- */
-
-
-
-  const optionMap = option.map((item, index) => {
-    const count = countMap[item.random] || 1;
-     if(countMap[item.random]<=0){
-      alert("수량은 최소 1개")
-      countMap[item.random]=1
-    } 
-   
-    return (
-      <>
-        <List
-          dense
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-          style={{ display: "flex" }}
-        >
-          <ListItemButton>
-            <ListItemAvatar>
-              <Avatar> {imgBunch[index]}</Avatar>
-            </ListItemAvatar>
-            <ListItemText
-  primary={
-    <Typography
-      component="span"
-      display="block"
-      variant="body1"
-      color="textPrimary"
-      style={{ position: 'relative' }}
-    >
-      상품 이름: {item.itemName}
-      <span
-        style={{
-         display:'block'
-         
-        }}
-      >  상품 가격:
-      {item.itemPrice}</span>
-     
-    </Typography>
-  }
-  secondary={
-    <React.Fragment>
-      <Typography
-        component="span"
-        display="block"
-        variant="body2"
-        color="textSecondary"
-      >
-        {` 옵션:${item.here}/${item.hot}/${item.ice}/${item.sweetness} `}<br/> 
-        토핑
-        {item.selectedToppings ? (
-              <span>
-                {(() => {
-                  const topping = JSON.parse(item.selectedToppings);
-                  console.log(topping)
-                  const toppingnameprice=topping.map((item)=>{
-                    return `[${item.toppingName}/가격:${item.toppingPrice}]`
-                  })
-                  return (
-                    <>
-              {toppingnameprice}
-                    </>
-                  );
-                })()}
-              </span>
-            ) : (
-              <span>선택된 토핑 없음</span>
-            )} 
-      </Typography>
-    </React.Fragment>
-  }
-/>
-            {/* 개수 */}
-          </ListItemButton>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <AddCircleOutlineIcon style={{ marginRight: "10px" }}  onClick={() => plus(item.random)}  />
-            {count}
-            <RemoveCircleOutlineIcon
-              style={{ marginLeft: "10px", marginRight: "10px" }}  
-              onClick={() => minus(item.random)}
-            />
-            <DeleteIcon
-              onClick={() => {
-                if (window.confirm("진짜로 삭제하시겠습니까?")) {
-                  removeHandler(item);
-                }
-              }}
-            />
-          </div>
-
-          {/*     </ListItem> */}
-        </List>
-      </>
-    );
-  });
-
-  //총합계
-  const totalPrice = option.reduce((acc, item) => {
-    console.log(acc); 
-    
-    const toppingP=JSON.parse(item.selectedToppings);
-    const onlyprice= toppingP.map((item)=>{
-      return item.toppingPrice
-    })
-    console.log(onlyprice); 
-    const toppingPriceSum = onlyprice.reduce((toppingAcc, toppingPrice) => {
-      return toppingAcc + parseInt(toppingPrice, 10);
-    }, 0);
-    const count = countMap[item.random] || 1;
-   
-
-
-    return acc + (item.itemPrice * count)+toppingPriceSum;
-  }, 0);
-  console.log(totalPrice)
-
-  //장바구니 초기화
-  const deleteAll=()=>{
-    fetch(BASE_URL+"/cart/deleteall",{
-      method: "DELETE",
-      headers: {
-        Authorization: "Bearer " + ACCESS_TOKEN,
-      },
-    }).then(res=>res.json())
-    .then(res=>{
-      console.log(res) //true 
-      if(res){
-        if(window.confirm("초기화?")){
-          window.location.reload();
-        }
-        
-       
-      }else{
-        alert("삭제할 항목이 없습니다. ")
-      }  
-    })
-  }
-
-/*   if (res) {
-    const updatedInform = option.filter(
-      (item) => item.itemName !== target.itemName
-    );
-    setOption(updatedInform); */
   //찐return
   return (
     <div>
@@ -315,7 +78,7 @@ const Cart = (props) => {
           paddingTop: "50px",
         }}
       >
-        {optionMap}
+      
       </div>
       <div
         style={{
@@ -329,15 +92,10 @@ const Cart = (props) => {
           color: "#333",
         }}
       >
-        총합계:{totalPrice}
+    
        
       </div>
-      <button style={{position:'fixed',right:'0'}}>결제하기</button>
-      <button style={{position:'fixed',left:'0'}}   onClick={() => {
-                
-                  deleteAll();
-             
-              }}>메뉴 전체 삭제</button>
+    
 
     </div>
     
