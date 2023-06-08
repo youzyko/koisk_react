@@ -170,18 +170,18 @@ const MenuList = () => {
       ownImgId: imgId,
       itemImg: img,
       sweetness: sweetness,
-      selectedToppings:selectedToppings,
-     // selectedToppingsJson:selectedToppingsJson  //[{d:d,sd:sd}]...배열 형태
+      selectedToppingsJson: selectedToppings,
+      //  selectedToppingsJson:selectedToppingsJson  //[{d:d,sd:sd}]...배열 형태
     };
-    
-/* param.selectedToppings=param.selectedToppings.toString() */
-console.log(param)
+
+    /* param.selectedToppings=param.selectedToppings.toString() */
+    console.log(param);
 
     fetch(BASE_URL + "/cart/incart", {
       method: "post",
       headers: {
         Authorization: "Bearer " + ACCESS_TOKEN,
-        "Content-Type": "application/json"
+        "Content-type": "application/json",
       },
       body: JSON.stringify(param),
     }).then((res) => {
@@ -191,7 +191,7 @@ console.log(param)
         setOpen(false); //모달 닫기
       } else {
         alert("장바구니 추가 완료");
-       // window.location.href = "/cart"; //취소시 페이지 유지
+        // window.location.href = "/cart"; //취소시 페이지 유지
       }
     });
   };
@@ -217,22 +217,19 @@ console.log(param)
   };
   console.log(sweetness);
 
-/*   const toppingNameChange = (e) => {
+  /*   const toppingNameChange = (e) => {
     setToppingName(e.target.value);
   }; */
 
   const [selectedToppings, setSelectedToppings] = useState([]);
 
-
   const handleListItemClick = (toppingName, toppingPrice) => {
     const newValue = { toppingName, toppingPrice };
-    setSelectedToppings(prevState => [...prevState, newValue]);
-   
+    setSelectedToppings((prevState) => [...prevState, newValue]);
   };
 
   console.log("selectedToppings: ", selectedToppings);
 
-  
   const toppingbumch = topping.map((item, index) => {
     return (
       <>
@@ -244,8 +241,9 @@ console.log(param)
             key={item.toppingName}
             secondaryAction={<Checkbox edge="end" />}
             disablePadding
-      
-      onChange={() => handleListItemClick(item.toppingName, item.toppingPrice)} 
+            onChange={() =>
+              handleListItemClick(item.toppingName, item.toppingPrice)
+            }
           >
             <ListItemButton>
               {/*    토핑 사진   */}
