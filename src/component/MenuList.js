@@ -253,7 +253,7 @@ const MenuList = () => {
               </ListItemAvatar>
 
               <ListItemText
-                primary={`${item.toppingName} - ${item.toppingPrice}`}
+                primary={`${item.toppingName} /가격:${item.toppingPrice}원`}
               />
             </ListItemButton>
           </ListItem>

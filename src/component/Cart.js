@@ -21,6 +21,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import { ConnectedTvOutlined, ImportExport } from "@mui/icons-material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import { loadPaymentWidget, ANONYMOUS } from '@tosspayments/payment-widget-sdk'
 
 const Cart = (props) => {
   const BASE_URL = "http://localhost:8080/api";
@@ -73,8 +74,8 @@ const Cart = (props) => {
 
   //삭제 버튼
   const remove = (target) => {
-    console.log(target);
-    fetch(BASE_URL + `/cart/${target.itemName}`, {
+    console.log(target.random);
+    fetch(BASE_URL + `/cart/${target.random}`, {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + ACCESS_TOKEN,
@@ -85,14 +86,14 @@ const Cart = (props) => {
         console.log(res); //true
         if (res) {
           const updatedInform = option.filter(
-            (item) => item.itemName !== target.itemName
+            (item) => item.random !== target.random
           );
           setOption(updatedInform);
         }
       });
   };
   const removeHandler = (item) => {
-    console.log(item.itemName);
+    console.log(item.random);
     remove(item);
   };
 
@@ -274,11 +275,18 @@ const Cart = (props) => {
       });
   };
 
+  const paymentPage=()=>{
+    window.location.href = "/payment"
+  }
+
   /*   if (res) {
     const updatedInform = option.filter(
       (item) => item.itemName !== target.itemName
     );
     setOption(updatedInform); */
+    const clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq"
+    const customerKey = "RhxngV2kEKAUJjhjgzClt" // 내 상점의 고객을 식별하는 고유한 키
+
   //찐return
   return (
     <div>
@@ -319,7 +327,9 @@ const Cart = (props) => {
       >
         총합계:{totalPrice}
       </div>
-      <button style={{ position: "fixed", right: "0" }}>결제하기</button>
+      <button style={{ position: "fixed", right: "0" }}onClick={() => {
+         paymentPage()
+        }}>결제하기</button>
       <button
         style={{ position: "fixed", left: "0" }}
         onClick={() => {

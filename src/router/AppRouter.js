@@ -16,7 +16,7 @@ import MainImgAdmin from "component/MainImgAdmin";
 import Cart from "component/Cart";
 import Topping from "component/Topping";
 import AdminTopping from "component/AdminTopping";
-
+import Payment from "component/Payment";
 const AppRouter = () => {
 
     return (
@@ -28,7 +28,7 @@ const AppRouter = () => {
       {/*   <Route exact path="/" element={<App />} /> */}
       
         <Route exact path="/api/item/:menuId" element={<MenuList />} />  
-        <Route exact path="/api/option/:itemName" element={<Option />} />
+{/*         <Route exact path="/api/option/:itemName" element={<Option />} /> */}
       <Route  path="/login" element={<Login />} /> 
       <Route    exact path="/" element={<ImageSlide />} /> 
       <Route  path="/join" element={<Join />} /> 
@@ -39,6 +39,9 @@ const AppRouter = () => {
 <Route  path="/cart" element={< Cart/>} />  
 <Route  path="/topping" element={< Topping/>} />  
 <Route  path="/admintopping" element={< AdminTopping/>} />  
+
+<Route  path="/payment" element={< Payment/>} />  
+
        </Routes>     
        </>
     );
