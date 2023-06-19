@@ -21,7 +21,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import { ConnectedTvOutlined, ImportExport } from "@mui/icons-material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import { loadPaymentWidget, ANONYMOUS } from '@tosspayments/payment-widget-sdk'
+import { loadPaymentWidget, ANONYMOUS } from "@tosspayments/payment-widget-sdk";
 
 const Cart = (props) => {
   const BASE_URL = "http://localhost:8080/api";
@@ -35,6 +35,9 @@ const Cart = (props) => {
 
   //개수
   const [countMap, setCountMap] = useState([]);
+
+  //이름 모음집 
+  const [payment,setPayment]=useState([]);
 
   useEffect(() => {
     fetch(BASE_URL + "/cart", {
@@ -119,7 +122,7 @@ const Cart = (props) => {
     setCountMap(updatedCountMap);
   };
 
-  console.log("countMap: ", countMap);
+  //console.log("countMap: ", countMap);
 
   //토핑이름.가격
   const toppingMap = option.map((item) => {
@@ -134,6 +137,10 @@ const Cart = (props) => {
   });
   console.log(mapp)
  */
+const cartmenuName=option.map((item)=>{
+  return item.itemName
+})
+console.log(cartmenuName)
 
   const optionMap = option.map((item, index) => {
     const count = countMap[item.random] || 1;
@@ -141,7 +148,7 @@ const Cart = (props) => {
       alert("수량은 최소 1개");
       countMap[item.random] = 1;
     }
-
+    /*   localStorage.setItem("itemName", item.itemName);  */
     return (
       <>
         <List
@@ -168,7 +175,6 @@ const Cart = (props) => {
                       display: "block",
                     }}
                   >
-                    {" "}
                     상품 가격:
                     {item.itemPrice}
                   </span>
@@ -190,6 +196,8 @@ const Cart = (props) => {
                         {(() => {
                           const topping = JSON.parse(item.selectedToppingsJson);
                           console.log(topping);
+                          /*  const toppingString = JSON.stringify(topping);
+                          localStorage.setItem("topping", toppingString); */
                           const toppingnameprice = topping.map((item) => {
                             return `[${item.toppingName}/가격:${item.toppingPrice}]`;
                           });
@@ -275,17 +283,43 @@ const Cart = (props) => {
       });
   };
 
-  const paymentPage=()=>{
-    window.location.href = "/payment"
-  }
+  //totalprice 저장 후 /payment로 넘겨주기
+  const payClick = () => {
+    const item = {
+      // Construct the item object with the necessary data
+      // Replace with your item data
+      // Example: totalPrice, orderId, etc.
+      totalPrice:totalPrice,
+      orderName:cartmenuName,
+      orderTopping:""
+    };
+  
+    fetch(BASE_URL + "/payment", {
+      method: 'post',
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + ACCESS_TOKEN,
+      },
+      body: JSON.stringify(item),
+    })
+      .then(res => {
+        console.log(res);
+        return res.json();
+      })
+      .then(res => {
+        // Process the payment response
+        console.log(res);
+        // Set the payment state or take any other necessary action
+        setPayment(res);
+        // Redirect to the payment page if needed
+        // window.location.href = "/payment";
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
 
-  /*   if (res) {
-    const updatedInform = option.filter(
-      (item) => item.itemName !== target.itemName
-    );
-    setOption(updatedInform); */
-    const clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq"
-    const customerKey = "RhxngV2kEKAUJjhjgzClt" // 내 상점의 고객을 식별하는 고유한 키
+
 
   //찐return
   return (
@@ -327,9 +361,12 @@ const Cart = (props) => {
       >
         총합계:{totalPrice}
       </div>
-      <button style={{ position: "fixed", right: "0" }}onClick={() => {
-         paymentPage()
-        }}>결제하기</button>
+      <button
+        style={{ position: "fixed", right: "0" }}
+       onClick={payClick}
+      >
+        결제하기
+      </button>
       <button
         style={{ position: "fixed", left: "0" }}
         onClick={() => {
