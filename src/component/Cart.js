@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { json, Link, useParams } from "react-router-dom";
+import { json, Link, useParams,useHistory  } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useContext } from "react";
 import Box from "@mui/material/Box";
@@ -23,7 +23,10 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { loadPaymentWidget, ANONYMOUS } from "@tosspayments/payment-widget-sdk";
 
-const Cart = (props) => {
+
+const Cart = () => {
+
+
   const BASE_URL = "http://localhost:8080/api";
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
 
@@ -38,6 +41,8 @@ const Cart = (props) => {
 
   //이름 모음집 
   const [payment,setPayment]=useState([]);
+  
+ 
 
   useEffect(() => {
     fetch(BASE_URL + "/cart", {
@@ -52,6 +57,7 @@ const Cart = (props) => {
       });
   }, []);
   console.log("option: ", option);
+
 
   //이미지
   useEffect(() => {
@@ -130,17 +136,18 @@ const Cart = (props) => {
   });
   console.log(toppingMap);
 
-  /* const mapp=toppingMap.map((item)=>{
-    return item
+  //토핑의 이름만 출력
+  const toppingName=option.map((item)=>{
+    return item.selectedToppingsJson
+  })
+  console.log(toppingName);
 
-
-  });
-  console.log(mapp)
- */
+ //카트에 담긴 메뉴이름
 const cartmenuName=option.map((item)=>{
   return item.itemName
 })
 console.log(cartmenuName)
+
 
   const optionMap = option.map((item, index) => {
     const count = countMap[item.random] || 1;
@@ -282,17 +289,17 @@ console.log(cartmenuName)
         }
       });
   };
-
+  const payClick =()=>{
+    window.location.href = "/payment";
+  }
   //totalprice 저장 후 /payment로 넘겨주기
-  const payClick = () => {
+ /*  const payClick = () => {
     const item = {
-      // Construct the item object with the necessary data
-      // Replace with your item data
-      // Example: totalPrice, orderId, etc.
       totalPrice:totalPrice,
-      orderName:cartmenuName,
+      orderNameJson:JSON.stringify(cartmenuName),
       orderTopping:""
     };
+    console.log(item.orderNameJson);
   
     fetch(BASE_URL + "/payment", {
       method: 'post',
@@ -301,24 +308,26 @@ console.log(cartmenuName)
         Authorization: "Bearer " + ACCESS_TOKEN,
       },
       body: JSON.stringify(item),
+      
     })
       .then(res => {
         console.log(res);
         return res.json();
       })
       .then(res => {
-        // Process the payment response
+      
         console.log(res);
-        // Set the payment state or take any other necessary action
+     
         setPayment(res);
-        // Redirect to the payment page if needed
-        // window.location.href = "/payment";
+
+        window.location.href = "/payment";
       })
       .catch(error => {
         console.error(error);
       });
+      
   };
-
+  console.log(payment) //true */
 
 
   //찐return
@@ -375,7 +384,9 @@ console.log(cartmenuName)
       >
         메뉴 전체 삭제
       </button>
+
     </div>
+    
   );
 };
 export default Cart;

@@ -17,6 +17,8 @@ import Cart from "component/Cart";
 import Topping from "component/Topping";
 import AdminTopping from "component/AdminTopping";
 import Payment from "component/Payment";
+import SuccessUrl from "component/SuccessUrl";
+
 const AppRouter = () => {
 
     return (
@@ -39,7 +41,7 @@ const AppRouter = () => {
 <Route  path="/cart" element={< Cart/>} />  
 <Route  path="/topping" element={< Topping/>} />  
 <Route  path="/admintopping" element={< AdminTopping/>} />  
-
+<Route path="/success/*" element={<SuccessUrl />} />
 <Route  path="/payment" element={< Payment/>} />  
 
        </Routes>     

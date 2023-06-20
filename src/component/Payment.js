@@ -15,6 +15,7 @@ import { loadTossPayments } from "@tosspayments/payment-sdk";
 const Payment = () => {
   const BASE_URL = "http://localhost:8080/api";
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
+  const [option, setOption] = useState([]);
   //전체 금액 받아오기
   const totalPrice = localStorage.getItem("totalPrice");
   console.log(totalPrice);
@@ -27,11 +28,37 @@ const Payment = () => {
       ).toString(16)
     );
   }
-  console.log(uuidv4());
+  console.log(uuidv4()); 
+  const [clientLoaded, setClientLoaded] = useState(false); 
 
+  //카트 전체정보 받아오기
+  useEffect(() => {
+    if (clientLoaded) {
+      fetch(BASE_URL + "/cart", {
+        method: "get",
+        headers: {
+          Authorization: "Bearer " + ACCESS_TOKEN,
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          setOption(res);
+        })
+        .catch((error) => {
+          console.error('Failed to fetch options:', error);
+        });
+    }
+  }, [clientLoaded]);
+
+  const menuNamelist=option.map((item)=>{
+    return item.itemName
+  })
+
+  console.log("menuNamelist: ", menuNamelist);
   const clientKey = "test_ck_N5OWRapdA8d2qxRzXmAVo1zEqZKL";
   /* 시크릿키  test_sk_D4yKeq5bgrp1KYMmwO08GX0lzW6Y */
   loadTossPayments(clientKey).then((tossPayments) => {
+    setClientLoaded(true);
     // ------ 결제창 띄우기 ------
     tossPayments
       .requestPayment("카드", {
@@ -41,11 +68,12 @@ const Payment = () => {
         // https://docs.tosspayments.com/reference/js-sdk
         amount: totalPrice, // 결제 금액
         orderId: uuidv4(), // 주문 ID
-        orderName: "테스트 결제", // 주문명
+        orderName: menuNamelist.toString(), // 주문명
         //customerName: '김토스', // 구매자 이름
-        successUrl: "http://localhost:3000/", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+        successUrl: "http://localhost:3000/success", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
         failUrl: "https://docs.tosspayments.com/guides/payment/test-fail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
       })
+      //http://localhost:3000/success?orderId=03e2c548-2d99-48e4-b6c6-31b2f6714405&paymentKey=pd12AjJexmnRQoOaPz8LEdWgvJ2lBv3y47BMw6vl0gkYqDNE&amount=5000
       //alert("결제가 완료 되었습니다/")
       // ------ 결제창을 띄울 수 없는 에러 처리 ------
       // 메서드 실행에 실패해서 reject 된 에러를 처리하는 블록입니다.
@@ -61,43 +89,6 @@ const Payment = () => {
         }
       });
   }, []);
-
-  //인코딩
-  const secretKey = "test_sk_D4yKeq5bgrp1KYMmwO08GX0lzW6Y";
-  const encodedString = btoa(secretKey);
-  console.log(encodedString);
-  /*  dGVzdF9za19ENHlLZXE1YmdycDFLWU1td08wOEdYMGx6VzZZ  */
-
-  const axios = require('axios');
-
-  
-    /* method: "POST",
-    url: "https://api.tosspayments.com/v1/payments/confirm",
-    headers: {
-      Authorization:
-        "Basic dGVzdF9za19ENHlLZXE1YmdycDFLWU1td08wOEdYMGx6VzZZOg==",
-      "Content-Type": "application/json",
-    },
-    data: {
-      paymentKey: "4qjZblEopLBa5PzR0ArnjEWkZokGkrvmYnNeDMyW2G1OgwK7",
-      amount: totalPrice,
-      orderId: uuidv4(),
-    }, 
-    useEffect(()=>{
-      const option={
-        meth
-      }
-    })
-  };
-  axios(options)
-  .then(function (response) {
-    console.log(response.data);
-  })
-  .catch(function (error) {
-    console.error(error);
-  });*/
-
-  
 
   return <></>;
 };
