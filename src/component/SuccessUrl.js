@@ -25,44 +25,53 @@ const SuccessUrl = () => {
       .then((res) => res.json())
       .then((res) => {
         setOption(res);
+       /*  savePayment(); */
       });
   }, []);
+  
   console.log("option: ", option);
+  //const cartmenuName = option.map((item) => item.itemName);
+  
+  const savePayment = () => {
+    //메뉴 이름만 받아오기
+    const cartmenuName = option.map((item) => item.itemName);
+    const cartTopping=option.map((item) => item.selectedToppingsJson);
+    const items = {
+      totalPrice: totalPrice,
+      orderNameJson: JSON.stringify(cartmenuName),
+      orderTopping: JSON.stringify(cartTopping),
 
-  const cartmenuName = option.map((item) => item.itemName);
-
-  //메뉴이름만 받아오기
+    };
+  
+    return fetch(BASE_URL + "/payment", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + ACCESS_TOKEN,
+      },
+      body: JSON.stringify(items),
+    })
+      .then((res) => {
+        console.log(res);
+        return res.json();
+      })
+      .then((res) => {
+        console.log(res);
+        setPayment(res);
+        //window.location.href = "/payment";
+      });
+  };
 
   useEffect(() => {
-    Promise.all(
-      option.map((item) => {
-        const items = {
-          totalPrice: totalPrice,
-          orderNameJson: JSON.stringify(cartmenuName),
-          orderTopping: "rtert",
-        };
-        return fetch(BASE_URL + "/payment", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + ACCESS_TOKEN,
-          },
-          body: JSON.stringify(items),
-        })
-          .then((res) => {
-            console.log(res);
-            return res.json();
-          })
-          .then((res) => {
-            console.log(res);
-            setPayment(res);
-
-            //window.location.href = "/payment";
-          });
-      })
-    );
-   
+    if (option.length > 0) {
+      savePayment();
+      localStorage.removeItem('totalPrice');
+      alert("경제성공")
+      window.location.href = "/"
+    }
   }, [option]);
+
+
   //진짜 return
   return <>{/* <button onClick={payClick} >추가하기</button> */}</>;
 };

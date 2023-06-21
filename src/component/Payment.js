@@ -18,7 +18,8 @@ const Payment = () => {
   const [option, setOption] = useState([]);
   //전체 금액 받아오기
   const totalPrice = localStorage.getItem("totalPrice");
-  console.log(totalPrice);
+  console.log("totalPrice:",totalPrice);
+  
   //orderId 랜덤 번호 생성
   function uuidv4() {
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>

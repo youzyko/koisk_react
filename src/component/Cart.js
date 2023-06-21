@@ -205,6 +205,7 @@ console.log(cartmenuName)
                           console.log(topping);
                           /*  const toppingString = JSON.stringify(topping);
                           localStorage.setItem("topping", toppingString); */
+                       
                           const toppingnameprice = topping.map((item) => {
                             return `[${item.toppingName}/가격:${item.toppingPrice}]`;
                           });
@@ -290,6 +291,7 @@ console.log(cartmenuName)
       });
   };
   const payClick =()=>{
+    localStorage.setItem("totalPrice", totalPrice);
     window.location.href = "/payment";
   }
   //totalprice 저장 후 /payment로 넘겨주기
