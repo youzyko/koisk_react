@@ -61,7 +61,7 @@ useEffect(()=>{
 {/*    <Sidebar  ></Sidebar>  */}
 
         <Routes>
-          <Route exact path="/api/item/:menuId" element={<MenuList updateCart={updateCart} />} />
+          <Route exact path="/api/item/:menuId" element={<MenuList  />} />
           <Route path="/login" element={<Login />} />
           <Route exact path="/" element={<ImageSlide />} />
           <Route path="/join" element={<Join />} />

@@ -226,11 +226,14 @@ const MenuList = ({updateCart}) => {
     })
     .then((res)=>{
       console.log(res) //true
-      updateCart()
+     /*  updateCart() */
       setTf(false)
       alert("장바구니 추가 완료")
+    
     })
+    setTf(true)
   };
+console.log("장바구니 추가 완료tf",tf)
 
   useEffect(() => {
     fetch(BASE_URL + "/cart", {
@@ -245,6 +248,7 @@ const MenuList = ({updateCart}) => {
       });
   }, [tf]); 
   console.log("OPTION",option)
+
 const [imgside,setImgside]=useState([])
 
   useEffect(() => {
