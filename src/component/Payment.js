@@ -16,9 +16,11 @@ const Payment = () => {
   const BASE_URL = "http://localhost:8080/api";
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
   const [option, setOption] = useState([]);
+  
   //전체 금액 받아오기
   const totalPrice = localStorage.getItem("totalPrice");
   console.log("totalPrice:",totalPrice);
+  const cartmenuName = localStorage.getItem("cartmenuName");
   
   //orderId 랜덤 번호 생성
   function uuidv4() {
@@ -31,32 +33,33 @@ const Payment = () => {
   }
   console.log(uuidv4()); 
   const [clientLoaded, setClientLoaded] = useState(false); 
-
-  //카트 전체정보 받아오기
-  useEffect(() => {
-    if (clientLoaded) {
-      fetch(BASE_URL + "/cart", {
-        method: "get",
-        headers: {
-          Authorization: "Bearer " + ACCESS_TOKEN,
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          setOption(res);
-        })
-        .catch((error) => {
-          console.error('Failed to fetch options:', error);
-        });
-    }
-  }, [clientLoaded]);
-
-  const menuNamelist=option.map((item)=>{
-    return item.itemName
-  })
-
-  console.log("menuNamelist: ", menuNamelist);
   const clientKey = "test_ck_N5OWRapdA8d2qxRzXmAVo1zEqZKL";
+ /*     //카트 전체정보 받아오기
+     useEffect(() => {
+      if (clientLoaded) {
+        fetch(BASE_URL + "/cart", {
+          method: "get",
+          headers: {
+            Authorization: "Bearer " + ACCESS_TOKEN,
+          },
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            setOption(res);
+          })
+          .catch((error) => {
+            console.error('Failed to fetch options:', error);
+          });
+      }
+    }, [clientLoaded]);
+  
+    const menuNamelist=option.map((item)=>{
+      return item.itemName
+    })
+  
+    console.log("menuNamelist: ", menuNamelist); */
+   
+ 
   /* 시크릿키  test_sk_D4yKeq5bgrp1KYMmwO08GX0lzW6Y */
   loadTossPayments(clientKey).then((tossPayments) => {
     setClientLoaded(true);
@@ -69,7 +72,7 @@ const Payment = () => {
         // https://docs.tosspayments.com/reference/js-sdk
         amount: totalPrice, // 결제 금액
         orderId: uuidv4(), // 주문 ID
-        orderName: menuNamelist.toString(), // 주문명
+        orderName: cartmenuName.toString(), // 주문명
         //customerName: '김토스', // 구매자 이름
         successUrl: "http://localhost:3000/success", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
         failUrl: "https://docs.tosspayments.com/guides/payment/test-fail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
@@ -90,6 +93,8 @@ const Payment = () => {
         }
       });
   }, []);
+
+
 
   return <></>;
 };

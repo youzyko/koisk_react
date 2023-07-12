@@ -24,10 +24,22 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Checkbox from "@mui/material/Checkbox";
 import Avatar from "@mui/material/Avatar";
-
+import Sidebar from "./Sidebar";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import DeleteIcon from "@mui/icons-material/Delete";
 //리액트 context
 
-const MenuList = () => {
+const MenuList = ({updateCart}) => {
+  const sidebarStyle = {
+    position: "fixed",
+    top: 300,
+    right: 0,
+    width: "200px",
+    height: "100%",
+    backgroundColor: "#f2f2f2",
+    padding: "20px",
+  };
   const BASE_URL = "http://localhost:8080/api";
   /*    http://localhost:8080/api/item/1,2,3,.... */
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
@@ -68,7 +80,23 @@ const MenuList = () => {
   const [ice, setIce] = useState();
   const [sweetness, setSweetness] = useState();
   const [selectedToppings, setSelectedToppings] = useState([]);
- // const [selectedToppingsJson, setselectedToppingsJson] = useState([]);
+  // const [selectedToppingsJson, setselectedToppingsJson] = useState([]);
+ const [option, setOption] = useState([]);
+ 
+/*   function onOptionButtonClicked(){
+    console.log("onOptionButtonClicked실행 된다")
+      fetch(BASE_URL + "/cart", {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + ACCESS_TOKEN,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setOption(res);
+      }); 
+  } */
+
   //전체 토핑
   const [topping, setTopping] = useState([]);
 
@@ -159,6 +187,7 @@ const MenuList = () => {
   const imgBunch = groupImg.map((item) => {
     return <img src={item}></img>;
   });
+  const [tf,setTf]=useState(true)
 
   //장바구니 담기 버튼
   const optionButton = (e) => {
@@ -174,9 +203,8 @@ const MenuList = () => {
       selectedToppingsJson: JSON.stringify(selectedToppings),
       //selectedToppings:selectedToppings  //[{d:d,sd:sd}]...배열 형태
     };
-
-    /* param.selectedToppings=param.selectedToppings.toString() */
     console.log(param);
+    //if param 값이 없으면 오류
 
     fetch(BASE_URL + "/cart/incart", {
       method: "post",
@@ -186,16 +214,235 @@ const MenuList = () => {
       },
       body: JSON.stringify(param),
     }).then((res) => {
-      console.log(res);
       if (res.status === 400) {
         alert("이미 장바구니에 추가된 메뉴입니다.");
         setOpen(false); //모달 닫기
-      } else {
-        alert("장바구니 추가 완료");
-        // window.location.href = "/cart"; //취소시 페이지 유지
-      }
-    });
+      } else if (res.status === 500) {
+        alert("필수항목을 체크해주세요.");
+        setOpen(true);
+      } else if (res.status === 200) {
+        return res.json(); // Assuming the response contains JSON data
+      } 
+    })
+    .then((res)=>{
+      console.log(res) //true
+      updateCart()
+      setTf(false)
+      alert("장바구니 추가 완료")
+    })
   };
+
+  useEffect(() => {
+    fetch(BASE_URL + "/cart", {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + ACCESS_TOKEN,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setOption(res);
+      });
+  }, [tf]); 
+  console.log("OPTION",option)
+const [imgside,setImgside]=useState([])
+
+  useEffect(() => {
+    Promise.all(
+      option.map((item) => {
+        return fetch(BASE_URL + `/cart/${item.random}`, {
+          method: "get",
+          headers: {
+            Authorization: "Bearer " + ACCESS_TOKEN,
+          },
+        })
+          .then((res) => res.blob())
+          .then((data) => window.URL.createObjectURL(data));
+      })
+    ).then((url) => {
+      setImgside(url);
+    });
+  }, [option]);
+
+  const imgBunchSide = imgside.map((item) => {
+    return <img style={{ width: "100%", height: "100%" }} src={item}></img>;
+  });
+
+  const showshow=option.map((item)=>{
+    return item.itemName
+  })
+
+  
+  console.log("showshow",showshow);
+
+
+    //삭제 버튼
+    const remove = (target) => {
+      console.log(target.random);
+      fetch(BASE_URL + `/cart/${target.random}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + ACCESS_TOKEN,
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res); //true
+          if (res) {
+            const updatedInform = option.filter(
+              (item) => item.random !== target.random
+            );
+            setOption(updatedInform);
+          }
+        });
+    };
+    const removeHandler = (item) => {
+      console.log(item.random);
+      remove(item);
+   
+    };
+
+
+//=============================================================================
+//개수
+const [countMap, setCountMap] = useState([]);
+
+const plus = (target) => {
+  const selectedItem = target;
+  const updatedCountMap = {
+    ...countMap,
+    [selectedItem]: (countMap[selectedItem] || 1) + 1,
+  };
+  setCountMap(updatedCountMap);
+ localStorage.setItem("count",JSON.stringify(countMap)); 
+};
+console.log("countMap");
+  //-
+  const minus = (target) => {
+    const selectedItem = target;
+    const updatedCountMap = {
+      ...countMap,
+      [selectedItem]: (countMap[selectedItem] || 1) - 1,
+    };
+    setCountMap(updatedCountMap);
+    localStorage.setItem("count",JSON.stringify(countMap)); 
+  };
+  console.log(localStorage.getItem("count"))
+
+  const optionMap = option.map((item, index) => {
+    const count = countMap[item.random] || 1;
+    
+    if (countMap[item.random] <= 0) {
+      alert("수량은 최소 1개");
+      countMap[item.random] = 1;
+    }
+  
+    return (
+      <>
+        <ListItemAvatar>
+          <Avatar> {imgBunchSide[index]}</Avatar>
+        </ListItemAvatar>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <AddCircleOutlineIcon
+            style={{ marginRight: "10px" }}
+            onClick={() => plus(item.random)}
+          />
+          {count}
+          <RemoveCircleOutlineIcon
+            style={{ marginLeft: "10px", marginRight: "10px" }}
+            onClick={() => minus(item.random)}
+          />
+          <DeleteIcon
+            onClick={() => {
+              if (window.confirm("진짜로 삭제하시겠습니까?")) {
+                removeHandler(item);
+              }
+            }}
+          />
+        </div>
+        <List dense sx={{ width: "250px" }} style={{ display: "flex" }}>
+          <div
+            style={{
+              width: "500px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <ListItemText
+              primary={
+                <Typography
+                  component="span"
+                  display="block"
+                  variant="body1"
+                  color="textPrimary"
+                  style={{ textAlign: "center" }}
+                >
+                  상품 이름: {item.itemName}
+                </Typography>
+              }
+              secondary={
+                <React.Fragment>
+                  <Typography
+                    component="span"
+                    display="block"
+                    variant="body2"
+                    color="textSecondary"
+                    style={{ textAlign: "center" }}
+                  >
+                    {` 옵션:${item.here}/${item.hot}/${item.ice}/${item.sweetness} `}
+                    <br />
+                    토핑:
+                    {item.selectedToppingsJson ? (
+                      <span>
+                        {(() => {
+                          const topping = JSON.parse(item.selectedToppingsJson);
+                          console.log(topping);
+
+                          const toppingnameprice = topping.map((item) => {
+                            return `[${item.toppingName}/가격:${item.toppingPrice}]`;
+                          });
+                          return <>{toppingnameprice}</>;
+                        })()}
+                      </span>
+                    ) : (
+                      <span>선택된 토핑 없음</span>
+                    )}
+                  </Typography>
+                </React.Fragment>
+              }
+            />
+          </div>
+        </List>
+      </>
+    );
+  });
+
+  //총합계
+  const totalPrice = option.reduce((acc, item) => {
+    console.log(acc);
+
+    const toppingP = JSON.parse(item.selectedToppingsJson);
+    const onlyprice = toppingP.map((item) => {
+      return item.toppingPrice;
+    });
+
+    console.log(onlyprice);
+    const toppingPriceSum = onlyprice.reduce((toppingAcc, toppingPrice) => {
+      return toppingAcc + parseInt(toppingPrice, 10);
+    }, 0);
+    const count = countMap[item.random] || 1;
+
+    return acc + item.itemPrice * count + toppingPriceSum;
+  }, 0);
+  console.log(totalPrice);
+
+
 
   // radio 옵션값이 변경될 때 onchange
   const HereChange = (e) => {
@@ -222,11 +469,25 @@ const MenuList = () => {
     setToppingName(e.target.value);
   }; */
 
- 
-
   const handleListItemClick = (toppingName, toppingPrice) => {
     const newValue = { toppingName, toppingPrice };
-    setSelectedToppings((prevState) => [...prevState, newValue]);
+
+    setSelectedToppings((prevState) => {
+      // Check if the value already exists in selectedToppings
+      const existingIndex = prevState.findIndex(
+        (topping) => topping.toppingName === toppingName
+      );
+
+      if (existingIndex !== -1) {
+        // If the value exists, remove it from selectedToppings
+        const updatedToppings = [...prevState];
+        updatedToppings.splice(existingIndex, 1);
+        return updatedToppings;
+      } else {
+        // If the value doesn't exist, add it to selectedToppings
+        return [...prevState, newValue];
+      }
+    });
   };
 
   console.log("selectedToppings: ", selectedToppings);
@@ -261,6 +522,18 @@ const MenuList = () => {
       </>
     );
   });
+   //카트에 담긴 메뉴이름
+   const cartmenuName = option.map((item) => {
+    return item.itemName;
+  });
+  console.log(cartmenuName);
+
+    //결제하기
+    const payClick = () => {
+      localStorage.setItem("totalPrice", totalPrice);
+      localStorage.setItem("cartmenuName", cartmenuName);
+      window.location.href = "/payment";
+    };
 
   //진짜 return
   return (
@@ -277,9 +550,9 @@ const MenuList = () => {
         메뉴 리스트
       </h1>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={-30}>
         {menuList.items.map((item, index) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
             <Button
               onClick={() => {
                 setMenuname(item.itemName);
@@ -307,7 +580,69 @@ const MenuList = () => {
             </Button>
           </Grid>
         ))}
+       
       </Grid>
+
+
+     <div style={sidebarStyle}>
+      <h1
+        style={{
+          textDecorationLine: "underline",
+          fontFamily: "Arial, sans-serif",
+          fontSize: "32px",
+          color: "#333",
+          textAlign: "center",
+        }}
+      >
+        장바구니
+      </h1>
+
+    <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          paddingTop: "50px",
+        }}
+      >
+        {optionMap}
+      </div>
+
+      <div
+        style={{
+          fontSize: "20px",
+          position: "fixed",
+          bottom: "60px",
+          right: 0,
+          marginRight: "50px",
+        }}
+      >
+        총합계:{totalPrice}
+      </div>
+
+      <button
+        style={{
+          position: "fixed",
+          bottom: "0",
+          left: "87.5%",
+          /*   transform: 'translateX(970%)', */
+          fontSize: "18px",
+          fontWeight: "bold",
+          backgroundColor: "transparent",
+          /*     border: "none", */
+          /*       borderTop:'2px solid black', */
+          height: "50px",
+          width: "246px",
+        }}
+        class="blink"
+        onClick={payClick}
+      >
+        결제하기
+      </button>
+
+      </div>
+
 
       <div>
         <Modal
@@ -331,6 +666,16 @@ const MenuList = () => {
                 id="transition-modal-title"
                 variant="h6"
                 component="h2"
+                style={{
+                  fontFamily: "Verdana, sans-serif",
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  color: "#555",
+                  marginBottom: "8px",
+                  textDecoration: "none",
+                  textTransform: "uppercase",
+                  textAlign: "center",
+                }}
               >
                 {menuname}/{price}원
               </Typography>
@@ -493,10 +838,13 @@ const MenuList = () => {
               </Typography>
 
               <button
-                onClick={() => {
-                  /*  if(window.confirm(`장바구니로 이동하시겠습니까?`)){ } */
-                  optionButton();
-                }}
+                onClick={()=>{
+                  optionButton()
+                  handleClose();
+
+                }
+
+                }
               >
                 장바구니 담기
               </button>

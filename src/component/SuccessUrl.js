@@ -7,9 +7,9 @@ const SuccessUrl = () => {
 
   //카트 전체 정보
   const [option, setOption] = useState([]);
-
+  const [inform,setInform]=useState([]);
   const [payment, setPayment] = useState([]);
- 
+
   //총 가격
   const totalPrice = localStorage.getItem("totalPrice");
   console.log(totalPrice);
@@ -18,9 +18,9 @@ const SuccessUrl = () => {
   useEffect(() => {
     fetch(BASE_URL + "/cart", {
       method: "get",
-      headers: {
+    /*   headers: {
         Authorization: "Bearer " + ACCESS_TOKEN,
-      },
+      }, */
     })
       .then((res) => res.json())
       .then((res) => {
@@ -28,19 +28,21 @@ const SuccessUrl = () => {
        /*  savePayment(); */
       });
   }, []);
-  
   console.log("option: ", option);
+  
+
+ 
   //const cartmenuName = option.map((item) => item.itemName);
   
   const savePayment = () => {
     //메뉴 이름만 받아오기
     const cartmenuName = option.map((item) => item.itemName);
     const cartTopping=option.map((item) => item.selectedToppingsJson);
+   
     const items = {
       totalPrice: totalPrice,
       orderNameJson: JSON.stringify(cartmenuName),
       orderTopping: JSON.stringify(cartTopping),
-
     };
   
     return fetch(BASE_URL + "/payment", {
@@ -62,14 +64,60 @@ const SuccessUrl = () => {
       });
   };
 
+  const alldoneDelete=()=>{
+    fetch(BASE_URL+"/cart/deleteall",{
+      method:'delete',
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + ACCESS_TOKEN,
+      },
+    })
+    .then(res=>res.json())
+  }
+
+      //payment정보 불러오기
+      useEffect(() => {
+        fetch(BASE_URL + "/payment", {
+          method: "get",
+           headers: {
+            Authorization: "Bearer " + ACCESS_TOKEN,
+          }, 
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            setInform(res)
+           /*  savePayment(); */
+          });
+      }, []);
+    
+      console.log("inform: ", inform);
+
+      const orderIdNum=inform.map((item)=>item.orderId);
+      console.log(orderIdNum)
+       const latestNum =Math.max(...orderIdNum);
+console.log("latestNum: ", latestNum);
+ 
+/* let latestNum = null;
+for (let i = 0; i < orderIdNum.length; i++) {
+  if (latestNum === null || orderIdNum[i] > latestNum) {
+    latestNum = orderIdNum[i];
+  }
+} */
+console.log("latestNum: ", latestNum);
+
+
   useEffect(() => {
-    if (option.length > 0) {
+     if (option.length > 0 ) {  
       savePayment();
       localStorage.removeItem('totalPrice');
-      alert("경제성공")
-      window.location.href = "/"
-    }
+      localStorage.removeItem('cartmenuName');
+      alldoneDelete();
+       alert("주문번호는 " + (latestNum)+1); 
+       //window.location.href="/"
+      }  
   }, [option]);
+
+
 
 
   //진짜 return

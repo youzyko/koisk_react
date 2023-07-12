@@ -7,9 +7,13 @@ import { Autoplay, Pagination, Navigation } from "swiper";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
  import "./styles.css";
+ import Sidebar from "./Sidebar";
 
+ //자식컴포넌트
+ import MenuList from "./MenuList";
+ 
+ //부모 컴포넌트
 const ImageSlide =()=>{
-
   const BASE_URL = "http://localhost:8080/api/image";
  //const token = localStorage.getItem("ACCESS_TOKEN"); 
   /* const [backImg,setBackImg]=useState(null); */
@@ -44,16 +48,30 @@ const ImageSlide =()=>{
   });
   }, [id]); 
   console.log([...group])
-  
 
-  
-/* const bunch=backImg.map((item)=>{
-  console.log(item)
-}) */
+/*   const BASE_URL1 = "http://localhost:8080/api";
+  const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
+
+  const [option, setOption] = useState([]);
+  useEffect(()=>{
+    fetch(BASE_URL1 + "/cart", {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + ACCESS_TOKEN,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setOption(res);
+      });
+  },[option])
+ */
+
 const bunch =group.map((item)=>{
   return(
     <>
-       <SwiperSlide><img src={item} alt="Blob URL Image" /></SwiperSlide>
+       <SwiperSlide><img src={item} alt="Blob URL Image" style={{ width: '100%', height: '1000px' }}/></SwiperSlide>
+  
     </>
   )
 })
@@ -61,28 +79,6 @@ const bunch =group.map((item)=>{
     return (
         <>
       
-        {/* { backImg.mainImgs[0].mainImg != undefined ?
-       <Swiper
-            spaceBetween={30}
-            centeredSlides={true}
-            autoplay={{
-              delay: 2500,
-              disableOnInteraction: false,
-            }}
-            pagination={{
-              clickable: true,
-            }}
-            navigation={true}
-            modules={[Autoplay, Pagination, Navigation]}
-            className="mySwiper"
-          >
-            
-            <SwiperSlide><img src={backImg.mainImgs[0].mainImg} alt="Blob URL Image" /></SwiperSlide>
-      
-          
-          </Swiper> 
-          : <></>
-    } */}
      <Swiper
             spaceBetween={30}
             centeredSlides={true}

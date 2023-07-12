@@ -129,9 +129,9 @@ const Header = () => {
   }
 
   //장바구니 아이콘
-  const cartIcon = () => {
+/*   const cartIcon = () => {
     window.location.href = "/cart";
-  };
+  }; */
   const homeIcon=()=>{
     fetch(BASE_URL+"api/cart/deleteall",{
       method: "DELETE",
@@ -177,7 +177,8 @@ const Header = () => {
             paddingBottom: "20px",
           }}
         >
-          GONG CHA
+             <a href="/" style={{textDecoration:"none",color:"white"}}>GONG CHA</a>
+       
         </h1>
         <div
           style={{
@@ -189,7 +190,7 @@ const Header = () => {
         >
           {menu}
           <div>
-            <ShoppingCartIcon
+           {/*  <ShoppingCartIcon
               onClick={cartIcon}
               sx={{
                 fontSize: 40,
@@ -200,8 +201,8 @@ const Header = () => {
                 marginTop: "20px",
                 cursor: 'pointer'
               }}
-            ></ShoppingCartIcon>
-             <HomeIcon 
+            ></ShoppingCartIcon> */}
+         {/*    <HomeIcon 
             onClick={homeIcon}
              sx={{
                 fontSize: 40,
@@ -211,8 +212,8 @@ const Header = () => {
                 marginRight: "20px",
                 marginTop: "20px",
                 cursor: 'pointer'
-              }}></HomeIcon> 
-          </div>
+              }}></HomeIcon>  */}
+          </div> 
         </div>
 
         {/*   </nav> */}

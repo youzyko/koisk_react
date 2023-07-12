@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState,useCallback  } from "react";
+import Cart from "./Cart";
+
+import * as React from "react";
+
 import { json, Link, useParams, useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useContext } from "react";
@@ -23,7 +27,18 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { loadPaymentWidget, ANONYMOUS } from "@tosspayments/payment-widget-sdk";
 
-const Cart = () => {
+const Sidebar = ({updateCart}) => {
+  
+  const sidebarStyle = {
+    position: "fixed",
+    top: 300,
+    right: 0,
+    width: "200px",
+    height: "100%",
+    backgroundColor: "#f2f2f2",
+    padding: "20px",
+  };
+
   const BASE_URL = "http://localhost:8080/api";
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
 
@@ -39,7 +54,28 @@ const Cart = () => {
   //이름 모음집
   const [payment, setPayment] = useState([]);
 
-  useEffect(() => {
+  //총합계
+  const totalPrice = option.reduce((acc, item) => {
+    console.log(acc);
+
+    const toppingP = JSON.parse(item.selectedToppingsJson);
+    const onlyprice = toppingP.map((item) => {
+      return item.toppingPrice;
+    });
+
+    console.log(onlyprice);
+    const toppingPriceSum = onlyprice.reduce((toppingAcc, toppingPrice) => {
+      return toppingAcc + parseInt(toppingPrice, 10);
+    }, 0);
+    const count = countMap[item.random] || 1;
+
+    return acc + item.itemPrice * count + toppingPriceSum;
+  }, 0);
+  console.log(totalPrice);
+
+
+//전체정보
+    useEffect(() => {
     fetch(BASE_URL + "/cart", {
       method: "get",
       headers: {
@@ -49,9 +85,11 @@ const Cart = () => {
       .then((res) => res.json())
       .then((res) => {
         setOption(res);
+        updateCart();
       });
-  }, []);
-  console.log("option: ", option);
+  }, []); 
+
+
 
   //이미지
   useEffect(() => {
@@ -74,6 +112,8 @@ const Cart = () => {
   const imgBunch = img.map((item) => {
     return <img style={{ width: "100%", height: "100%" }} src={item}></img>;
   });
+
+  
 
   //삭제 버튼
   const remove = (target) => {
@@ -196,7 +236,6 @@ const Cart = () => {
                   style={{ textAlign: "center" }}
                 >
                   상품 이름: {item.itemName}
-              
                 </Typography>
               }
               secondary={
@@ -216,7 +255,6 @@ const Cart = () => {
                         {(() => {
                           const topping = JSON.parse(item.selectedToppingsJson);
                           console.log(topping);
-                         
 
                           const toppingnameprice = topping.map((item) => {
                             return `[${item.toppingName}/가격:${item.toppingPrice}]`;
@@ -231,32 +269,11 @@ const Cart = () => {
                 </React.Fragment>
               }
             />
-  
           </div>
-
-
         </List>
       </>
     );
   });
-
-  //총합계
-  const totalPrice = option.reduce((acc, item) => {
-    console.log(acc);
-
-    const toppingP = JSON.parse(item.selectedToppingsJson);
-    const onlyprice = toppingP.map((item) => {
-      return item.toppingPrice;
-    });
-    console.log(onlyprice);
-    const toppingPriceSum = onlyprice.reduce((toppingAcc, toppingPrice) => {
-      return toppingAcc + parseInt(toppingPrice, 10);
-    }, 0);
-    const count = countMap[item.random] || 1;
-
-    return acc + item.itemPrice * count + toppingPriceSum;
-  }, 0);
-  console.log(totalPrice);
 
   //장바구니 초기화
   /*  const deleteAll = () => {
@@ -277,7 +294,7 @@ const Cart = () => {
       });
   }; */
 
-  const deleteAll = () => {
+  /* const deleteAll = () => {
     if (window.confirm("초기화?")) {
       //만약 true면
       fetch(BASE_URL + "/cart/deleteall", {
@@ -294,7 +311,7 @@ const Cart = () => {
         });
     }
   };
-
+ */
   //결제하기
   const payClick = () => {
     localStorage.setItem("totalPrice", totalPrice);
@@ -340,7 +357,7 @@ const Cart = () => {
 
   //찐return
   return (
-    <div>
+    <div style={sidebarStyle}>
       <h1
         style={{
           textDecorationLine: "underline",
@@ -375,7 +392,7 @@ const Cart = () => {
       >
         총합계:{totalPrice}
       </div>
-   {/*     <div style={{,position:'fixed'}}></div> */}
+      {/*     <div style={{,position:'fixed'}}></div> */}
       <button
         style={{
           position: "fixed",
@@ -385,10 +402,10 @@ const Cart = () => {
           fontSize: "18px",
           fontWeight: "bold",
           backgroundColor: "transparent",
-      /*     border: "none", */
-    /*       borderTop:'2px solid black', */
+          /*     border: "none", */
+          /*       borderTop:'2px solid black', */
           height: "50px",
-          width:'246px'
+          width: "246px",
         }}
         class="blink"
         onClick={payClick}
@@ -414,7 +431,23 @@ const Cart = () => {
       >
         메뉴 전체 삭제
       </button>  */}
+    
     </div>
   );
 };
-export default Cart;
+
+//찐 return
+/*   return(
+    <>
+    <div style={sidebarStyle}>
+     <Cart />
+    </div>
+
+
+    </>
+  )
+ 
+    
+
+}; */
+export default Sidebar;
