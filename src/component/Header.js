@@ -128,23 +128,21 @@ const Header = () => {
     }
   }
 
-  //장바구니 아이콘
-/*   const cartIcon = () => {
-    window.location.href = "/cart";
-  }; */
+
   const homeIcon=()=>{
-    fetch(BASE_URL+"api/cart/deleteall",{
+    fetch(BASE_URL+"/cart/deleteall",{
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + ACCESS_TOKEN,
       },
     }).then(res=>res.json())
     .then(res=>{
-      console.log(res)
+      console.log(res) //
     })
+    window.confirm("장바구니는 초기화됩니다.")
     window.location.href="/"
   }
-
+  
   
 
   //진짜 return 
@@ -157,18 +155,18 @@ const Header = () => {
         border: "1px solid black",
       }}
     >
-      {" "}
+ 
       {button}
       {userLabel()}
       <div style={{ display: "flex", alignItems: "center" }}>
-        <a href="/">
+   
           <img
             src={require("../images/gongcha_logo.png")}
             alt="logo"
             className="brand-logo"
             style={{ width: 45 }}
           />
-        </a>
+   
 
         <h1
           style={{
@@ -177,7 +175,7 @@ const Header = () => {
             paddingBottom: "20px",
           }}
         >
-             <a href="/" style={{textDecoration:"none",color:"white"}}>GONG CHA</a>
+           GONG CHA
        
         </h1>
         <div
@@ -202,7 +200,7 @@ const Header = () => {
                 cursor: 'pointer'
               }}
             ></ShoppingCartIcon> */}
-         {/*    <HomeIcon 
+          <HomeIcon 
             onClick={homeIcon}
              sx={{
                 fontSize: 40,
@@ -212,7 +210,7 @@ const Header = () => {
                 marginRight: "20px",
                 marginTop: "20px",
                 cursor: 'pointer'
-              }}></HomeIcon>  */}
+              }}></HomeIcon>  
           </div> 
         </div>
 

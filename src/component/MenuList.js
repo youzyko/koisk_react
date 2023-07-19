@@ -311,6 +311,7 @@ const [imgside,setImgside]=useState([])
 //개수
 const [countMap, setCountMap] = useState([]);
 
+//+
 const plus = (target) => {
   const selectedItem = target;
   const updatedCountMap = {
@@ -318,7 +319,7 @@ const plus = (target) => {
     [selectedItem]: (countMap[selectedItem] || 1) + 1,
   };
   setCountMap(updatedCountMap);
- localStorage.setItem("count",JSON.stringify(countMap)); 
+/*   localStorage.setItem("count",JSON.stringify(countMap));  */
 };
 console.log("countMap");
   //-
@@ -329,9 +330,13 @@ console.log("countMap");
       [selectedItem]: (countMap[selectedItem] || 1) - 1,
     };
     setCountMap(updatedCountMap);
-    localStorage.setItem("count",JSON.stringify(countMap)); 
+   
   };
   console.log(localStorage.getItem("count"))
+  
+  useEffect(() => {
+    localStorage.setItem("count", JSON.stringify(countMap));
+  }, [countMap]);
 
   const optionMap = option.map((item, index) => {
     const count = countMap[item.random] || 1;
@@ -339,7 +344,7 @@ console.log("countMap");
     if (countMap[item.random] <= 0) {
       alert("수량은 최소 1개");
       countMap[item.random] = 1;
-    }
+    } 
   
     return (
       <>
@@ -357,7 +362,7 @@ console.log("countMap");
             style={{ marginRight: "10px" }}
             onClick={() => plus(item.random)}
           />
-          {count}
+      {count}
           <RemoveCircleOutlineIcon
             style={{ marginLeft: "10px", marginRight: "10px" }}
             onClick={() => minus(item.random)}
@@ -427,7 +432,7 @@ console.log("countMap");
     );
   });
 
-  //총합계
+   //총합계
   const totalPrice = option.reduce((acc, item) => {
     console.log(acc);
 
@@ -444,7 +449,7 @@ console.log("countMap");
 
     return acc + item.itemPrice * count + toppingPriceSum;
   }, 0);
-  console.log(totalPrice);
+  console.log(totalPrice); 
 
 
 
@@ -534,7 +539,7 @@ console.log("countMap");
 
     //결제하기
     const payClick = () => {
-      localStorage.setItem("totalPrice", totalPrice);
+    localStorage.setItem("totalPrice", totalPrice); 
       localStorage.setItem("cartmenuName", cartmenuName);
       window.location.href = "/payment";
     };
@@ -622,7 +627,7 @@ console.log("countMap");
           marginRight: "50px",
         }}
       >
-        총합계:{totalPrice}
+       총합계:{totalPrice} 
       </div>
 
       <button

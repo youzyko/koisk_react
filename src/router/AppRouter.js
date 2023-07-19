@@ -29,7 +29,7 @@ const AppRouter = () => {
   const [option, setOption] = useState([]);
 
   const [tf,setTf]=useState(true);
-
+/* 
   function updateCart(){
     console.log("업데이트카트 실행이다")
 
@@ -47,12 +47,12 @@ const AppRouter = () => {
       console.log("업데이트카트 끝이다")
   
   }
-  console.log("업데이트카트 실행이다option",option)
-
+  console.log("업데이트카트 실행이다option",option) */
+/* 
 useEffect(()=>{
 <Sidebar></Sidebar>
 },[tf])
-  
+   */
   //찐 return 
   return (
     <>
