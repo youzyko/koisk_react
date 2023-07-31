@@ -28,6 +28,7 @@ import Sidebar from "./Sidebar";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Swal from "sweetalert2";
 //리액트 context
 
 const MenuList = ({updateCart}) => {
@@ -43,7 +44,8 @@ const MenuList = ({updateCart}) => {
   const BASE_URL = "http://localhost:8080/api";
   /*    http://localhost:8080/api/item/1,2,3,.... */
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
-
+  const LOGIN_ID = localStorage.getItem("LOGIN_ID");
+  console.log("LOGIN_ID",LOGIN_ID)
   //전체정보
   const [menuList, setMenuList] = useState({ items: [] });
 
@@ -189,6 +191,8 @@ const MenuList = ({updateCart}) => {
   });
   const [tf,setTf]=useState(true)
 
+  
+
   //장바구니 담기 버튼
   const optionButton = (e) => {
     const param = {
@@ -217,20 +221,50 @@ const MenuList = ({updateCart}) => {
       if (res.status === 400) {
         alert("이미 장바구니에 추가된 메뉴입니다.");
         setOpen(false); //모달 닫기
-      } else if (res.status === 500) {
-        alert("필수항목을 체크해주세요.");
-        setOpen(true);
+      } else if (res.status === 500) { 
+       // setOpen(true); //modal창 열기
+        Swal.fire({
+          icon: 'error',
+          title: '필수항목을 체크해주세요',
+        }).then(() => {
+          setOpen(true); // Set the 'open' state back to true after the Swal is closed
+        });
+ 
+        //modal
+       // alert("필수항목을 체크해주세요.");
+       
       } else if (res.status === 200) {
+        
+        Swal.fire({
+         // position: 'top-end',
+          icon: 'success',
+          title: '장바구니 담기 완료',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        // alert("장바구니 추가 완료")
+       // param = null;
+        setTf(false)
+        //param = null
         return res.json(); // Assuming the response contains JSON data
+        
       } 
     })
-    .then((res)=>{
+
+/*     Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: 'Your work has been saved',
+      showConfirmButton: false,
+      timer: 1500
+    }) */
+ /*    .then((res)=>{
       console.log(res) //true
-     /*  updateCart() */
-      setTf(false)
-      alert("장바구니 추가 완료")
+    //  updateCart() 
+     
+     
     
-    })
+    }) */
     setTf(true)
   };
 console.log("장바구니 추가 완료tf",tf)
@@ -303,11 +337,12 @@ const [imgside,setImgside]=useState([])
     const removeHandler = (item) => {
       console.log(item.random);
       remove(item);
-   
+console.log("메뉴리스트")   
     };
 
 
 //=============================================================================
+
 //개수
 const [countMap, setCountMap] = useState([]);
 
@@ -342,7 +377,10 @@ console.log("countMap");
     const count = countMap[item.random] || 1;
     
     if (countMap[item.random] <= 0) {
-      alert("수량은 최소 1개");
+      Swal.fire({
+        icon: 'error',
+        title: '수량은 최소 1개 이상입니다.',
+      });
       countMap[item.random] = 1;
     } 
   
@@ -368,11 +406,28 @@ console.log("countMap");
             onClick={() => minus(item.random)}
           />
           <DeleteIcon
-            onClick={() => {
-              if (window.confirm("진짜로 삭제하시겠습니까?")) {
-                removeHandler(item);
+          onClick={() => {
+             
+            Swal.fire({
+              title: "진짜로 삭제하시겠습니까?",
+              //text: "",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "지우기",
+              cancelButtonText: "취소",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                Swal.fire(
+                  removeHandler(item),
+                  "삭제완료!",
+                //  "Your file has been deleted.",
+                  //"success"
+                );
               }
-            }}
+            })
+        }}
           />
         </div>
         <List dense sx={{ width: "250px" }} style={{ display: "flex" }}>
@@ -450,6 +505,9 @@ console.log("countMap");
     return acc + item.itemPrice * count + toppingPriceSum;
   }, 0);
   console.log(totalPrice); 
+
+  //총합계를 통화로 표시하기
+  const moneyNum=totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
 
 
@@ -536,13 +594,45 @@ console.log("countMap");
     return item.itemName;
   });
   console.log(cartmenuName);
+  console.log("option",option)
 
     //결제하기
     const payClick = () => {
-    localStorage.setItem("totalPrice", totalPrice); 
-      localStorage.setItem("cartmenuName", cartmenuName);
+    
+      if(option.length<1 ){    //장바구니가 비었을때 장치 
+        //console.log("장바구니가 비어있습니다. 추가해주세요")
+       // alert("장바구니가 비어있습니다. 추가해주세요")
+       Swal.fire({
+        icon: 'error',
+        title: '장바구니가 비어있습니다. 추가해주세요',
+       // text: 'Something went wrong!',
+       // footer: '<a href="">Why do I have this issue?</a>'
+       //timer: 150000
+      }) 
+       // localStorage.setItem("totalPrice", totalPrice); 
+       // localStorage.setItem("cartmenuName", cartmenuName);
+      }else if(LOGIN_ID== 'admin'){ //관리자 결제 권한 제한
+        //alert("관리자는 결제 권한이 없습니다.")
+        Swal.fire({
+          icon: 'error',
+          title: '관리자는 결제 권한이 없습니다.',
+         // text: 'Something went wrong!',
+         // footer: '<a href="">Why do I have this issue?</a>'
+         //timer: 150000
+        }) 
+      }
+      else{
+           localStorage.setItem("totalPrice", totalPrice); 
+     localStorage.setItem("cartmenuName", cartmenuName);
       window.location.href = "/payment";
+      }
+    
+  //  localStorage.setItem("totalPrice", totalPrice); 
+     // localStorage.setItem("cartmenuName", cartmenuName);
+    //  window.location.href = "/payment";
+  
     };
+    
 
   //진짜 return
   return (
@@ -558,7 +648,6 @@ console.log("countMap");
       >
         메뉴 리스트
       </h1>
-
       <Grid container spacing={-30}>
         {menuList.items.map((item, index) => (
           <Grid item xs={12} sm={6} md={4} lg={3}>
@@ -627,7 +716,7 @@ console.log("countMap");
           marginRight: "50px",
         }}
       >
-       총합계:{totalPrice} 
+       총합계: {moneyNum} 원
       </div>
 
       <button
@@ -643,9 +732,11 @@ console.log("countMap");
           /*       borderTop:'2px solid black', */
           height: "50px",
           width: "246px",
+          cursor:'pointer'
         }}
         class="blink"
-        onClick={payClick}
+        onClick={payClick} 
+  
       >
         결제하기
       </button>

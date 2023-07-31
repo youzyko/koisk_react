@@ -19,6 +19,7 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { json } from "react-router-dom";
 import { SetMeal } from "@mui/icons-material";
+import Swal from "sweetalert2";
 
 const Topping = () => {
   const BASE_URL = "http://localhost:8080/api";
@@ -119,9 +120,25 @@ const Topping = () => {
                 edge="end"
                 aria-label="delete"
                 onClick={() => {
-                  if (window.confirm("진짜로 삭제하시겠습니까?")) {
-                    removeHandler(item);
-                  }
+                  Swal.fire({
+                    title: "진짜로 삭제하시겠습니까?",
+                    //text: "",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "지우기",
+                    cancelButtonText: "취소",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      Swal.fire(
+                        removeHandler(item),
+                        "삭제완료!"
+                        //  "Your file has been deleted.",
+                        //"success"
+                      );
+                    }
+                  });
                 }}
               >
                 <DeleteIcon />

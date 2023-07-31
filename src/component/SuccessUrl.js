@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Cart from "./Cart";
+import Swal from "sweetalert2";
 
 const SuccessUrl = () => {
   const BASE_URL = "http://localhost:8080/api";
@@ -99,8 +100,12 @@ const SuccessUrl = () => {
           const latestNum = orderIdNum.length > 0 ? Math.max(...orderIdNum) : 0;
           setTf(true); // Set tf to true after setting the inform state
           setTimeout(() => {
-            alert(latestNum);
-        
+           Swal.fire({
+            icon: 'success',
+            title: '주문번호:'+[latestNum],
+          }).then(() => {
+            //window.location.href = "/"; // Set the 'open' state to false after the Swal is closed
+          });
           }, 0);
         });
     }

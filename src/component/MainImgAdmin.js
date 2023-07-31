@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Stack from '@mui/material/Stack';
-
+import Swal from "sweetalert2";
 
 const MainImgAdmin = () => {
   const BASE_URL = "http://localhost:8080/api/image";
@@ -87,26 +87,7 @@ const imglist = img.map((item) => {
   );
 });
 
-//삭제
-/* const remove=(target)=>{
-  //console.log(target.id)
-  fetch(BASE_URL+`/${target.id}`,{
-    method: 'DELETE',
-    headers: { 
-      'Authorization': 'Bearer ' + ACCESS_TOKEN 
-    },
-  })
-  .then(res=>res.json())
-  .then(res=>{
-   // console.log(res) //true
-   if (res){
-      const updatedInform=allinform.filter(item=>item.id !== target.id);
-      console.log(updatedInform)
-      setAllInform(updatedInform); 
-    } 
-  })
-  }
-  console.log(allinform) */
+
 
   const remove = (target) => {
     fetch(BASE_URL + `/${target.id}`, {
@@ -123,7 +104,7 @@ const imglist = img.map((item) => {
           );
           setAllInform(updatedInform);
   
-          // Fetch the updated list of IDs and update the 'id' state
+      
           fetch(BASE_URL + "/bringId", {
             method: "get",
             headers: {
@@ -139,8 +120,6 @@ const imglist = img.map((item) => {
   };
   
   const removeHandler=(item)=>{
-   // console.log(item.id)
-    //console.log(item)
     remove(item);
   }
   
@@ -154,22 +133,33 @@ const mainImgbunch = allinform.map((item, index) => {
       {imglist[index]}
 
 
-      {/*     <CardContent>
-      <Typography gutterBottom variant="h5" component="div">
-        
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        Lizards are a widespread group of squamate reptiles, with over 6,000
-        species, ranging across all continents except Antarctica
-      </Typography>
-    </CardContent> */}
+  
       <CardActions>
-      <Button size="small" onClick={() =>{
-        console.log(item)
-        if(window.confirm("진짜로 삭제하시겠습니까?")){removeHandler(item)}}}>
+      <Button size="small"  onClick={() => {
+             
+             Swal.fire({
+               title: "진짜로 삭제하시겠습니까?",
+               //text: "",
+               icon: "warning",
+               showCancelButton: true,
+               confirmButtonColor: "#3085d6",
+               cancelButtonColor: "#d33",
+               confirmButtonText: "지우기",
+               cancelButtonText: "취소",
+             }).then((result) => {
+               if (result.isConfirmed) {
+                 Swal.fire(
+                   removeHandler(item),
+                   "삭제완료!",
+                 //  "Your file has been deleted.",
+                   //"success"
+                 );
+               }
+             })
+         }}>
           삭제하기
         </Button>
-        {/*         <Button size="small">Learn More</Button> */}
+      
       </CardActions>
     </Card>
   );
@@ -179,14 +169,11 @@ const mainImgbunch = allinform.map((item, index) => {
 
 
   //업로드이미지
-  const addClickSubmit=(e)=>{
-   // e.preventDefault();
+  const addClickSubmit = (e) => {
+    e.preventDefault();
     const userFormData = new FormData();
-  /*   const userBlob = new Blob([JSON.stringify(allinform)], {
-      type: "application/json",
-    }); */
     userFormData.append("mainImg", $fileInput.current.files[0]);
-    
+  
     fetch(BASE_URL + "/upload", {
       method: "POST",
       headers: {
@@ -194,19 +181,26 @@ const mainImgbunch = allinform.map((item, index) => {
       },
       body: userFormData,
     })
-    .then((res) => {
-      if (res.status === 200) {
-        alert("정상적으로 상품등록을 완료했습니다");
-        setNewImg(null)
-      } else{
-        alert("이미지를 등록해주세요");
-      }
-    })
-    .catch((error)=>{
-      console.log(error);
-  alert("이미지를 등록해주세요");
-    })
-  }
+      .then((res) => {
+        if (res.status === 200) {
+          Swal.fire({
+            title: '정상적으로 상품등록을 완료했습니다!',
+            icon: 'success',
+            // You can add any additional Swal configuration options here
+          }).then((result) => { 
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: '입력란을 다시 확인하세요',
+          });
+        }
+      });
+  };
+
   const fileClickHandler = (e) => {
     // const $fileInput = document.getElementById('profileImg');
     $fileInput.current.click();
@@ -288,19 +282,7 @@ const mainImgbunch = allinform.map((item, index) => {
             상품 추가
           </Button>
           </Box>
-{/* 
-        <div>
-        <Stack direction="row" alignItems="center" spacing={2}>
-      <Button variant="contained" component="label">
-        메인 이미지 등록
-        <input hidden accept="image/*" multiple type="file" />
-      </Button>
-      <IconButton color="primary" aria-label="upload picture" component="label">
-        <input hidden accept="image/*" type="file" />
-        <PhotoCamera />
-      </IconButton>
-    </Stack>
-    </div> */}
+
       {mainImgbunch}
       
     

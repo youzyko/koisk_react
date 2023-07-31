@@ -74,6 +74,9 @@ const Header = () => {
   const changeTopping=(e)=>{
     window.location.href = "/topping";
   }
+  const paymentList=(e)=>{
+    window.location.href = "/paymentlist";
+  }
 
   const button = USERNAME ? (
     <>
@@ -102,6 +105,12 @@ const Header = () => {
 {USERNAME == "admin" ? (
         <Button color="inherit" onClick={changeTopping}>
           토핑 등록/수정/삭제
+        </Button>
+      ) : null}
+
+{USERNAME == "admin" ? (
+        <Button color="inherit" onClick={paymentList}>
+          매출 조회
         </Button>
       ) : null}
     </>

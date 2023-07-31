@@ -16,6 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
 /* import Stack from '@mui/material/Stack'; */
 import Grid from "@mui/material/Grid";
+import Swal from "sweetalert2";
 
 const ItemChange = () => {
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
@@ -68,40 +69,38 @@ const ItemChange = () => {
         body: userFormData,
       }).then((res) => {
         if (res.status === 200) {
-          alert("정상적으로 상품등록을 완료했습니다");
-          window.location.href = "/adminitem";
+          Swal.fire({
+            icon: 'success',
+            title: '정상적으로 상품등록을 완료했습니다',
+          }).then(() => {
+            window.location.href = "/adminitem"; // Set the 'open' state to false after the Swal is closed
+          });
+        //  alert("정상적으로 상품등록을 완료했습니다");
+         
         } else {
-          alert("입력란을 다시 확인하세요");
+          Swal.fire({
+            icon: 'error',
+            title: '입력란을 다시 확인하세요',
+           // text: 'Something went wrong!',
+           // footer: '<a href="">Why do I have this issue?</a>'
+           //timer: 150000
+          }) 
+          //alert("입력란을 다시 확인하세요");
         }
       });
     } else {
-      alert("서버 오류");
+      Swal.fire({
+        icon: 'error',
+        title: '입력란을 다시 확인하세요',
+       // text: 'Something went wrong!',
+       // footer: '<a href="">Why do I have this issue?</a>'
+       //timer: 150000
+      }) 
+      //alert("서버 오류");
     }
-    /*     const userFormData = new FormData();
-    const userBlob = new Blob([JSON.stringify(data)], {
-      type: "application/json",
-    });
-
-    userFormData.append("itemInfo", userBlob);
-    userFormData.append("itemImg", $fileInput.current.files[0]);
-    fetch(BASE_URL + "/register", {
-      method: "POST",
-    headers: {
-        Authorization: "Bearer " + ACCESS_TOKEN,
-      },
-      body: userFormData,
-    })
-      .then((res) => /*  res.json() {
-        if(res.status===200){
-          return res.json();
-        }else{
-          alert("qlszks")
-        }
-      })
-      .then((json) => {
-        console.log(json);
-      }); */
+    
   };
+  
 
   // 이미지 썸네일 체인지 이벤트
   const showImageHandler = (e) => {
@@ -131,6 +130,7 @@ const ItemChange = () => {
 
   //get-only-menu-id
   const [onlyId, setOnlyId] = useState([]);
+
   useEffect(() => {
     fetch(BASE_URL + "/onlymenuId", {
       method: "get",
@@ -145,6 +145,9 @@ const ItemChange = () => {
       });
   }, []);
   console.log(onlyId);
+
+ 
+
 
   //forEach로 적용 안됨
   const getonlyId = onlyId.map((item) => {
@@ -167,6 +170,7 @@ const ItemChange = () => {
   };
 
   const itemPriceHandler = (e) => {
+
     //상품가격
     if (!e.target.value) {
       setValidate({ ...validate, itemPrice: false });
@@ -174,8 +178,22 @@ const ItemChange = () => {
       setValidate({ ...validate, itemPrice: true });
     }
 
-    setData({ ...data, itemPrice: e.target.value });
+    if(e.target.value<0){ //가격<0 불가
+      Swal.fire({
+        icon: 'error',
+        title: '가격은 0보다 작을 수 없습니다.',
+       // text: 'Something went wrong!',
+       // footer: '<a href="">Why do I have this issue?</a>'
+      })
+      //alert("0보다 작을 수 없습니다")
+      setData({ ...data, itemPrice: 0 });
+    }else{
+      setData({ ...data, itemPrice: e.target.value });
+    }
+
+    
   };
+
   const statusHandler = (e) => {
     //재고상태
     setData({ ...data, status: e.target.value });
@@ -183,7 +201,12 @@ const ItemChange = () => {
   /* const backhome=(e)=>{
   window.location.href = "/adminitem";
 } */
+console.log("getonlyId",getonlyId)
 
+
+
+
+//찐 return
   return (
     <>
       <div style={{ display: "flex", justifyContent: "center" }}>
@@ -204,9 +227,13 @@ const ItemChange = () => {
                 maxWidth: "150px",
                 maxHeight: "200px",
              /*    border: "1px solid black", */
-                marginLeft:"2em"
+                marginLeft:"2em",
+                cursor: "pointer" 
               }}
             ></img>
+
+
+
 
             <input
               id="itemImg"
@@ -217,15 +244,8 @@ const ItemChange = () => {
               onChange={showImageHandler}
             />
           </div>
-
-          {/*       <div>
-      <TextField id="outlined-basic" label="상품코드" variant="outlined" placeholder="상품코드" required
-         value={data.itemId}
-       name="itemId"
-       onChange={itemIdHandler}
-      />
-      </div>
-    */}
+        
+  
 
           <Box sx={{ minWidth: 150, width: "100%" }}>
             <FormControl fullWidth>
@@ -238,11 +258,18 @@ const ItemChange = () => {
                 onChange={itemIdHandler}
                 required
               >
-                {getonlyId.map((menuId) => (
-                  <MenuItem key={menuId} value={menuId}>
-                    {menuId}
+               {onlyId.map((item) => (
+                  <MenuItem value={item.menuId}>
+                    {item.menuId} -{item.menuName}
                   </MenuItem>
-                ))}
+                ))} 
+               {/*  {onlyId.map((item)=>{
+                  <MenuItem>
+                {item.menuId}-{item.menuName}
+                  </MenuItem>
+                })} */}
+                
+            
               </Select>
             </FormControl>
           </Box>
@@ -268,6 +295,7 @@ const ItemChange = () => {
               placeholder="상품가격"
               required
               name="itemPrice"
+              type="number"
               value={data.itemPrice}
               onChange={itemPriceHandler}
             />

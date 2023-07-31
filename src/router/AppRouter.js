@@ -21,6 +21,8 @@ import SuccessUrl from "component/SuccessUrl";
 import Sidebar from "component/Sidebar";
 /* import Sidebar from '../component/Sidebar'; */
 import { useLocation } from 'react-router-dom';
+import PaymentList from "component/PaymentList";
+
 
 const AppRouter = () => {
 
@@ -29,36 +31,13 @@ const AppRouter = () => {
   const [option, setOption] = useState([]);
 
   const [tf,setTf]=useState(true);
-/* 
-  function updateCart(){
-    console.log("업데이트카트 실행이다")
 
-      fetch(BASE_URL + "/cart", {
-        method: "get",
-        headers: {
-          Authorization: "Bearer " + ACCESS_TOKEN,
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          setOption(res);
-          setTf(false)
-        });
-      console.log("업데이트카트 끝이다")
-  
-  }
-  console.log("업데이트카트 실행이다option",option) */
-/* 
-useEffect(()=>{
-<Sidebar></Sidebar>
-},[tf])
-   */
   //찐 return 
   return (
     <>
     <Header />
 
-{/*    <Sidebar  ></Sidebar>  */}
+
 
         <Routes>
           <Route exact path="/api/item/:menuId" element={<MenuList  />} />
@@ -73,10 +52,10 @@ useEffect(()=>{
           <Route path="/admintopping" element={<AdminTopping />} />
           <Route path="/success/*" element={<SuccessUrl />} />
           <Route path="/payment" element={<Payment />} />
-       {/*    <Route path="/cart" element={<Cart />} /> */}
+          <Route path="/paymentlist" element={<PaymentList />} />
+     
         </Routes>
-{/*          </div>
-</div>  */}
+
   </>
   );
 };

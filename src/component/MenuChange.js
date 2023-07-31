@@ -20,6 +20,7 @@ import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
 import Stack from "@mui/material/Stack";
 import { json } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const MenuChange = () => {
   /*   const [dense, setDense] = React.useState(false);
@@ -88,10 +89,17 @@ console.log(newMenu)
     const numRegex = /[^0-9]/g;
 
     if (!wordRegex.test(menuId) || !wordRegex.test(menuName)) {
-      alert("코드 또는 이름은 필수 입력사항입니다.");
+      Swal.fire({
+        icon: 'error',
+        title: '입력란을 다시 확인하세요',
+      });
       return;
     } else if (numRegex.test(menuId)) {
-      alert("메뉴코드는 오직 숫자만 가능합니다");
+      Swal.fire({
+        icon: 'error',
+        title: '메뉴코드는 0이상의 숫자만 가능합니다',
+      });
+     // alert("메뉴코드는 오직 숫자만 가능합니다");
       return;
     }
 
@@ -124,11 +132,19 @@ console.log(newMenu)
       body: JSON.stringify(diary),
     }).then((res) => {
       if (res.status === 500) {
-        alert("중복된 메뉴코드가 존재합니다.");
+        Swal.fire({
+          icon: 'error',
+          title: '입력란을 다시 확인하세요',
+        });
         return;
       } else {
         res.json();
-        alert("저장완료");
+        Swal.fire({
+          title: '정상적으로 등록을 완료했습니다!',
+          icon: 'success',
+          // You can add any additional Swal configuration options here
+        })
+       // alert("저장완료");
         setMenu((menu) => [...menu, newMenu]);
       }
     });
@@ -164,14 +180,36 @@ console.log(newMenu)
             <IconButton
               edge="end"
               aria-label="delete"
-              onClick={() => {
+              /* onClick={() => {
                 if (
                   window.confirm(
                     `"${item.menuName}"를 진짜로 삭제하시겠습니까?`
                   )
                 )
                   removeClick(item.menuId);
-              }}
+              }} */
+              onClick={() => {
+             
+                Swal.fire({
+                  title: `"${item.menuName}"를 진짜로 삭제하시겠습니까?`,
+                  //text: "",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "지우기",
+                  cancelButtonText: "취소",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    Swal.fire(
+                      removeClick(item.menuId),
+                      "삭제완료!",
+                    //  "Your file has been deleted.",
+                      //"success"
+                    );
+                  }
+                })
+            }}
             >
               <DeleteIcon />
             </IconButton>

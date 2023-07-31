@@ -16,7 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
 /* import Stack from '@mui/material/Stack'; */
 import Grid from "@mui/material/Grid";
-
+import Swal from "sweetalert2";
 const AdminTopping = () => {
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
   const BASE_URL = "http://localhost:8080/api";
@@ -92,7 +92,22 @@ const AdminTopping = () => {
       } else {
         setValidate({ ...validate, toppingPrice: true });
       }
-    setToppingdata({ ...toppingdata, toppingPrice: e.target.value });
+
+      if(e.target.value<0){ //가격<0 불가
+        Swal.fire({
+          icon: 'error',
+          title: '가격은 0보다 작을 수 없습니다.',
+         // text: 'Something went wrong!',
+         // footer: '<a href="">Why do I have this issue?</a>'
+        })
+        setToppingdata({ ...toppingdata, toppingPrice: 0 });
+      }else{
+        setToppingdata({ ...toppingdata, toppingPrice: e.target.value });
+      }
+
+      
+
+  /*   setToppingdata({ ...toppingdata, toppingPrice: e.target.value }); */
   }
 
   // 상태변수 validate내부값이 모두 true인지 확인
@@ -105,16 +120,16 @@ const AdminTopping = () => {
 
   //등록 버튼 
   const addClickSubmit = (e) => {
-    //e.preventDefault();
+    e.preventDefault();
     if (isValid()) {
       const userFormData = new FormData();
       const userBlob = new Blob([JSON.stringify(toppingdata)], {
         type: "application/json",
       });
-
+  
       userFormData.append("toppingInfo", userBlob);
       userFormData.append("toppingImg", $fileInput.current.files[0]);
-
+  
       fetch(BASE_URL + "/topping/register", {
         method: "POST",
         headers: {
@@ -123,16 +138,27 @@ const AdminTopping = () => {
         body: userFormData,
       }).then((res) => {
         if (res.status === 200) {
-          alert("정상적으로 상품등록을 완료했습니다");
-          window.location.href = "/topping";
+          Swal.fire({
+            icon: 'success',
+            title: '정상적으로 상품등록을 완료했습니다.',
+          }).then(() => {
+            // Redirect to "/topping" after the user clicks "확인" (OK) on the success message
+            window.location.href = "/topping";
+          });
         } else {
-          alert("입력란을 다시 확인하세요");
+          Swal.fire({
+            icon: 'error',
+            title: '중복된 이름이 존재합니다',
+          });
         }
       });
     } else {
-      alert("서버 오류");
-    };
-}
+      Swal.fire({
+        icon: 'error',
+        title: '입력란을 다시 확인하세요',
+      });
+    }
+  };
 
   //진짜 return
   return (
@@ -209,6 +235,7 @@ const AdminTopping = () => {
               placeholder="토핑 가격"
               required
               name="toppingPrice"
+              type="number"
               value={toppingdata.toppingPrice}
               onChange={toppingPriceHandler}
             />
