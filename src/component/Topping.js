@@ -20,9 +20,9 @@ import Button from "@mui/material/Button";
 import { json } from "react-router-dom";
 import { SetMeal } from "@mui/icons-material";
 import Swal from "sweetalert2";
-
+import {API_BASE_URL} from "../config/host-config";
 const Topping = () => {
-  const BASE_URL = "http://localhost:8080/api";
+  const BASE_URL = `${API_BASE_URL}/api`;
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
 
   const [topping, setTopping] = useState([]); //전체토핑 저장

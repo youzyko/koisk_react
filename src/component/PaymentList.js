@@ -6,10 +6,8 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 //import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangeCalendar } from "@mui/x-date-pickers-pro/DateRangeCalendar";
-import {
-  DatePicker,
-  LocalizationProvider,
-} from "@mui/x-date-pickers-pro";
+
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { DataGrid } from "@mui/x-data-grid";
 
 import TextField from "@mui/material/TextField";
@@ -28,9 +26,9 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import { API_BASE_URL } from "../config/host-config";
 const PaymentList = () => {
-  const BASE_URL = "http://localhost:8080/api";
+  const BASE_URL = `${API_BASE_URL}/api`;
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
   // 현재 날짜/시간
   const today = new Date();
@@ -48,10 +46,12 @@ const PaymentList = () => {
   const [enddate, setEnddate] = useState(); // 끝날
 
   const containerStyle = {
-    display: "flex",
+    /* display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    minHeight: "100vh",
+    minHeight: "100vh", */
+    marginLeft: "650px",
+    border: "1px solid black",
   };
 
   useEffect(() => {
@@ -73,9 +73,7 @@ const PaymentList = () => {
   const startChnage = (newDateRange) => {
     setSelectedDateRange(newDateRange);
   };
-const stas=()=>{
-
-}
+  const stas = () => {};
   const searchButton = (e) => {
     e.preventDefault();
     const param = {
@@ -95,33 +93,37 @@ const stas=()=>{
     })
       .then((res) => res.json())
       .then((res) => setSearchpay(res));
+  };
+  console.log(searchpay);
 
-  }; 
-  console.log(searchpay)
+  
   const showpaylist = () => {
     const columns = [
       { field: "orderCard", headerName: "승인번호", width: 130 },
       { field: "orderNameJson", headerName: "주문 메뉴", width: 130 },
       { field: "totalPrice", headerName: "가격", width: 130 },
-      { field: "date", headerName: "날짜", width: 250 },
-     
+      { field: "date", headerName: "날짜", width: 130 },
+      { field: "orderTopping", headerName: "토핑", width: 200 },
+      { field: "orderId", headerName: "주문번호", width: 70 },
     ];
-
+ 
     const rows = searchpay.map((item, index) => ({
+      
       id: index + 1,
       orderCard: item.orderCard,
-      orderNameJson: item.orderNameJson,
+      orderNameJson: item.orderNameJson.replace(/[\[\]"']/g, ""),
       totalPrice: item.totalPrice + "원",
       date: dayjs(item.date).format("YYYY-MM-DD HH:mm:ss"),
+      orderTopping: item.orderTopping.replace(/[\[\]"']/g, ""),
+      orderId: item.orderId,
     }));
 
     return (
-      <div style={{ height: 400, width: "100%" }}>
-        총합계:
+      <div style={{ height: 400, width: 1000 }}>
+       
         <DataGrid
           rows={rows}
           columns={columns}
-       
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 5 },
@@ -130,16 +132,13 @@ const stas=()=>{
           pageSizeOptions={[5, 10]}
           checkboxSelection
         />
-      
       </div>
     );
   };
 
-
-
   const ordercardClick = (e) => {
     e.preventDefault();
-    if (ordercard.length===0) {
+    if (ordercard.length === 0) {
       Swal.fire({
         icon: "error",
         title: "승인번호를 입력해주세요",
@@ -171,31 +170,28 @@ const stas=()=>{
   };
 
   const ordercardOnchange = (e) => {
-    
     setOrdercard(e.target.value);
-   
   };
 
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
 
-
-    //삭제 버튼
-    const remove = (target) => {
-      fetch(BASE_URL + `/payment/${target.orderCard}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: "Bearer " + ACCESS_TOKEN,
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res); //true
-          if (res) {
-            // If deletion is successful, set the oneordercard state to an empty array
-            setOneordercard([]);
-            // Optionally, you may also want to refresh the list of payments after deletion
-         /*    fetch(BASE_URL + "/payment", {
+  //삭제 버튼
+  const remove = (target) => {
+    fetch(BASE_URL + `/payment/${target.orderCard}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + ACCESS_TOKEN,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res); //true
+        if (res) {
+          // If deletion is successful, set the oneordercard state to an empty array
+          setOneordercard([]);
+          // Optionally, you may also want to refresh the list of payments after deletion
+          /*    fetch(BASE_URL + "/payment", {
               method: "get",
               headers: {
                 Authorization: "Bearer " + ACCESS_TOKEN,
@@ -203,16 +199,19 @@ const stas=()=>{
             })
               .then((res) => res.json())
               .then((res) => setPayInform(res)); */
-          }
-        });
-    };
-  
-    const removeHandler = (item) => {
-      remove(item);
-    };
+        }
+      });
+  };
+
+  const removeHandler = (item) => {
+    remove(item);
+  };
 
   const selectedone = oneordercard.map((item) => {
-    const orderName = item.orderNameJson.replace(/[\[\]"']/g, "");
+    const orderName = item.orderNameJson.replace(
+      /[\[\]"']/g,
+      ""
+    ); /* JSON형식 빈칸 수정 */
     return (
       <Box sx={{ flexGrow: 1, maxWidth: 752 }}>
         <FormGroup row>
@@ -221,30 +220,28 @@ const stas=()=>{
               <ListItem
                 secondaryAction={
                   <IconButton edge="end" aria-label="delete">
-                         <DeleteIcon
-          onClick={() => {
-             
-            Swal.fire({
-              title: "매출을 취소하시겠습니까?",
-              //text: "",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#3085d6",
-              cancelButtonColor: "#d33",
-              confirmButtonText: "지우기",
-              cancelButtonText: "취소",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                Swal.fire(
-                  removeHandler(item),
-                  "삭제완료!",
-                  //window.location.reload()
-                );
-
-              }
-            })
-        }}
-          />
+                    <DeleteIcon
+                      onClick={() => {
+                        Swal.fire({
+                          title: "매출을 취소하시겠습니까?",
+                          //text: "",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#3085d6",
+                          cancelButtonColor: "#d33",
+                          confirmButtonText: "지우기",
+                          cancelButtonText: "취소",
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            Swal.fire(
+                              removeHandler(item),
+                              "삭제완료!"
+                              //window.location.reload()
+                            );
+                          }
+                        });
+                      }}
+                    />
                   </IconButton>
                 }
               >
@@ -268,11 +265,9 @@ const stas=()=>{
                       color="textSecondary"
                       style={{ textAlign: "center" }}
                     >
-                      {`부가 정보: ${orderName}/ ${
-                        item.totalPrice
-                      }원/ ${dayjs(item.date).format(
-                        "YYYY-MM-DD HH:mm:ss"
-                      )}`}
+                      {`부가 정보: ${orderName}/ ${item.totalPrice}원/ ${dayjs(
+                        item.date
+                      ).format("YYYY-MM-DD HH:mm:ss")}`}
                     </Typography>
                   }
                 />
@@ -287,108 +282,129 @@ const stas=()=>{
   //찐 return
   return (
     <>
-    <h1
-      style={{
-        textDecorationLine: "underline",
-        fontFamily: "Arial, sans-serif",
-        fontSize: "32px",
-        color: "#333",
-        textAlign: "center",
-      }}
-    >
-      매출조회
-    </h1>
+      <h1
+        style={{
+          textDecorationLine: "underline",
+          fontFamily: "Arial, sans-serif",
+          fontSize: "32px",
+          color: "#333",
+          textAlign: "center",
+        }}
+      >
+        매출조회
+      </h1>
 
-    {/* 승인번호 검색하기 */}
-    <div
-      style={{
-        fontSize: "32px",
-        color: "#333",
-        textAlign: "center",
-      }}
-    >
-      <form>
-        <Box
-          component="form"
-          sx={{
-            "& > :not(style)": { m: 1, width: "25ch" },
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <TextField
-            id="outlined-basic"
-            label="승인 번호"
-            variant="outlined"
-            placeholder="승인 번호"
-            required
-            name="orderCard"
-            type="number"
-            value={payInform.orderCard}
-            onChange={ordercardOnchange}
+      {/* 승인번호 검색하기 */}
+      <div
+        style={{
+          fontSize: "32px",
+          color: "#333",
+          textAlign: "center",
+        }}
+      >
+        <form>
+          <Box
+            component="form"
+            sx={{
+              "& > :not(style)": { m: 1, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              id="outlined-basic"
+              label="승인 번호"
+              variant="outlined"
+              placeholder="승인 번호"
+              required
+              name="orderCard"
+              type="number"
+              value={payInform.orderCard}
+              onChange={ordercardOnchange}
+              sx={{
+                "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":
+                  {
+                    display: "none",
+                  },
+                "& input[type=number]": {
+                  MozAppearance: "textfield",
+                },
+              }} //type="number" up&down arrow remove
+            />
+          </Box>
+
+          <input
+            type="submit"
+            onClick={ordercardClick}
+            value="승인번호 조회하기"
+            style={{
+              backgroundColor: "#4CAF50",
+              border: "none",
+              color: "white",
+              padding: "10px 20px",
+              textAlign: "center",
+              textDecoration: "none",
+              display: "inline-block",
+              fontSize: "16px",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
           />
-        </Box>
+        </form>
+      </div>
+      <div
+        style={{
+          marginLeft: "800px",
+          //  border: '1px solid black',
+          width: "500px",
+          marginTop: "20px",
+          // border:'2px solid black'
+          // marginBottomp:'50px'
+        }}
+      >
+        {selectedone}
+      </div>
 
-        <input
-          type="submit"
-          onClick={ordercardClick}
-          value="승인번호 조회하기"
-          style={{
-            backgroundColor: "#4CAF50",
-            border: "none",
-            color: "white",
-            padding: "10px 20px",
-            textAlign: "center",
-            textDecoration: "none",
-            display: "inline-block",
-            fontSize: "16px",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
-        />
-      </form>
-    
-    </div>
-    <div   style={{
-     marginLeft : '550px',
-     display: 'flex',
-     //border:'2px black solid '
-      }} >
-    {selectedone}
-    </div>
+      <div>
+        <form>
+          <div style={{ marginLeft: "630px" }}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateRangeCalendar
+                defaultValue={[dayjs(today), dayjs(today)]}
+                onChange={startChnage}
+              />
+            </LocalizationProvider>
+          </div>
 
-    <div style={containerStyle}>
-      <form>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateRangeCalendar
-            defaultValue={[dayjs(today), dayjs(today)]}
-            onChange={startChnage}
+          <input
+            type="submit"
+            onClick={searchButton}
+            value="기간 조회하기"
+            style={{
+              backgroundColor: "#4CAF50",
+              border: "none",
+              color: "white",
+              padding: "10px 20px",
+              textAlign: "center",
+              textDecoration: "none",
+              display: "inline-block",
+              fontSize: "16px",
+              borderRadius: "4px",
+              cursor: "pointer",
+              marginTop: "10px",
+              marginLeft: "630px",
+              marginBottom: "20px",
+              // border:'1px solid black',
+              marginLeft: "875px",
+            }}
           />
-        </LocalizationProvider>
-        <input
-          type="submit"
-          onClick={searchButton}
-          value="기간 조회하기"
-          style={{
-            backgroundColor: "#4CAF50",
-            border: "none",
-            color: "white",
-            padding: "10px 20px",
-            textAlign: "center",
-            textDecoration: "none",
-            display: "inline-block",
-            fontSize: "16px",
-            borderRadius: "4px",
-            cursor: "pointer",
-            marginTop: "10px",
-            marginLeft : '250px',
-            marginBottom: "20px",
-          }}
-        />
-        {showpaylist()}
-      </form>
-    </div>
-  </>
+          <div style={{ width:'1000px',    marginLeft: "500px",}}>
+        
+            {showpaylist()}
+          </div>
+        </form>
+      </div>
+    </>
   );
 };
 

@@ -12,9 +12,10 @@ import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Stack from '@mui/material/Stack';
 import Swal from "sweetalert2";
-
+import {API_BASE_URL} from "../config/host-config";
 const MainImgAdmin = () => {
-  const BASE_URL = "http://localhost:8080/api/image";
+  const BASE_URL = `${API_BASE_URL}/api/image`;
+  //const BASE_URL = "http://localhost:8080/api";
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
 
   //id

@@ -7,8 +7,8 @@ console.log('현재호스트: ', hostname);
 let backendHost; // 백엔드 호스트 이름
 if (hostname === 'localhost') {
     backendHost = 'http://localhost:8080';
-} else if (hostname === 'todo-react-front-app.s3-website.ap-northeast-2.amazonaws.com') {
-    backendHost = 'http://ec2-54-180-12-218.ap-northeast-2.compute.amazonaws.com';
+} else if (hostname === '192.168.1.2') {
+    backendHost = 'http://192.168.1.2:8080';
 }
 
 export const API_BASE_URL = `${backendHost}`;

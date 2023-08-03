@@ -1,7 +1,9 @@
  import React, { useEffect, useState } from "react";
 import { Grid, Button, Container, Typography, TextField } from "@mui/material"; 
+import {API_BASE_URL} from "../config/host-config";
+import Swal from "sweetalert2";
 const Login=()=>{ 
-   const BASE_URL = "http://localhost:8080/api";
+  const BASE_URL = `${API_BASE_URL}/api`;
     //로그인 서브밋 이벤트 핸들러
   const submitHandler = (e) => {
     e.preventDefault();
@@ -28,7 +30,11 @@ const Login=()=>{
         //  console.log("==>loginUserData" + loginUserData);
         if (loginUserData.message) {
           // console.log("로그인에 실패하셨습니다.");
-          alert(loginUserData.message);
+       /*    alert(loginUserData.message); */
+       Swal.fire({
+        icon: 'error',
+        title: '로그인에 실패하셨습니다.',
+      });
         } else {
           localStorage.setItem("ACCESS_TOKEN", loginUserData.token);
           localStorage.setItem("LOGIN_ID", loginUserData.id);

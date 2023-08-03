@@ -23,10 +23,9 @@ import Sidebar from "component/Sidebar";
 import { useLocation } from 'react-router-dom';
 import PaymentList from "component/PaymentList";
 
-
+import {API_BASE_URL} from "../config/host-config";
 const AppRouter = () => {
-
-  const BASE_URL = "http://localhost:8080/api";
+  const BASE_URL = `${API_BASE_URL}/api`;
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
   const [option, setOption] = useState([]);
 

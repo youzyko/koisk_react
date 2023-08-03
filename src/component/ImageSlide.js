@@ -8,13 +8,14 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "./styles.css";
 import Sidebar from "./Sidebar";
-
+import {API_BASE_URL} from "../config/host-config";
 //자식컴포넌트
 import MenuList from "./MenuList";
 
 //부모 컴포넌트
 const ImageSlide = () => {
-  const BASE_URL = "http://localhost:8080/api/image";
+  const BASE_URL = `${API_BASE_URL}/api/image`;
+ /*  const BASE_URL = "http://localhost:8080/api"; */
   //const token = localStorage.getItem("ACCESS_TOKEN");
   /* const [backImg,setBackImg]=useState(null); */
   const [group, setGroup] = useState([]);
@@ -53,7 +54,9 @@ const ImageSlide = () => {
           <img
             src={item}
             alt="Blob URL Image"
-            style={{ width: "100%", height: "1000px" }}
+            style={{  width: "100%", height: "890px" 
+      
+}}
           />
         </SwiperSlide>
       </>

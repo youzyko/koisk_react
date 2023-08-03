@@ -7,8 +7,10 @@ import {
     Typography,
     Link,
   } from "@mui/material"; 
+  import {API_BASE_URL} from "../config/host-config";
+  import Swal from "sweetalert2";
 const Join=()=>{    
-    const BASE_URL = "http://localhost:8080/api";
+   const BASE_URL = `${API_BASE_URL}/api`;
 
       // 상태변수 validate내부값이 모두 true인지 확인
   const isValid = () => {
@@ -89,15 +91,28 @@ const Join=()=>{
         body: userFormData,
       }).then((res) => {
         if (res.status === 200) {
-          alert("회원가입 축하합니다");
-          window.location.href = "/login";
+          Swal.fire({
+            icon: 'success',
+            title: '회원되신걸 축하합니다~',
+          }).then(() => {
+          
+            window.location.href = "/login";
+          });
         } else {
-          alert("다시 시도해주세요");
+         /*  alert("다시 시도해주세요"); */
+         Swal.fire({
+          icon: 'error',
+          title: '다시 시도해주세요',
+        });
         }
       });
     } //if_end
     else {
-      alert("입력란 다시 확인");
+    /*   alert("입력란 다시 확인"); */
+    Swal.fire({
+      icon: 'error',
+      title: '입력란을 다시 확인하세요',
+    });
     }
   };
 

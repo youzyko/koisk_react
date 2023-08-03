@@ -1,17 +1,34 @@
 import React, { useEffect, useState } from "react";
 import Cart from "./Cart";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import {API_BASE_URL} from "../config/host-config";
 
 const SuccessUrl = () => {
-  const BASE_URL = "http://localhost:8080/api";
+  const BASE_URL = `${API_BASE_URL}/api`;
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
 
-  //카트 전체 정보
+  const navigate = useNavigate();
+  //장바구니정보를 가져온다=>거기에서 Max?=> 그냥 제일 큰 값만 추출...
+  //하루마다 갱신되는 orderId 
+
+  //장바구니 정보
   const [option, setOption] = useState([]);
+
+  //매출테이블_get
   const [inform, setInform] = useState([]);
+
+  //매출테이블_post
   const [payment, setPayment] = useState([]);
+
   const [tf, setTf] = useState(true);
 
+  //주문번호(날짜가 바뀌면 리셋을 시켜야하는데)
+  const initialOrderId = parseInt(localStorage.getItem("orderId")) || 1;
+  const [orderId, setOrderId] = useState(initialOrderId);
+
+  //오늘날짜
+  const [currentDate, setCurrentDate] = useState(new Date().toISOString().slice(0, 10));
   //총 가격
   const totalPrice = localStorage.getItem("totalPrice");
   console.log(totalPrice);
@@ -30,7 +47,7 @@ const SuccessUrl = () => {
       });
 
   }, []);
- console.log("option: ", option);
+ console.log("option 장바구니: ", option);
 
   const savePayment = () => { //매출테이블 저장 
     //메뉴 이름만 받아오기
@@ -59,19 +76,11 @@ const SuccessUrl = () => {
       .then((res) => {
         console.log(res); //true
         setPayment(res);
-        // tlqkf();
-        //window.location.href = "/payment";
+        localStorage.setItem("orderId", orderId+1);
       });
   };
+  //console.log(orderId);
 
-  useEffect(()=>{
-    if(option.length>0){ //장바구니가 비어있지 않고/변동될때만 저장
-      setTf(false); 
-      savePayment()
-    }
-    alldoneDelete(); //장바구나 삭제
-  
-  },[option])
 
   const alldoneDelete = () => { //장바구니 비우기
     fetch(BASE_URL + "/cart/deleteall", {
@@ -85,34 +94,38 @@ const SuccessUrl = () => {
 
   };
 
-  useEffect(() => {
-    if (tf === false) {
-      fetch(BASE_URL + "/payment", {
-        method: "get",
-        headers: {
-          Authorization: "Bearer " + ACCESS_TOKEN,
-        },
+  useEffect(() => {  
+    if (option.length>0){ //장바구니가 비어있지 않다면 
+      savePayment(); //장바구니 저장 
+
+      Swal.fire({
+        icon: 'success',
+        title: '주문번호'+[orderId],
+      }).then(() => {
+        // Redirect to "/topping" after the user clicks "확인" (OK) on the success message
+        alldoneDelete()
+       window.location.href = "/";
       })
-        .then((res) => res.json())
-        .then((res) => {
-          setInform(res); // 매출 테이블 get
-          const orderIdNum = res.map((item) => item.orderId);
-          const latestNum = orderIdNum.length > 0 ? Math.max(...orderIdNum) : 0;
-          setTf(true); // Set tf to true after setting the inform state
-          setTimeout(() => {
-           Swal.fire({
-            icon: 'success',
-            title: '주문번호:'+[latestNum],
-          }).then(() => {
-            //window.location.href = "/"; // Set the 'open' state to false after the Swal is closed
-          });
-          }, 0);
-        });
-    }
-  }, [tf]);
+     // alert("주문번호"+orderId)
+  }
+  }, [option]);
   console.log("inform",inform)
 
+  console.log("currentDate",currentDate)
+
+
+  useEffect(() => {
+    const currentDateStr = new Date().toISOString().slice(0, 10);
+    if (currentDate !== currentDateStr) {
+      setCurrentDate(currentDateStr);
+      setOrderId(1); // Reset orderId to 1 when the date changes
+    }
+  }, [currentDate]);
+
+
+  
+
   //진짜 return
-  return <>{/* <button onClick={payClick} >추가하기</button> */}</>;
+  return <></>;
 };
 export default SuccessUrl;
