@@ -73,7 +73,18 @@ const PaymentList = () => {
   const startChnage = (newDateRange) => {
     setSelectedDateRange(newDateRange);
   };
-  const stas = () => {};
+  const inputString = payInform.map((item)=>{
+    return (item.orderTopping)
+  })
+  //const jsonArray = JSON.parse(inputString);
+  console.log(inputString)
+/*   const modifiedArray = jsonArray.map((item) => {
+    const { toppingName, ...rest } = JSON.parse(item);
+    return JSON.stringify({ '토핑이름': toppingName, ...rest });
+  });
+  const outputString = JSON.stringify(modifiedArray);
+  
+  console.log(outputString) */
   const searchButton = (e) => {
     e.preventDefault();
     const param = {
@@ -98,23 +109,23 @@ const PaymentList = () => {
 
   
   const showpaylist = () => {
+
     const columns = [
       { field: "orderCard", headerName: "승인번호", width: 130 },
       { field: "orderNameJson", headerName: "주문 메뉴", width: 130 },
       { field: "totalPrice", headerName: "가격", width: 130 },
-      { field: "date", headerName: "날짜", width: 130 },
-      { field: "orderTopping", headerName: "토핑", width: 200 },
+      { field: "date", headerName: "날짜", width: 170 },
+      { field: "orderTopping", headerName: "토핑", width: 300 },
       { field: "orderId", headerName: "주문번호", width: 70 },
     ];
  
     const rows = searchpay.map((item, index) => ({
-      
       id: index + 1,
       orderCard: item.orderCard,
       orderNameJson: item.orderNameJson.replace(/[\[\]"']/g, ""),
       totalPrice: item.totalPrice + "원",
       date: dayjs(item.date).format("YYYY-MM-DD HH:mm:ss"),
-      orderTopping: item.orderTopping.replace(/[\[\]"']/g, ""),
+      orderTopping: item.orderTopping.replace(/[\[\]"'{}\\]/g, ""),
       orderId: item.orderId,
     }));
 
