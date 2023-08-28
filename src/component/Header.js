@@ -12,16 +12,18 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import HomeIcon from "@mui/icons-material/Home";
 import Swal from "sweetalert2";
 /* import {API_BASE_URL} from "../config/host-config"; */
-import { API_BASE_URL } from "config/host-config";
+/* import { API_BASE_URL } from "config/host-config";
+ */
+//import { API_BASE_URL } from "config/host-config"; 
 
 const Header = () => {
-  const BASE_URL = `${API_BASE_URL}/api`;
+  const BASE_URL = `http://13.124.149.19/api`;
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
   const [headName, setHeadName] = useState({ items: [] });
   const USERNAME = localStorage.getItem("LOGIN_ID");
 
   useEffect(() => {
-    alert(API_BASE_URL)
+
     fetch(BASE_URL + "/name", {
       method: "GET",
       headers: {
