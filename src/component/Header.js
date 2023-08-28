@@ -17,7 +17,7 @@ import Swal from "sweetalert2";
 //import { API_BASE_URL } from "config/host-config"; 
 
 const Header = () => {
-  const BASE_URL = `http://13.124.149.19:3000/api`;
+  const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api';
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
   const [headName, setHeadName] = useState({ items: [] });
   const USERNAME = localStorage.getItem("LOGIN_ID");
