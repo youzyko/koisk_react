@@ -20,6 +20,7 @@ const Header = () => {
   const USERNAME = localStorage.getItem("LOGIN_ID");
 
   useEffect(() => {
+    alert(API_BASE_URL)
     fetch(BASE_URL + "/name", {
       method: "GET",
       headers: {
