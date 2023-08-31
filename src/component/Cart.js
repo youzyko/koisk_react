@@ -25,7 +25,8 @@ import { loadPaymentWidget, ANONYMOUS } from "@tosspayments/payment-widget-sdk";
 import {API_BASE_URL} from "../config/host-config";
 const Cart = () => {
  // const BASE_URL = "http://localhost:8080/api";
-  const BASE_URL = `${API_BASE_URL}/api`;
+ // const BASE_URL = `${API_BASE_URL}/api`;
+ const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api';
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
 
   //전체정보 받아오기

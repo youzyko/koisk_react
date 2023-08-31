@@ -28,7 +28,8 @@ import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { API_BASE_URL } from "../config/host-config";
 const PaymentList = () => {
-  const BASE_URL = `${API_BASE_URL}/api`;
+ //const BASE_URL = `${API_BASE_URL}/api`;
+ const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api';
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
   // 현재 날짜/시간
   const today = new Date();

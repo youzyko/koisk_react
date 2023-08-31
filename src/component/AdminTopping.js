@@ -22,8 +22,8 @@ import {API_BASE_URL} from "../config/host-config";
 const AdminTopping = () => {
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
   //const BASE_URL = "http://localhost:8080/api";
-  const BASE_URL = `${API_BASE_URL}/api`;
-  
+ // const BASE_URL = `${API_BASE_URL}/api`;
+  const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api';
 
   // 검증 완료 여부 상태관리
   const [validate, setValidate] = useState({

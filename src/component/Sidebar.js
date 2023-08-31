@@ -38,8 +38,8 @@ const Sidebar = ({updateCart}) => {
     backgroundColor: "#f2f2f2",
     padding: "20px",
   };
-
-  const BASE_URL = `${API_BASE_URL}/api`;
+  const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api';
+ // const BASE_URL = `${API_BASE_URL}/api`;
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
 
   //전체정보 받아오기
