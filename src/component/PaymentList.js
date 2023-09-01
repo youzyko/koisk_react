@@ -108,6 +108,17 @@ const PaymentList = () => {
   };
   console.log(searchpay);
 
+  //총합계 
+const calculateTotalPrice = () => {
+  let total = 0;
+
+  // Iterate through the selected items in your searchpay state
+  for (const item of searchpay) {
+    total += item.totalPrice;
+  }
+
+  return total;
+};
   
   const showpaylist = () => {
 
@@ -144,6 +155,7 @@ const PaymentList = () => {
           pageSizeOptions={[5, 10]}
           checkboxSelection
         />
+        
       </div>
     );
   };
@@ -410,10 +422,14 @@ const PaymentList = () => {
               marginLeft: "875px",
             }}
           />
+          {/* <div>총합계: </div> */}
           <div style={{ width:'1000px',    marginLeft: "500px",}}>
         
             {showpaylist()}
           </div>
+          <div style={{ textAlign: 'center', marginTop: '20px' }}>
+  Total Price: {calculateTotalPrice()}원
+</div>
         </form>
       </div>
     </>

@@ -41,6 +41,19 @@ const MenuList = ({updateCart}) => {
     backgroundColor: "#f2f2f2",
     padding: "20px",
   };
+  //hover기능
+  const [isHovered, setIsHovered] = useState(false);
+  const buttonStyles = {
+    backgroundColor: isHovered ? '#2980b9' : '#3498db',
+    color: '#fff',
+    padding: '10px 20px',
+    borderRadius: '5px',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
+  };
+
   // const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api';
   const BASE_URL = `${API_BASE_URL}/api`;
   /*    http://localhost:8080/api/item/1,2,3,.... */
@@ -942,10 +955,12 @@ console.log("countMap");
                 onClick={()=>{
                   optionButton()
                   handleClose();
-
                 }
-
                 }
+                style={buttonStyles}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+               
               >
                 장바구니 담기
               </button>
