@@ -74,7 +74,7 @@ const Payment = () => {
         orderId: uuidv4(), // 주문 ID
         orderName: cartmenuName.toString(), // 주문명
         //customerName: '김토스', // 구매자 이름
-        successUrl: "http://localhost:3000/success", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+        successUrl: "http://13.124.149.19:3000/success", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
         failUrl: "https://docs.tosspayments.com/guides/payment/test-fail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
       })
       //http://localhost:3000/success?orderId=03e2c548-2d99-48e4-b6c6-31b2f6714405&paymentKey=pd12AjJexmnRQoOaPz8LEdWgvJ2lBv3y47BMw6vl0gkYqDNE&amount=5000
