@@ -11,7 +11,7 @@ import axios from 'axios';
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
-import {API_BASE_URL} from "../config/host-config";
+import { API_BASE_URL } from "config/host-config";
 const Payment = () => {
   const BASE_URL = `${API_BASE_URL}/api`;
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");

@@ -30,7 +30,7 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
 //리액트 context
-import {API_BASE_URL} from "../config/host-config";
+import { API_BASE_URL } from "config/host-config";
 const MenuList = ({updateCart}) => {
   const sidebarStyle = {
     position: "fixed",
@@ -41,8 +41,8 @@ const MenuList = ({updateCart}) => {
     backgroundColor: "#f2f2f2",
     padding: "20px",
   };
-  const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api';
-  //const BASE_URL = `${API_BASE_URL}/api`;
+  // const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api';
+  const BASE_URL = `${API_BASE_URL}/api`;
   /*    http://localhost:8080/api/item/1,2,3,.... */
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
   const LOGIN_ID = localStorage.getItem("LOGIN_ID");

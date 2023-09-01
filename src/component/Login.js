@@ -1,10 +1,10 @@
  import React, { useEffect, useState } from "react";
 import { Grid, Button, Container, Typography, TextField } from "@mui/material"; 
-import {API_BASE_URL} from "../config/host-config";
+import { API_BASE_URL } from "config/host-config";
 import Swal from "sweetalert2";
 const Login=()=>{ 
-  const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api';
-  //const BASE_URL = `${API_BASE_URL}/api`;
+  // const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api';
+  const BASE_URL = `${API_BASE_URL}/api`;
     //로그인 서브밋 이벤트 핸들러
   const submitHandler = (e) => {
     e.preventDefault();

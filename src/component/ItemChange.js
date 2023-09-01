@@ -17,13 +17,13 @@ import SendIcon from "@mui/icons-material/Send";
 /* import Stack from '@mui/material/Stack'; */
 import Grid from "@mui/material/Grid";
 import Swal from "sweetalert2";
-import {API_BASE_URL} from "../config/host-config";
+import { API_BASE_URL } from "config/host-config";
 
 const ItemChange = () => {
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
  //  const BASE_URL = "http://localhost:8080/api"; 
- const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api/item';
- // const BASE_URL = `${API_BASE_URL}/api/item`;
+//  const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api/item';
+ const BASE_URL = `${API_BASE_URL}/api/item`;
   /* @PostMapping("/register") */
 
   // 검증 완료 여부 상태관리

@@ -21,12 +21,12 @@ import SendIcon from "@mui/icons-material/Send";
 import Stack from "@mui/material/Stack";
 import { json } from "react-router-dom";
 import Swal from "sweetalert2";
-import {API_BASE_URL} from "../config/host-config";
+import { API_BASE_URL } from "config/host-config";
 const MenuChange = () => {
   /*   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false); */
-  // const BASE_URL = "http://localhost:8080/api"; 
-  const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api/name';
+  const BASE_URL = "http://localhost:8080/api/name"; 
+  // const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api/name';
  // const BASE_URL = `${API_BASE_URL}/api/name`;
   const [newMenu, setNewMenu] = useState({
     menuId: "",

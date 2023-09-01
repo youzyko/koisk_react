@@ -19,7 +19,7 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { json } from "react-router-dom";
 import { SetMeal } from "@mui/icons-material";
-import {API_BASE_URL} from "../config/host-config";
+import { API_BASE_URL } from "config/host-config";
 /* SEND BUTTON */
 
 /* import Stack from '@mui/material/Stack'; */
@@ -29,7 +29,8 @@ const AdminItem = () => {
   //관리자페이지 전체조회
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
   //const BASE_URL = `${API_BASE_URL}/api/item`;
-  const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api/item';
+  //const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api/item';
+  const BASE_URL = `${API_BASE_URL}/api/item`;
 
   const [id, setId] = useState([]); //ownImgId만 가져오기
   const [Img, setImg] = useState([]); //ownImgId에 해당하는 이미지주소
