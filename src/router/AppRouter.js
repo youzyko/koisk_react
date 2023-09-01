@@ -41,7 +41,7 @@ const AppRouter = () => {
         <Routes>
           <Route exact path="/api/item/:menuId" element={<MenuList  />} />
           <Route path="/login" element={<Login />} />
-      {/*   <Route exact path="/" element={<ImageSlide />} /> */}
+         <Route exact path="/" element={<ImageSlide />} /> 
           <Route path="/join" element={<Join />} />
           <Route path="/menuchange" element={<MenuChange />} />
           <Route path="/itemchange" element={<ItemChange />} />
