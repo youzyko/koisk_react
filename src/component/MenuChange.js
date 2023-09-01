@@ -25,9 +25,9 @@ import { API_BASE_URL } from "config/host-config";
 const MenuChange = () => {
   /*   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false); */
-  // const BASE_URL = "http://localhost:8080/api/name"; 
+  // const BASE_URL = "http://localhost:8080/api/name";
   // const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api/name';
- const BASE_URL = `${API_BASE_URL}/api/name`;
+  const BASE_URL = `${API_BASE_URL}/api/name`;
   const [newMenu, setNewMenu] = useState({
     menuId: "",
     menuName: "",
@@ -91,16 +91,16 @@ console.log(newMenu)
 
     if (!wordRegex.test(menuId) || !wordRegex.test(menuName)) {
       Swal.fire({
-        icon: 'error',
-        title: '입력란을 다시 확인하세요',
+        icon: "error",
+        title: "입력란을 다시 확인하세요",
       });
       return;
     } else if (numRegex.test(menuId)) {
       Swal.fire({
-        icon: 'error',
-        title: '메뉴코드는 0이상의 숫자만 가능합니다',
+        icon: "error",
+        title: "메뉴코드는 0이상의 숫자만 가능합니다",
       });
-     // alert("메뉴코드는 오직 숫자만 가능합니다");
+      // alert("메뉴코드는 오직 숫자만 가능합니다");
       return;
     }
 
@@ -134,18 +134,18 @@ console.log(newMenu)
     }).then((res) => {
       if (res.status === 500) {
         Swal.fire({
-          icon: 'error',
-          title: '입력란을 다시 확인하세요',
+          icon: "error",
+          title: "입력란을 다시 확인하세요",
         });
         return;
       } else {
         res.json();
         Swal.fire({
-          title: '정상적으로 등록을 완료했습니다!',
-          icon: 'success',
+          title: "정상적으로 등록을 완료했습니다!",
+          icon: "success",
           // You can add any additional Swal configuration options here
-        })
-       // alert("저장완료");
+        });
+        // alert("저장완료");
         setMenu((menu) => [...menu, newMenu]);
       }
     });
@@ -175,6 +175,9 @@ console.log(newMenu)
   const repeatmenu = menu.map((item) => {
     return (
       // console.log("fsdfsdfsdf")
+  
+
+   
       <List>
         <ListItem
           secondaryAction={
@@ -190,7 +193,6 @@ console.log(newMenu)
                   removeClick(item.menuId);
               }} */
               onClick={() => {
-             
                 Swal.fire({
                   title: `"${item.menuName}"를 진짜로 삭제하시겠습니까?`,
                   //text: "",
@@ -204,13 +206,13 @@ console.log(newMenu)
                   if (result.isConfirmed) {
                     Swal.fire(
                       removeClick(item.menuId),
-                      "삭제완료!",
-                    //  "Your file has been deleted.",
+                      "삭제완료!"
+                      //  "Your file has been deleted.",
                       //"success"
                     );
                   }
-                })
-            }}
+                });
+              }}
             >
               <DeleteIcon />
             </IconButton>
@@ -227,7 +229,8 @@ console.log(newMenu)
             /*    secondary={secondary ? 'Secondary text' : null} */
           />
         </ListItem>
-      </List>
+      </List>  
+
     );
   });
   /* console.log("MC리렌더") */
@@ -339,7 +342,10 @@ console.log(newMenu)
         </form>
       </div>
       {/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<메뉴 List>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
+      <div style={{marginTop:"20px", width:"500px"}}>
       {repeatmenu}
+      </div>
+
     </>
   );
 };
