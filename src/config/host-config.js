@@ -10,5 +10,6 @@ if (hostname === 'localhost') {
 } else if (hostname === '13.124.149.19') {
     backendHost = 'http://13.124.149.19:8080';
 }
-console.log(backendHost) //undefined 
+console.log(backendHost) //undefined _ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com
+                        //13.124.149.19_ http://13.124.149.19:8080
 export const API_BASE_URL = `${backendHost}`;
