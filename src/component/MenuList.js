@@ -672,7 +672,7 @@ console.log("countMap");
                     {item.itemName}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {item.itemPrice}
+                    {item.itemPrice}원
                   </Typography>
                 </CardContent>
               </Card>

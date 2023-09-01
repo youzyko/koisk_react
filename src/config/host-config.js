@@ -8,7 +8,7 @@ let backendHost; // 백엔드 호스트 이름
 if (hostname === 'localhost') {
     backendHost = 'http://localhost:8080';
 } else if (hostname === 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com') {
-    backendHost = '13.124.149.19:8080';
+    backendHost = 'http://13.124.149.19:8080';
 }
 
 export const API_BASE_URL = `${backendHost}`;
