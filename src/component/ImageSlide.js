@@ -8,7 +8,8 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "./styles.css";
 import Sidebar from "./Sidebar";
-import {API_BASE_URL} from "../config/host-config";
+/* import {API_BASE_URL} from "../config/host-config"; */
+import { API_BASE_URL } from "config/host-config";
 //자식컴포넌트
 import MenuList from "./MenuList";
 
@@ -63,7 +64,7 @@ const ImageSlide = () => {
       </>
     );
   });
-
+console.log(BASE_URL)
   return (
     <>
       <Swiper
