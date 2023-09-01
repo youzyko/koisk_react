@@ -17,7 +17,7 @@ const MainImgAdmin = () => {
  // const BASE_URL = `${API_BASE_URL}/api/image`;
 //  const BASE_URL = 'http://ec2-13-124-149-19.ap-northeast-2.compute.amazonaws.com:8080/api/image';
   // const BASE_URL = "http://localhost:8080/api/image";
-  const BASE_URL = `${API_BASE_URL}/api`;
+  const BASE_URL = `${API_BASE_URL}/api/image`;
   const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN");
 
   //id
