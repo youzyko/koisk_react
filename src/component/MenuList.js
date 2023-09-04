@@ -31,6 +31,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
 //리액트 context
 import { API_BASE_URL } from "config/host-config";
+import { red } from "@mui/material/colors";
 const MenuList = ({updateCart}) => {
   const sidebarStyle = {
     position: "fixed",
@@ -40,7 +41,7 @@ const MenuList = ({updateCart}) => {
     height: "100%",
     backgroundColor: "#f2f2f2",
     padding: "20px",
-     overflowY: "auto"
+  /*   overflowY: "auto" */
   };
   //hover기능
   const [isHovered, setIsHovered] = useState(false);
@@ -651,7 +652,7 @@ console.log("countMap");
   
     };
     
-    const shouldScroll = optionMap.length > 0;
+ 
   //진짜 return
   return (
     <div>
@@ -722,7 +723,9 @@ console.log("countMap");
           justifyContent: "center",
           alignItems: "center",
           paddingTop: "50px",
-          
+          overflowY: "auto",
+          border:"1px solid red"
+      
         }}
       >
         {optionMap}
@@ -731,7 +734,7 @@ console.log("countMap");
       <div
         style={{
           fontSize: "20px",
-          position: "fixed",
+         // position: "fixed",
           bottom: "60px",
           right: 0,
           marginRight: "50px",
@@ -739,32 +742,28 @@ console.log("countMap");
       >
        총합계: {moneyNum} 원
       </div>
-    
-      {shouldScroll && (
-      <div
+
+      <button
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          position: "sticky",
-          bottom: "20px",
+           position: "fixed",
+          bottom: "0", 
+          left: "87.5%",
+          /*   transform: 'translateX(970%)', */
+          fontSize: "18px",
+          fontWeight: "bold",
+          backgroundColor: "transparent",
+   
+          height: "50px",
+          width: "246px",
+          cursor:'pointer',
+    
         }}
+      /*   class="blink" */
+        onClick={payClick} 
+  
       >
-        <button
-          style={{
-            fontSize: "18px",
-            fontWeight: "bold",
-            backgroundColor: "transparent",
-            height: "50px",
-            width: "246px",
-            cursor: "pointer",
-          }}
-          onClick={payClick}
-        >
-          결제하기
-        </button>
-      </div>
-    )}
+        결제하기
+      </button>
 
     
       </div>
