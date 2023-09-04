@@ -651,7 +651,7 @@ console.log("countMap");
   
     };
     
-
+    const shouldScroll = optionMap.length > 0;
   //진짜 return
   return (
     <div>
@@ -739,38 +739,33 @@ console.log("countMap");
       >
        총합계: {moneyNum} 원
       </div>
-      <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      position: "sticky",
-      bottom: "20px", // Adjust as needed
-    }}
-  >
-      <button
-        style={{
-         /*  position: "fixed",
-          bottom: "0", */
-          left: "87.5%",
-          /*   transform: 'translateX(970%)', */
-          fontSize: "18px",
-          fontWeight: "bold",
-          backgroundColor: "transparent",
-          /*     border: "none", */
-          /*       borderTop:'2px solid black', */
-          height: "50px",
-          width: "246px",
-          cursor:'pointer',
     
+      {shouldScroll && (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          position: "sticky",
+          bottom: "20px",
         }}
-      /*   class="blink" */
-        onClick={payClick} 
-  
       >
-        결제하기
-      </button>
+        <button
+          style={{
+            fontSize: "18px",
+            fontWeight: "bold",
+            backgroundColor: "transparent",
+            height: "50px",
+            width: "246px",
+            cursor: "pointer",
+          }}
+          onClick={payClick}
+        >
+          결제하기
+        </button>
       </div>
+    )}
+
     
       </div>
 
