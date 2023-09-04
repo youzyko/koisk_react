@@ -715,7 +715,7 @@ console.log("countMap");
       </h1>
       
  
-<div style={{overflow:"auto"}}>
+
 
     <div
         style={{
@@ -724,14 +724,15 @@ console.log("countMap");
           justifyContent: "center",
           alignItems: "center",
           paddingTop: "50px",
-          
-          border:"1px solid red"
+          height:"500px",
+          border:"1px solid red",
+          overflow:"auto"
       
         }}
       >
         {optionMap}
       </div>
-      </div>
+      
 <div style={{marginTop:"20px"}}>
 <div
         style={{
