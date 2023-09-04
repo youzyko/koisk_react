@@ -342,7 +342,7 @@ console.log(newMenu)
         </form>
       </div>
       {/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<메뉴 List>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/}
-      <div style={{marginTop:"20px", width:"500px", marginLeft:"500px"}}>
+      <div style={{marginTop:"20px", width:"500px", marginLeft:"600px"}}>
       {repeatmenu}
       </div>
 
