@@ -254,11 +254,11 @@ const MenuList = ({updateCart}) => {
        // param = null;
         setTf(false)
         //param==null
-        setHere(null)
-        setHot (null)
-        setIce(null)
-        setSweetness(null)
-        setSelectedToppings(null)
+        setHere()
+        setHot ()
+        setIce()
+        setSweetness()
+        setSelectedToppings()
         //param = null_적용안됨
    /*    param = {
           here: "",
