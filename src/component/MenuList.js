@@ -253,25 +253,14 @@ const MenuList = ({updateCart}) => {
         // alert("장바구니 추가 완료")
        // param = null;
         setTf(false)
-        //param==null
+       
+        //옵션값 초기화
         setHere()
         setHot ()
         setIce()
         setSweetness()
         setSelectedToppings([]) 
-        //param = null_적용안됨
-   /*    param = {
-          here: "",
-          hot: "",
-          ice: "", 
-          itemName: "",
-          itemPrice: "",
-          ownImgId: "",
-          itemImg: "",
-          sweetness: "",
-          selectedToppingsJson: "",
-          
-        }; _적용안됨*/
+      
 
         return res.json(); // Assuming the response contains JSON data
       
@@ -821,6 +810,7 @@ console.log("countMap");
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"
+                    value={here}
                   >
                     <FormControlLabel
                       value="포장"
