@@ -251,8 +251,20 @@ const MenuList = ({updateCart}) => {
         // alert("장바구니 추가 완료")
        // param = null;
         setTf(false)
-        param = null; //장바구니에 담기면 param vlaue 
-        //param = null
+        //param = null_적용안됨
+      param = {
+          here: "",
+          hot: "",
+          ice: "",
+          itemName: "",
+          itemPrice: "",
+          ownImgId: "",
+          itemImg: "",
+          sweetness: "",
+          selectedToppingsJson: "",
+          
+        };
+
         return res.json(); // Assuming the response contains JSON data
       
         
