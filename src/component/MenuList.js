@@ -711,6 +711,13 @@ console.log("countMap");
       >
         장바구니
       </h1>
+      
+      <div
+        style={{
+          height: "calc(100vh - 150px)", 
+          overflowY: "auto",
+        }}
+      >
 
     <div
         style={{
@@ -758,6 +765,7 @@ console.log("countMap");
         결제하기
       </button>
 
+      </div>
       </div>
 
 
