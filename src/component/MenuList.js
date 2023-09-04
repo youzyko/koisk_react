@@ -726,7 +726,7 @@ console.log("countMap");
           paddingTop: "50px",
           height:"600px",
           border:"1px solid red",
-          overflow:"auto",
+          overflowY:"auto",
           width:"200px"
       
         }}
