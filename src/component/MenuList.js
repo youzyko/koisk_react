@@ -835,6 +835,7 @@ console.log("countMap");
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"
+                    value={hot}
                   >
                     <FormControlLabel
                       value="핫"
@@ -860,6 +861,7 @@ console.log("countMap");
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"
+                    value={ice}
                   >
                     <FormControlLabel
                       value="적게"
@@ -893,6 +895,7 @@ console.log("countMap");
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="row-radio-buttons-group"
+                    
                     >
                       <FormControlLabel
                         value="안달게"
@@ -923,6 +926,7 @@ console.log("countMap");
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="row-radio-buttons-group"
+                      value={sweetness}
                     >
                       <FormControlLabel
                         value="안달게"
