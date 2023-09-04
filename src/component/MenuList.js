@@ -739,7 +739,15 @@ console.log("countMap");
       >
        총합계: {moneyNum} 원
       </div>
-
+      <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      position: "sticky",
+      bottom: "20px", // Adjust as needed
+    }}
+  >
       <button
         style={{
          /*  position: "fixed",
@@ -757,13 +765,13 @@ console.log("countMap");
           position: "sticky", // Initially set as sticky
           bottom: "20px",  
         }}
-        class="blink"
+      /*   class="blink" */
         onClick={payClick} 
   
       >
         결제하기
       </button>
-
+      </div>
     
       </div>
 
