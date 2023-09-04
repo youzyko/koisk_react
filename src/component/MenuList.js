@@ -41,7 +41,7 @@ const MenuList = ({updateCart}) => {
     height: "100%",
     backgroundColor: "#f2f2f2",
     padding: "20px",
-  /*   overflowY: "auto" */
+  overflowY: "auto" 
   };
   //hover기능
   const [isHovered, setIsHovered] = useState(false);
@@ -723,7 +723,7 @@ console.log("countMap");
           justifyContent: "center",
           alignItems: "center",
           paddingTop: "50px",
-          overflowY: "auto",
+          
           border:"1px solid red"
       
         }}
@@ -731,10 +731,11 @@ console.log("countMap");
         {optionMap}
       </div>
 
-      <div
+<div style={{marginTop:"20px"}}>
+<div
         style={{
           fontSize: "20px",
-         // position: "fixed",
+          position: "fixed",
           bottom: "60px",
           right: 0,
           marginRight: "50px",
@@ -764,6 +765,8 @@ console.log("countMap");
       >
         결제하기
       </button>
+</div>
+     
 
     
       </div>
