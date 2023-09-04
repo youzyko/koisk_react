@@ -241,7 +241,6 @@ const MenuList = ({updateCart}) => {
        // alert("필수항목을 체크해주세요.");
        
       } else if (res.status === 200) {
-        param = null; //장바구니에 담기면 param vlaue clear
         Swal.fire({
          // position: 'top-end',
           icon: 'success',
@@ -252,8 +251,10 @@ const MenuList = ({updateCart}) => {
         // alert("장바구니 추가 완료")
        // param = null;
         setTf(false)
+        param = null; //장바구니에 담기면 param vlaue 
         //param = null
         return res.json(); // Assuming the response contains JSON data
+      
         
       } 
     })
