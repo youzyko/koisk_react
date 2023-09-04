@@ -196,8 +196,7 @@ const MenuList = ({updateCart}) => {
   });
   const [tf,setTf]=useState(true)
 
-   //param값
- const [saveparam, setSaveparam] = useState(null);
+
 
   //장바구니 담기 버튼
   const optionButton = (e) => {
@@ -214,8 +213,8 @@ const MenuList = ({updateCart}) => {
       //selectedToppings:selectedToppings  //[{d:d,sd:sd}]...배열 형태
     };
     console.log("param",param);
-    setSaveparam(param)
-    console.log("saveparam",saveparam);
+   
+   
     //if param 값이 없으면 오류
 
     fetch(BASE_URL + "/cart/incart", {
@@ -230,7 +229,6 @@ const MenuList = ({updateCart}) => {
         alert("이미 장바구니에 추가된 메뉴입니다.");
         setOpen(false); //모달 닫기
       } else if (res.status === 500) { 
-      
        // setOpen(true); //modal창 열기
         Swal.fire({
           icon: 'error',
@@ -255,7 +253,12 @@ const MenuList = ({updateCart}) => {
         // alert("장바구니 추가 완료")
        // param = null;
         setTf(false)
-        setSaveparam(null); 
+        //param==null
+        setHere(null)
+        setHot (null)
+        setIce(null)
+        setSweetness(null)
+        setSelectedToppings(null)
         //param = null_적용안됨
    /*    param = {
           here: "",
