@@ -722,7 +722,7 @@ console.log("countMap");
           justifyContent: "center",
           alignItems: "center",
           paddingTop: "50px",
-          overflowY: "auto",
+          
         }}
       >
         {optionMap}
@@ -762,8 +762,7 @@ console.log("countMap");
           height: "50px",
           width: "246px",
           cursor:'pointer',
-          position: "sticky", // Initially set as sticky
-          bottom: "20px",  
+    
         }}
       /*   class="blink" */
         onClick={payClick} 
