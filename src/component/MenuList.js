@@ -742,8 +742,8 @@ console.log("countMap");
 
       <button
         style={{
-          position: "fixed",
-          bottom: "0",
+         /*  position: "fixed",
+          bottom: "0", */
           left: "87.5%",
           /*   transform: 'translateX(970%)', */
           fontSize: "18px",
@@ -753,7 +753,9 @@ console.log("countMap");
           /*       borderTop:'2px solid black', */
           height: "50px",
           width: "246px",
-          cursor:'pointer'
+          cursor:'pointer',
+          position: "sticky", // Initially set as sticky
+          bottom: "20px",  
         }}
         class="blink"
         onClick={payClick} 
