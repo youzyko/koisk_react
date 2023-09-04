@@ -100,6 +100,7 @@ const MenuList = ({updateCart}) => {
  const [option, setOption] = useState([]);
  
 
+
   //전체 토핑
   const [topping, setTopping] = useState([]);
 
@@ -195,7 +196,8 @@ const MenuList = ({updateCart}) => {
   });
   const [tf,setTf]=useState(true)
 
-  
+   //param값
+ const [saveparam, setSaveparam] = useState(null);
 
   //장바구니 담기 버튼
   const optionButton = (e) => {
@@ -211,7 +213,9 @@ const MenuList = ({updateCart}) => {
       selectedToppingsJson: JSON.stringify(selectedToppings),
       //selectedToppings:selectedToppings  //[{d:d,sd:sd}]...배열 형태
     };
-    console.log(param);
+    console.log("param",param);
+    setSaveparam(param)
+    console.log("saveparam",saveparam);
     //if param 값이 없으면 오류
 
     fetch(BASE_URL + "/cart/incart", {
@@ -251,8 +255,9 @@ const MenuList = ({updateCart}) => {
         // alert("장바구니 추가 완료")
        // param = null;
         setTf(false)
+        setSaveparam(null); 
         //param = null_적용안됨
-      param = {
+   /*    param = {
           here: "",
           hot: "",
           ice: "",
@@ -263,7 +268,7 @@ const MenuList = ({updateCart}) => {
           sweetness: "",
           selectedToppingsJson: "",
           
-        };
+        }; _적용안됨*/
 
         return res.json(); // Assuming the response contains JSON data
       
