@@ -727,7 +727,7 @@ console.log("countMap");
           height:"600px",
           border:"1px solid red",
           overflow:"auto",
-          width:"70px"
+          width:"200px"
       
         }}
       >
