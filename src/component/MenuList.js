@@ -724,9 +724,10 @@ console.log("countMap");
           justifyContent: "center",
           alignItems: "center",
           paddingTop: "50px",
-          height:"500px",
+          height:"600px",
           border:"1px solid red",
-          overflow:"auto"
+          overflow:"auto",
+          width:"70px"
       
         }}
       >
