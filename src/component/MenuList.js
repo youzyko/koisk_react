@@ -41,7 +41,7 @@ const MenuList = ({updateCart}) => {
     height: "100%",
     backgroundColor: "#f2f2f2",
     padding: "20px",
-  overflowY: "auto" 
+ /*  overflowY: "auto"  */
   };
   //hover기능
   const [isHovered, setIsHovered] = useState(false);
@@ -715,6 +715,7 @@ console.log("countMap");
       </h1>
       
  
+<div style={{overflow:"auto"}}>
 
     <div
         style={{
@@ -730,7 +731,7 @@ console.log("countMap");
       >
         {optionMap}
       </div>
-
+      </div>
 <div style={{marginTop:"20px"}}>
 <div
         style={{
