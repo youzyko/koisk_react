@@ -40,7 +40,7 @@ const MenuList = ({updateCart}) => {
     height: "100%",
     backgroundColor: "#f2f2f2",
     padding: "20px",
-    maxHeight: "calc(100vh - 200px)", overflowY: "auto"
+     overflowY: "auto"
   };
   //hover기능
   const [isHovered, setIsHovered] = useState(false);
