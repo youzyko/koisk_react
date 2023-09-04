@@ -99,22 +99,12 @@ const MenuList = ({updateCart}) => {
   // const [selectedToppingsJson, setselectedToppingsJson] = useState([]);
  const [option, setOption] = useState([]);
  
-/*   function onOptionButtonClicked(){
-    console.log("onOptionButtonClicked실행 된다")
-      fetch(BASE_URL + "/cart", {
-      method: "get",
-      headers: {
-        Authorization: "Bearer " + ACCESS_TOKEN,
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setOption(res);
-      }); 
-  } */
 
   //전체 토핑
   const [topping, setTopping] = useState([]);
+
+  //param 담긴값 보여주기
+  const [showSelectedOptions, setShowSelectedOptions] = useState(false);
 
   useEffect(() => {
     fetch(BASE_URL + "/topping", {
@@ -236,19 +226,22 @@ const MenuList = ({updateCart}) => {
         alert("이미 장바구니에 추가된 메뉴입니다.");
         setOpen(false); //모달 닫기
       } else if (res.status === 500) { 
+      
        // setOpen(true); //modal창 열기
         Swal.fire({
           icon: 'error',
           title: '필수항목을 체크해주세요',
         }).then(() => {
-          setOpen(true); // Set the 'open' state back to true after the Swal is closed
+          setOpen(true); 
+         //setShowSelectedOptions(true);
+          
         });
  
         //modal
        // alert("필수항목을 체크해주세요.");
        
       } else if (res.status === 200) {
-        
+        param = null; //장바구니에 담기면 param vlaue clear
         Swal.fire({
          // position: 'top-end',
           icon: 'success',
