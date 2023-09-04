@@ -354,7 +354,12 @@ const Cart = () => {
       >
         장바구니
       </h1>
-
+      <div
+        style={{
+          height: "calc(100vh - 150px)", // Adjust the height as needed
+          overflowY: "auto",
+        }}
+      >
       <div
         style={{
           display: "flex",
@@ -416,6 +421,7 @@ const Cart = () => {
       >
         메뉴 전체 삭제
       </button>  */}
+    </div>
     </div>
   );
 };
