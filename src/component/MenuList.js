@@ -40,6 +40,7 @@ const MenuList = ({updateCart}) => {
     height: "100%",
     backgroundColor: "#f2f2f2",
     padding: "20px",
+    maxHeight: "calc(100vh - 200px)", overflowY: "auto"
   };
   //hover기능
   const [isHovered, setIsHovered] = useState(false);
@@ -699,7 +700,7 @@ console.log("countMap");
       </Grid>
 
 
-     <div style={sidebarStyle} style={{overflowY: "auto" }} >
+     <div style={sidebarStyle}  >
       <h1
         style={{
           textDecorationLine: "underline",
